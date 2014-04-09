@@ -5,34 +5,34 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>1E4497F9-2F2B-4333-9134-A59F750FB188</string>
+	<string>5804BC95-2E79-4ABE-874D-97E72FD82870</string>
 	<key>IDESourceControlProjectName</key>
 	<string>database</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>ED11A023-C05A-4490-9AD1-915FFE6370E7</key>
-		<string>https://github.com/cyber-tron/database</string>
+		<key>90C0A264-E317-4F4D-BAEF-9CE4061CC13E</key>
+		<string>ssh://github.com/cyber-tron/database.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>database.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>ED11A023-C05A-4490-9AD1-915FFE6370E7</key>
+		<key>90C0A264-E317-4F4D-BAEF-9CE4061CC13E</key>
 		<string>../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>https://github.com/cyber-tron/database</string>
+	<string>ssh://github.com/cyber-tron/database.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>110</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>ED11A023-C05A-4490-9AD1-915FFE6370E7</string>
+	<string>90C0A264-E317-4F4D-BAEF-9CE4061CC13E</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>ED11A023-C05A-4490-9AD1-915FFE6370E7</string>
+			<string>90C0A264-E317-4F4D-BAEF-9CE4061CC13E</string>
 			<key>IDESourceControlWCCName</key>
 			<string>database</string>
 		</dict>

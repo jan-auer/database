@@ -2,8 +2,8 @@
 //  main.cpp
 //  database
 //
-//  Created by Jan Michael Auer on 08/04/14.
-//  Copyright (c) 2014 TUM. All rights reserved.
+//  Created by Jan Michael Auer on 09/04/14.
+//  Copyright (c) 2014 LightningSQL. All rights reserved.
 //
 
 #include <iostream>
