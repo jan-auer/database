@@ -55,7 +55,7 @@ namespace lsql {
 	}
 	
 	template<typename T>
-	bool FileUtils::readVector(int fd, std::vector<T> &data, off_t elementCount, off_t elementOffset = 0) {
+	bool FileUtils::readVector(int fd, std::vector<T> &data, off_t elementCount, off_t elementOffset) {
 		const T* rawData = data.data();
 		size_t rawSize = sizeof(T) * elementCount;
 		
