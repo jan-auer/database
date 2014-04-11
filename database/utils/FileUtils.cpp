@@ -7,6 +7,8 @@
 //
 
 #include <fcntl.h>
+#include <sys/types.h>
+#include <sys/uio.h>
 #include <unistd.h>
 #include <iostream>
 #include "FileUtils.h"
@@ -56,9 +58,11 @@ namespace lsql {
 	
 	template<typename T>
 	bool FileUtils::readVector(int fd, std::vector<T> &data, off_t elementCount, off_t elementOffset) {
-		const T* rawData = data.data();
-		size_t rawSize = sizeof(T) * elementCount;
+		data.resize(elementCount);
 		
+		T* rawData = data.data();
+		size_t rawSize = sizeof(T) * elementCount;
+
 		ssize_t readSize = pread(fd, rawData, rawSize, elementOffset * sizeof(T));
 		if (readSize < 0) {
 			cerr << "Cannot read from file: " << strerror(errno) << endl;

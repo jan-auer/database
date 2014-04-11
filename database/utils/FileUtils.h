@@ -32,7 +32,7 @@ namespace lsql {
 		
 		//
 		template<typename T>
-		bool readVector(int fd, std::vector<T> &data, off_t elementCount, off_t elementOffset = 0);
+		static bool readVector(int fd, std::vector<T> &data, off_t elementCount, off_t elementOffset = 0);
 		
 		//
 		template<typename T>
