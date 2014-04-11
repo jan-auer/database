@@ -8,6 +8,8 @@
 
 #include <iostream>
 
+#include "sorting/sorting.h"
+
 int main(int argc, const char * argv[])
 {
 
