@@ -48,7 +48,6 @@ int main(int argc, char* argv[]) {
 	vector<uint64_t> data;
 	for (int i = 0; i < n; i++) {
 		uint64_t num = rand.next();
-		cout << "adding: " << std::hex << num << endl;
 		data.push_back(num);
 		if (i % BUFFER_SIZE == 0) {
 			if (!FileUtils::writeVector(fd, data))
