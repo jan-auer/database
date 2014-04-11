@@ -13,15 +13,25 @@
 
 namespace lsql {
 	
+	//
 	class Sorting {
 	public:
-		void externalSort(int fdInput, uint64_t inputCount, int fdOutput, uint64_t memSize);
+		
+		//
+		static void externalSort(int fdInput, uint64_t inputCount, int fdOutput, uint64_t memSize);
 		
 	private:
-		uint32_t prepareBuckets(int fdInput, uint64_t inputCount, int fdBuckets, uint64_t memSize);
-		void mergeBuckets(int fdBuckets, uint64_t bucketSize, int fdOutput, uint64_t memSize);
+		
+		//
+		static uint64_t prepareBuckets(int fdInput, uint64_t inputCount, int fdBuckets, uint64_t memSize);
+		
+		//
+		static void mergeBuckets(int fdBuckets, uint64_t bucketSize, uint64_t bucketCount, int fdOutput, uint64_t memSize);
+		
 	};
 	
 }
+
+#include "Sorting.cpp"
 
 #endif /* defined(__database__sorting__) */
