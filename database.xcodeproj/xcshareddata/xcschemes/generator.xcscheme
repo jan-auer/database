@@ -59,11 +59,11 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "numbers.bin"
+            argument = "numbers"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "1048576"
+            argument = "10"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>
