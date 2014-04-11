@@ -37,7 +37,7 @@ int main(int argc, char* argv[]) {
 		std::cerr << "cannot open file '" << argv[1] << "': " << strerror(errno) << std::endl;
 		return -1;
 	}
-	if ((ret = posix_fallocate(fd, 0, n*sizeof(uint64_t))) != 0)
+	if ((ret = ftruncate(fd, n*sizeof(uint64_t))) != 0)
 		std::cerr << "warning: could not allocate file space: " << strerror(ret) << std::endl;
 	for (unsigned i=0; i<n; ++i) {
 		uint64_t x = rand.next();
