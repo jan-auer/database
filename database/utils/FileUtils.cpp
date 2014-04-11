@@ -38,7 +38,7 @@ namespace lsql {
 	}
 	
 	bool FileUtils::close(int fd) {
-		return ::close(fd);
+		return ::close(fd) == 0;
 	}
 	
 	template<typename T>
