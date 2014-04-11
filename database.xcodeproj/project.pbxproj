@@ -7,14 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		017A59F418F824820040863D /* gtest-all.cc in Sources */ = {isa = PBXBuildFile; fileRef = 017A59F118F824820040863D /* gtest-all.cc */; };
+		017A59F518F824820040863D /* gtest_main.cc in Sources */ = {isa = PBXBuildFile; fileRef = 017A59F318F824820040863D /* gtest_main.cc */; };
 		4A192C4718F8227D005941E4 /* generator.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4A192C4618F8227D005941E4 /* generator.1 */; };
-		4A192C4E18F822EF005941E4 /* generator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A192C4C18F822EF005941E4 /* generator.cpp */; };
 		4A192C4F18F82310005941E4 /* generator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A192C4C18F822EF005941E4 /* generator.cpp */; };
 		4A5E081D18F56D630062E0A3 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A5E081C18F56D630062E0A3 /* main.cpp */; };
 		4A5E081F18F56D630062E0A3 /* database.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4A5E081E18F56D630062E0A3 /* database.1 */; };
-		4A9D8F1518F5742400E700F6 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A9D8F1418F5742400E700F6 /* main.cpp */; };
 		4A9D8F1718F5742400E700F6 /* test.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4A9D8F1618F5742400E700F6 /* test.1 */; };
-		4A9D8F1B18F5742C00E700F6 /* gtest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A9D8F0C18F5740400E700F6 /* gtest.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -51,15 +50,16 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		017A59F118F824820040863D /* gtest-all.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "gtest-all.cc"; sourceTree = "<group>"; };
+		017A59F218F824820040863D /* gtest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gtest.h; sourceTree = "<group>"; };
+		017A59F318F824820040863D /* gtest_main.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gtest_main.cc; path = ../external/gtest/gtest_main.cc; sourceTree = "<group>"; };
 		4A192C4218F8227D005941E4 /* generator */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = generator; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A192C4618F8227D005941E4 /* generator.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = generator.1; sourceTree = "<group>"; };
 		4A192C4C18F822EF005941E4 /* generator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = generator.cpp; sourceTree = "<group>"; };
 		4A5E081918F56D630062E0A3 /* database */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = database; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A5E081C18F56D630062E0A3 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		4A5E081E18F56D630062E0A3 /* database.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = database.1; sourceTree = "<group>"; };
-		4A9D8F0C18F5740400E700F6 /* gtest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = gtest.framework; path = "../../Library/Developer/Xcode/DerivedData/gtest-ctxdmfaadbormkgnqimlpeguznej/Build/Products/Debug/gtest.framework"; sourceTree = "<group>"; };
 		4A9D8F1218F5742400E700F6 /* test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = test; sourceTree = BUILT_PRODUCTS_DIR; };
-		4A9D8F1418F5742400E700F6 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		4A9D8F1618F5742400E700F6 /* test.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = test.1; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -82,13 +82,22 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4A9D8F1B18F5742C00E700F6 /* gtest.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		017A59F018F824820040863D /* gtest */ = {
+			isa = PBXGroup;
+			children = (
+				017A59F218F824820040863D /* gtest.h */,
+				017A59F118F824820040863D /* gtest-all.cc */,
+			);
+			name = gtest;
+			path = external/gtest;
+			sourceTree = SOURCE_ROOT;
+		};
 		4A192C4318F8227D005941E4 /* generator */ = {
 			isa = PBXGroup;
 			children = (
@@ -101,7 +110,6 @@
 		4A5E081018F56D630062E0A3 = {
 			isa = PBXGroup;
 			children = (
-				4A9D8F0C18F5740400E700F6 /* gtest.framework */,
 				4A5E081B18F56D630062E0A3 /* database */,
 				4A9D8F1318F5742400E700F6 /* test */,
 				4A192C4318F8227D005941E4 /* generator */,
@@ -131,7 +139,8 @@
 		4A9D8F1318F5742400E700F6 /* test */ = {
 			isa = PBXGroup;
 			children = (
-				4A9D8F1418F5742400E700F6 /* main.cpp */,
+				017A59F018F824820040863D /* gtest */,
+				017A59F318F824820040863D /* gtest_main.cc */,
 				4A9D8F1618F5742400E700F6 /* test.1 */,
 			);
 			path = test;
@@ -240,8 +249,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4A9D8F1518F5742400E700F6 /* main.cpp in Sources */,
-				4A192C4E18F822EF005941E4 /* generator.cpp in Sources */,
+				017A59F418F824820040863D /* gtest-all.cc in Sources */,
+				017A59F518F824820040863D /* gtest_main.cc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -361,10 +370,7 @@
 		4A9D8F1918F5742400E700F6 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/gtest-ctxdmfaadbormkgnqimlpeguznej/Build/Products/Debug",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -376,10 +382,7 @@
 		4A9D8F1A18F5742400E700F6 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/gtest-ctxdmfaadbormkgnqimlpeguznej/Build/Products/Debug",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -394,6 +397,7 @@
 				4A192C4A18F8227D005941E4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		4A5E081418F56D630062E0A3 /* Build configuration list for PBXProject "database" */ = {
 			isa = XCConfigurationList;
