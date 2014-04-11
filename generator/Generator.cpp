@@ -49,14 +49,14 @@ int main(int argc, char* argv[]) {
 	for (int i = 0; i < n; i++) {
 		data.push_back(rand.next());
 		if (i % BUFFER_SIZE == 0) {
-			if (!FileUtils::writeAll(fd, data))
+			if (!FileUtils::writeVector(fd, data))
 				return -1;
 			
 			data.clear();
 		}
 	}
 	
-	if (!FileUtils::writeAll(fd, data))
+	if (!FileUtils::writeVector(fd, data))
 		return -1;
 	
 	if (!FileUtils::close(fd))
