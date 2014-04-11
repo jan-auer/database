@@ -29,38 +29,40 @@ int main(int argc, char* argv[]) {
 
 	if (argc < 3) {
 		cerr << "usage: " << argv[0] << " <file name> <number of elements>" << endl;
-		return -1;
+		return 1;
 	}
 	
 	n = atoi(argv[2]);
 	if (n == 0) {
 		cerr << "invalid length: " << argv[2] << endl;
-		return -1;
+		return 1;
 	}
 	
 	fd = FileUtils::openWrite(argv[1]);
 	if (fd < 0)
-		return -1;
+		return 2;
 	
 	if (!FileUtils::allocate<uint64_t>(fd, n))
-		return -1;
+		return 3;
 	
 	vector<uint64_t> data(BUFFER_SIZE);
 	for (int i = 0; i < n; i++) {
-		data.push_back(rand.next());
+		uint64_t num = rand.next();
+		cout << "adding: " << std::hex << num << endl;
+		data.push_back(num);
 		if (i % BUFFER_SIZE == 0) {
 			if (!FileUtils::writeVector(fd, data))
-				return -1;
+				return 4;
 			
 			data.clear();
 		}
 	}
 	
 	if (!FileUtils::writeVector(fd, data))
-		return -1;
+		return 4;
 	
 	if (!FileUtils::close(fd))
-		return -1;
+		return 5;
 	
 	return 0;
 }
