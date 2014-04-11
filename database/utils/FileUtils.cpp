@@ -55,12 +55,22 @@ namespace lsql {
 	}
 	
 	template<typename T>
-	vector<T> FileUtils::readAll() {
-		return vector<T>();
+	bool FileUtils::readVector(int fd, std::vector<T> &data, off_t elementCount, off_t elementOffset = 0) {
+		const T* rawData = data.data();
+		size_t rawSize = sizeof(T) * elementCount;
+		
+		ssize_t readSize = pread(fd, rawData, rawSize, elementOffset * sizeof(T));
+		if (readSize < 0) {
+			cerr << "Cannot read from file: " << strerror(errno) << endl;
+			return false;
+		} else {
+			data.resize(readSize / sizeof(T));
+			return true;
+		}
 	}
 	
 	template<typename T>
-	bool FileUtils::writeAll(int fd, vector<T> &data) {
+	bool FileUtils::writeVector(int fd, vector<T> &data) {
 		const T* rawData = data.data();
 		size_t rawSize = sizeof(T) * data.size();
 		

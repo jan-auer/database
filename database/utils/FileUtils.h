@@ -13,6 +13,7 @@
 
 namespace lsql {
 	
+	//
 	class FileUtils {
 	public:
 		
@@ -31,11 +32,11 @@ namespace lsql {
 		
 		//
 		template<typename T>
-		static std::vector<T> readAll();
+		bool readVector(int fd, std::vector<T> &data, off_t elementCount, off_t elementOffset = 0);
 		
 		//
 		template<typename T>
-		static bool writeAll(int fd, std::vector<T> &data);
+		static bool writeVector(int fd, std::vector<T> &data);
 		
 	};
 	
