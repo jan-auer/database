@@ -45,7 +45,7 @@ int main(int argc, char* argv[]) {
 	if (!FileUtils::allocate<uint64_t>(fd, n))
 		return 3;
 	
-	vector<uint64_t> data(BUFFER_SIZE);
+	vector<uint64_t> data;
 	for (int i = 0; i < n; i++) {
 		uint64_t num = rand.next();
 		cout << "adding: " << std::hex << num << endl;
