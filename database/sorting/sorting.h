@@ -15,7 +15,11 @@ namespace lsql {
 	
 	class Sorting {
 	public:
-		void externalSort(int fdInput, uint64_t size, int fdOutput, uint64_t memSize);
+		void externalSort(int fdInput, uint64_t inputCount, int fdOutput, uint64_t memSize);
+		
+	private:
+		uint32_t prepareBuckets(int fdInput, uint64_t inputCount, int fdBuckets, uint64_t memSize);
+		void mergeBuckets(int fdBuckets, uint64_t bucketSize, int fdOutput, uint64_t memSize);
 	};
 	
 }
