@@ -1,67 +1,77 @@
-#include <iostream>
+//
+//  Generator.cpp
+//  database
+//
+//  Created by Jan Michael Auer on 12/04/14.
+//  Copyright (c) 2014 LightningSQL. All rights reserved.
+//
+
 #include "FileUtils.h"
+#include "Generator.h"
 
-using namespace std;
-using namespace lsql;
-
-const int BUFFER_SIZE = 1000;
-
-class RandomLong {
+namespace lsql {
 	
-private:
-	uint64_t state;
 	
-public:
-	explicit RandomLong(uint64_t seed=88172645463325252ull) : state(seed) {}
-	
-	uint64_t next() {
-		state^=(state<<13);
-		state^=(state>>7);
-		return (state^=(state<<17));
-	}
-	
-};
-
-int main(int argc, char* argv[]) {
-	RandomLong rand;
-	int fd;
-	unsigned int n;
-
-	if (argc < 3) {
-		cerr << "usage: " << argv[0] << " <file name> <number of elements>" << endl;
-		return 1;
-	}
-	
-	n = atoi(argv[2]);
-	if (n == 0) {
-		cerr << "invalid length: " << argv[2] << endl;
-		return 1;
-	}
-	
-	fd = FileUtils::openWrite(argv[1]);
-	if (fd < 0)
-		return 2;
-	
-	if (!FileUtils::allocate<uint64_t>(fd, n))
-		return 3;
-	
-	vector<uint64_t> data;
-	for (int i = 0; i < n; i++) {
-		uint64_t num = rand.next();
-		data.push_back(num);
-		if (i % BUFFER_SIZE == 0) {
-			if (!FileUtils::writeVector(fd, data))
-				return 4;
-			
-			data.clear();
+	class RandomLong {
+		
+		uint64_t state;
+		
+	public:
+		
+		//
+		explicit RandomLong(uint64_t seed) : state(seed) {}
+		
+		//
+		uint64_t next() {
+			state ^= state << 13;
+			state ^= state >> 7;
+			return (state ^= (state << 17));
 		}
+		
+	};
+
+	
+	Generator::Generator(uint64_t bufferSize, uint64_t seed) :
+		bufferSize(bufferSize),
+		seed(seed) {}
+	
+	bool Generator::generate(const char* fileName, uint64_t n) {
+		RandomLong rand(seed);
+		
+		if (n <= 0) {
+			cerr << "Invalid number of elements: " << n << endl;
+			return false;
+		}
+		
+		int fd = FileUtils::openWrite(fileName);
+		if (fd < 0)
+			return false;
+		
+		if (!FileUtils::allocate<uint64_t>(fd, n))
+			return false;
+		
+		
+		vector<uint64_t> data;
+		data.reserve(bufferSize);
+		
+		for (int i = 0; i < n; i++) {
+			uint64_t num = rand.next();
+			data.push_back(num);
+			if (i % bufferSize == 0) {
+				if (!FileUtils::writeVector(fd, data))
+					return false;
+				
+				data.clear();
+			}
+		}
+		
+		if (!FileUtils::writeVector(fd, data))
+			return false;
+		
+		if (!FileUtils::close(fd))
+			return false;
+		
+		return true;
 	}
 	
-	if (!FileUtils::writeVector(fd, data))
-		return 4;
-	
-	if (!FileUtils::close(fd))
-		return 5;
-	
-	return 0;
 }
