@@ -11,6 +11,8 @@
 
 #include <iostream>
 
+#define bucket_t uint64_t
+
 namespace lsql {
 	
 	//

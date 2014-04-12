@@ -17,10 +17,10 @@ namespace lsql {
 	const char* BUCKET_FILE_NAME = "./buckets";
 
 	void Sorting::externalSort(int fdInput, uint64_t inputCount, int fdOutput, uint64_t memSize) {
-		size_t bucketSize = memSize / sizeof(uint64_t);
+		size_t bucketSize = memSize / sizeof(bucket_t);
 
 		int fdBuckets = FileUtils::openWrite(BUCKET_FILE_NAME);
-		FileUtils::allocate<uint64_t>(fdBuckets, inputCount);
+		FileUtils::allocate<bucket_t>(fdBuckets, inputCount);
 		
 		uint64_t bucketCount = prepareBuckets(fdInput, inputCount, fdBuckets, bucketSize);
 		mergeBuckets(fdBuckets, bucketSize, bucketCount, fdOutput, memSize);
@@ -32,7 +32,7 @@ namespace lsql {
 		int64_t bucketCount = -1;
 		uint64_t elementOffset = 0;
 		
-		vector<uint64_t> bucket(0);
+		vector<bucket_t> bucket(0);
 		bucket.reserve(bucketSize);
 		
 		do {
