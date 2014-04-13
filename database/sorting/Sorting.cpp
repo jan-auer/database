@@ -6,8 +6,12 @@
 //  Copyright (c) 2014 LightningSQL. All rights reserved.
 //
 
-#include <vector>
+#include <algorithm>    // std::sort
+#include <vector>       // std::vector
+#include <queue>        // std::priority_queue
+
 #include "FileUtils.h"
+#include "Chunk.h"
 #include "Sorting.h"
 
 using namespace std;
@@ -15,29 +19,49 @@ using namespace std;
 namespace lsql {
 
 	const char* BUCKET_FILE_NAME = "./buckets";
-
-	void Sorting::externalSort(int fdInput, uint64_t inputCount, int fdOutput, uint64_t memSize) {
-		size_t bucketSize = memSize / sizeof(bucket_t);
-
-		int fdBuckets = FileUtils::openWrite(BUCKET_FILE_NAME);
-		FileUtils::allocate<bucket_t>(fdBuckets, inputCount);
-		
-		uint64_t bucketCount = prepareBuckets(fdInput, inputCount, fdBuckets, bucketSize);
-		mergeBuckets(fdBuckets, bucketSize, bucketCount, fdOutput, memSize);
-		
-		//TODO: remove fdBuckets
+	
+	typedef uint64_t value_t;
+	typedef vector<value_t> bucket_t;
+	typedef Chunk<value_t> chunk_t;
+	
+	struct ChunkComparator {
+		bool operator()(const chunk_t* a, const chunk_t* b) const {
+			return *a->current() > *b->current();
+		}
 	};
 	
-	uint64_t Sorting::prepareBuckets(int fdInput, uint64_t inputCount, int fdBuckets, uint64_t bucketSize) {
+	typedef priority_queue<chunk_t*, vector<chunk_t*>, ChunkComparator> queue_t;
+	
+	uint64_t prepareBuckets(int fdInput, uint64_t inputCount, int fdBuckets, uint64_t bucketSize);
+	void mergeBuckets(int fdBuckets, uint64_t bucketSize, uint64_t bucketCount, int fdOutput, uint64_t memSize);
+	void shiftSmallest(queue_t& outputQueue, bucket_t& outputBuffer, int fdOutput);
+
+	void Sorting::externalSort(int fdInput, uint64_t inputCount, int fdOutput, uint64_t memSize) {
+		size_t bucketSize = memSize / sizeof(value_t);
+
+		int fdBuckets = FileUtils::openWrite(BUCKET_FILE_NAME);
+		FileUtils::allocate<value_t>(fdBuckets, inputCount);
+		uint64_t bucketCount = prepareBuckets(fdInput, inputCount, fdBuckets, bucketSize);
+		FileUtils::close(fdBuckets);
+		
+		fdBuckets = FileUtils::openRead(BUCKET_FILE_NAME);
+		mergeBuckets(fdBuckets, bucketSize, bucketCount, fdOutput, memSize);
+		FileUtils::close(fdBuckets);
+		
+		//TODO: remove and close fdBuckets
+	};
+	
+	uint64_t prepareBuckets(int fdInput, uint64_t inputCount, int fdBuckets, uint64_t bucketSize) {
 		int64_t bucketCount = -1;
 		uint64_t elementOffset = 0;
 		
-		vector<bucket_t> bucket(0);
+		bucket_t bucket(0);
 		bucket.reserve(bucketSize);
 		
 		do {
 			FileUtils::readVector(fdInput, bucket, bucketSize, elementOffset);
 			sort(bucket.begin(), bucket.end());
+//			for (auto e : bucket) cout << " - " << hex << e << endl;
 			FileUtils::writeVector(fdBuckets, bucket);
 			
 			bucketCount++;
@@ -47,10 +71,43 @@ namespace lsql {
 		return bucketCount;
 	}
 	
-	void Sorting::mergeBuckets(int fdBuckets, uint64_t bucketSize, uint64_t bucketCount, int fdOutput, uint64_t memSize) {
-		//  - load chunks of each bucket into a priority queue
-		//  - take the smallest out and relaod from the origin chunk
-		//  - reload a chunk from the temp bucket, if it is empty
+	void mergeBuckets(int fdBuckets, uint64_t bucketSize, uint64_t bucketCount, int fdOutput, uint64_t memSize) {
+		uint64_t chunkSize = (bucketSize - 2) / bucketCount;
+
+		queue_t outputQueue;
+		bucket_t outputBuffer;
+		outputBuffer.reserve(chunkSize);
+		
+		for (int i = 0; i < bucketCount; i++) {
+			chunk_t* chunk = new chunk_t(fdBuckets, i * bucketSize, chunkSize, bucketSize);
+			chunk->next();
+			outputQueue.push(chunk);
+//			cout << "Inserting: " << hex << *chunk->current()
+//			     << " (top: " << *outputQueue.top()->current() << ")" << endl;
+		}
+			
+		while (!outputQueue.empty())
+			shiftSmallest(outputQueue, outputBuffer, fdOutput);
+	}
+	
+	void shiftSmallest(queue_t& outputQueue, bucket_t& outputBuffer, int fdOutput) {
+		chunk_t* chunk = outputQueue.top();
+		outputQueue.pop();
+		
+//		cout << "Writing: " << hex << *chunk->current() << endl;
+		outputBuffer.push_back(*chunk->current());
+		if (outputBuffer.size() == outputBuffer.capacity()) {
+			FileUtils::writeVector(fdOutput, outputBuffer);
+			outputBuffer.clear();
+		}
+		
+		if (chunk->next() != 0) {
+			outputQueue.push(chunk);
+//			cout << "Inserting: " << hex << *chunk->current()
+//			     << " (top: " << *outputQueue.top()->current() << ")" << endl;
+		} else {
+			delete chunk;
+		}
 	}
 	
 }

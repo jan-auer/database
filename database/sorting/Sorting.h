@@ -11,8 +11,6 @@
 
 #include <iostream>
 
-#define bucket_t uint64_t
-
 namespace lsql {
 	
 	//
@@ -21,14 +19,6 @@ namespace lsql {
 		
 		//
 		static void externalSort(int fdInput, uint64_t inputCount, int fdOutput, uint64_t memSize);
-		
-	private:
-		
-		//
-		static uint64_t prepareBuckets(int fdInput, uint64_t inputCount, int fdBuckets, uint64_t memSize);
-		
-		//
-		static void mergeBuckets(int fdBuckets, uint64_t bucketSize, uint64_t bucketCount, int fdOutput, uint64_t memSize);
 		
 	};
 	
