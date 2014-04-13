@@ -26,7 +26,7 @@ namespace lsql {
 		Generator(uint64_t bufferSize, uint64_t seed = 88172645463325252ull);
 
 		//
-		bool generate(const char* fileName, uint64_t n);
+		bool generate(const char* fileName, uint64_t n) const;
 		
 	};
 

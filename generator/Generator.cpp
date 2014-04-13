@@ -35,7 +35,7 @@ namespace lsql {
 		bufferSize(bufferSize),
 		seed(seed) {}
 	
-	bool Generator::generate(const char* fileName, uint64_t n) {
+	bool Generator::generate(const char* fileName, uint64_t n) const {
 		RandomLong rand(seed);
 		
 		if (n <= 0) {
