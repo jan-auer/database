@@ -51,7 +51,7 @@ namespace lsql {
 		if (ret == 0) {
 			return true;
 		} else {
-			cerr << "Warning: Could not allocate file space: " << strerror(ret) << endl;
+			cerr << "Could not allocate file space: " << strerror(ret) << endl;
 			return false;
 		}
 	}
