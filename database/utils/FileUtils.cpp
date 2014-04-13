@@ -87,6 +87,14 @@ namespace lsql {
 		}
 	}
 	
+	bool FileUtils::remove(const char* location) {
+		if (::remove(location) == 0)
+			return true;
+		
+		cerr << "Cannot delete file: " << strerror(errno) << endl;
+		return false;
+	}
+	
 }
 
 # if defined(__APPLE__)

@@ -38,6 +38,9 @@ namespace lsql {
 		template<typename T>
 		static bool writeVector(int fd, std::vector<T> &data);
 		
+		//
+		static bool remove(const char* location);
+		
 	};
 	
 }
