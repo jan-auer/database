@@ -20,27 +20,27 @@ namespace lsql {
 
 	const char* BUCKET_FILE_NAME = "./buckets";
 	
-	typedef uint64_t value_t;
-	typedef vector<value_t> bucket_t;
-	typedef Chunk<value_t> chunk_t;
+	typedef uint64_t BucketValue;
+	typedef vector<BucketValue> Bucket;
+	typedef Chunk<BucketValue> BucketChunk;
 	
 	struct ChunkComparator {
-		bool operator()(const chunk_t* a, const chunk_t* b) const {
+		bool operator()(const BucketChunk* a, const BucketChunk* b) const {
 			return *a->current() > *b->current();
 		}
 	};
 	
-	typedef priority_queue<chunk_t*, vector<chunk_t*>, ChunkComparator> queue_t;
+	typedef priority_queue<BucketChunk*, vector<BucketChunk*>, ChunkComparator> queue_t;
 	
 	uint64_t prepareBuckets(int fdInput, uint64_t inputCount, int fdBuckets, uint64_t bucketSize);
 	void mergeBuckets(int fdBuckets, uint64_t bucketSize, uint64_t bucketCount, int fdOutput, uint64_t memSize);
-	void shiftSmallest(queue_t& outputQueue, bucket_t& outputBuffer, int fdOutput);
+	void shiftSmallest(queue_t& outputQueue, Bucket& outputBuffer, int fdOutput);
 
 	void Sorting::externalSort(int fdInput, uint64_t inputCount, int fdOutput, uint64_t memSize) {
-		size_t bucketSize = memSize / sizeof(value_t);
+		size_t bucketSize = memSize / sizeof(BucketValue);
 
 		int fdBuckets = FileUtils::openWrite(BUCKET_FILE_NAME);
-		FileUtils::allocate<value_t>(fdBuckets, inputCount);
+		FileUtils::allocate<BucketValue>(fdBuckets, inputCount);
 		uint64_t bucketCount = prepareBuckets(fdInput, inputCount, fdBuckets, bucketSize);
 		FileUtils::close(fdBuckets);
 		
@@ -55,7 +55,7 @@ namespace lsql {
 		int64_t bucketCount = -1;
 		uint64_t elementOffset = 0;
 		
-		bucket_t bucket(0);
+		Bucket bucket(0);
 		bucket.reserve(bucketSize);
 		
 		do {
@@ -75,11 +75,11 @@ namespace lsql {
 		uint64_t chunkSize = (bucketSize - 2) / bucketCount;
 
 		queue_t outputQueue;
-		bucket_t outputBuffer;
+		Bucket outputBuffer;
 		outputBuffer.reserve(chunkSize);
 		
 		for (int i = 0; i < bucketCount; i++) {
-			chunk_t* chunk = new chunk_t(fdBuckets, i * bucketSize, chunkSize, bucketSize);
+			BucketChunk* chunk = new BucketChunk(fdBuckets, i * bucketSize, chunkSize, bucketSize);
 			chunk->next();
 			outputQueue.push(chunk);
 //			cout << "Inserting: " << hex << *chunk->current()
@@ -90,8 +90,8 @@ namespace lsql {
 			shiftSmallest(outputQueue, outputBuffer, fdOutput);
 	}
 	
-	void shiftSmallest(queue_t& outputQueue, bucket_t& outputBuffer, int fdOutput) {
-		chunk_t* chunk = outputQueue.top();
+	void shiftSmallest(queue_t& outputQueue, Bucket& outputBuffer, int fdOutput) {
+		BucketChunk* chunk = outputQueue.top();
 		outputQueue.pop();
 		
 //		cout << "Writing: " << hex << *chunk->current() << endl;
