@@ -48,7 +48,7 @@ namespace lsql {
 		mergeBuckets(fdBuckets, bucketSize, bucketCount, fdOutput, memSize);
 		FileUtils::close(fdBuckets);
 		
-		//TODO: remove and close fdBuckets
+		FileUtils::remove(BUCKET_FILE_NAME);
 	};
 	
 	uint64_t prepareBuckets(int fdInput, uint64_t inputCount, int fdBuckets, uint64_t bucketSize) {
