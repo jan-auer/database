@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "4A9D8F1118F5742400E700F6"
-               BuildableName = "test"
-               BlueprintName = "test"
+               BuildableName = "unit_test"
+               BlueprintName = "unit_test"
                ReferencedContainer = "container:database.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -33,8 +33,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "4A9D8F1118F5742400E700F6"
-            BuildableName = "test"
-            BlueprintName = "test"
+            BuildableName = "unit_test"
+            BlueprintName = "unit_test"
             ReferencedContainer = "container:database.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -52,8 +52,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "4A9D8F1118F5742400E700F6"
-            BuildableName = "test"
-            BlueprintName = "test"
+            BuildableName = "unit_test"
+            BlueprintName = "unit_test"
             ReferencedContainer = "container:database.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -70,8 +70,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "4A9D8F1118F5742400E700F6"
-            BuildableName = "test"
-            BlueprintName = "test"
+            BuildableName = "unit_test"
+            BlueprintName = "unit_test"
             ReferencedContainer = "container:database.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
