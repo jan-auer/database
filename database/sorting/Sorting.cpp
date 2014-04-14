@@ -32,6 +32,8 @@ namespace lsql {
 	
 	typedef priority_queue<BucketChunk*, vector<BucketChunk*>, ChunkComparator> ChunkQueue;
 	
+	
+	//ToDo: Add documentation
 	uint64_t prepareBuckets(int fdInput, uint64_t inputCount, int fdBuckets, uint64_t bucketSize);
 	void mergeBuckets(int fdBuckets, uint64_t bucketSize, uint64_t bucketCount, int fdOutput);
 	void shiftSmallest(ChunkQueue& outputQueue, Bucket& outputBuffer, int fdOutput);
@@ -69,7 +71,7 @@ namespace lsql {
 			bucketCount++;
 			elementOffset += bucketSize;
 			
-			cout << "Finished preparing bucket " << bucketCount;
+			cout << "INFO: Finished preparing bucket " << bucketCount << endl;
 
 		} while (bucket.size() > 0);
 		
@@ -84,7 +86,7 @@ namespace lsql {
 		Bucket outputBuffer;
 		outputBuffer.reserve(chunkSize);
 		
-		cout << "Starting k-way merge";
+		cout << "INFO: Starting k-way merge" << endl;
 
 		for (int i = 0; i < bucketCount; i++) {
 			BucketChunk* chunk = new BucketChunk(fdBuckets, i * bucketSize, chunkSize, bucketSize);
