@@ -33,7 +33,7 @@ namespace lsql {
 	typedef priority_queue<BucketChunk*, vector<BucketChunk*>, ChunkComparator> ChunkQueue;
 	
 	uint64_t prepareBuckets(int fdInput, uint64_t inputCount, int fdBuckets, uint64_t bucketSize);
-	void mergeBuckets(int fdBuckets, uint64_t bucketSize, uint64_t bucketCount, int fdOutput, uint64_t memSize);
+	void mergeBuckets(int fdBuckets, uint64_t bucketSize, uint64_t bucketCount, int fdOutput);
 	void shiftSmallest(ChunkQueue& outputQueue, Bucket& outputBuffer, int fdOutput);
 
 	void Sorting::externalSort(int fdInput, uint64_t inputCount, int fdOutput, uint64_t memSize) {
@@ -45,7 +45,7 @@ namespace lsql {
 		FileUtils::close(fdBuckets);
 		
 		fdBuckets = FileUtils::openRead(BUCKET_FILE_NAME);
-		mergeBuckets(fdBuckets, bucketSize, bucketCount, fdOutput, memSize);
+		mergeBuckets(fdBuckets, bucketSize, bucketCount, fdOutput);
 		FileUtils::close(fdBuckets);
 		
 		FileUtils::remove(BUCKET_FILE_NAME);
@@ -76,9 +76,9 @@ namespace lsql {
 		return bucketCount;
 	}
 	
-	void mergeBuckets(int fdBuckets, uint64_t bucketSize, uint64_t bucketCount, int fdOutput, uint64_t memSize) {
+	void mergeBuckets(int fdBuckets, uint64_t bucketSize, uint64_t bucketCount, int fdOutput) {
 		
-		uint64_t chunkSize = (bucketSize - 2) / bucketCount;
+		uint64_t chunkSize = bucketSize / (bucketCount + 1);
 
 		ChunkQueue outputQueue;
 		Bucket outputBuffer;
