@@ -56,6 +56,8 @@ namespace lsql {
 		uint64_t elementOffset = 0;
 		
 		Bucket bucket(0);
+			
+		//FIXME: Crash with bad alloc if size is too big, e.g. 2048 MiB Memory
 		bucket.reserve(bucketSize);
 		
 		do {
@@ -66,18 +68,24 @@ namespace lsql {
 			
 			bucketCount++;
 			elementOffset += bucketSize;
+			
+			cout << "Finished preparing bucket " << bucketCount;
+
 		} while (bucket.size() > 0);
 		
 		return bucketCount;
 	}
 	
 	void mergeBuckets(int fdBuckets, uint64_t bucketSize, uint64_t bucketCount, int fdOutput, uint64_t memSize) {
+		
 		uint64_t chunkSize = (bucketSize - 2) / bucketCount;
 
 		ChunkQueue outputQueue;
 		Bucket outputBuffer;
 		outputBuffer.reserve(chunkSize);
 		
+		cout << "Starting k-way merge";
+
 		for (int i = 0; i < bucketCount; i++) {
 			BucketChunk* chunk = new BucketChunk(fdBuckets, i * bucketSize, chunkSize, bucketSize);
 			chunk->next();
