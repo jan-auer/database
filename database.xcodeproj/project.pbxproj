@@ -68,6 +68,7 @@
 /* Begin PBXFileReference section */
 		01D2818118FC5DB400F60DA7 /* sort */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = sort; sourceTree = BUILT_PRODUCTS_DIR; };
 		01D2818218FC5E0300F60DA7 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = sort/main.cpp; sourceTree = "<group>"; tabWidth = 2; };
+		01D2818418FC6EF400F60DA7 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		4A192C4218F8227D005941E4 /* generator */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = generator; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A192C4618F8227D005941E4 /* generator.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = generator.1; sourceTree = "<group>"; };
 		4A192C4C18F822EF005941E4 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
@@ -170,6 +171,7 @@
 				01D2817718FC5D5700F60DA7 /* sort */,
 				4A192C4318F8227D005941E4 /* generator */,
 				4A5E081A18F56D630062E0A3 /* Products */,
+				01D2818418FC6EF400F60DA7 /* Makefile */,
 			);
 			sourceTree = "<group>";
 		};
