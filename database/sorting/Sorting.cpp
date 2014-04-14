@@ -30,11 +30,11 @@ namespace lsql {
 		}
 	};
 	
-	typedef priority_queue<BucketChunk*, vector<BucketChunk*>, ChunkComparator> queue_t;
+	typedef priority_queue<BucketChunk*, vector<BucketChunk*>, ChunkComparator> ChunkQueue;
 	
 	uint64_t prepareBuckets(int fdInput, uint64_t inputCount, int fdBuckets, uint64_t bucketSize);
 	void mergeBuckets(int fdBuckets, uint64_t bucketSize, uint64_t bucketCount, int fdOutput, uint64_t memSize);
-	void shiftSmallest(queue_t& outputQueue, Bucket& outputBuffer, int fdOutput);
+	void shiftSmallest(ChunkQueue& outputQueue, Bucket& outputBuffer, int fdOutput);
 
 	void Sorting::externalSort(int fdInput, uint64_t inputCount, int fdOutput, uint64_t memSize) {
 		size_t bucketSize = memSize / sizeof(BucketValue);
@@ -74,7 +74,7 @@ namespace lsql {
 	void mergeBuckets(int fdBuckets, uint64_t bucketSize, uint64_t bucketCount, int fdOutput, uint64_t memSize) {
 		uint64_t chunkSize = (bucketSize - 2) / bucketCount;
 
-		queue_t outputQueue;
+		ChunkQueue outputQueue;
 		Bucket outputBuffer;
 		outputBuffer.reserve(chunkSize);
 		
@@ -90,7 +90,7 @@ namespace lsql {
 			shiftSmallest(outputQueue, outputBuffer, fdOutput);
 	}
 	
-	void shiftSmallest(queue_t& outputQueue, Bucket& outputBuffer, int fdOutput) {
+	void shiftSmallest(ChunkQueue& outputQueue, Bucket& outputBuffer, int fdOutput) {
 		BucketChunk* chunk = outputQueue.top();
 		outputQueue.pop();
 		
