@@ -12,7 +12,6 @@
 #include <queue>        // std::priority_queue
 
 #include "File.h"
-#include "FileUtils.h"
 #include "Chunk.h"
 #include "Sorting.h"
 
