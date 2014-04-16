@@ -33,9 +33,9 @@ namespace lsql {
 		close();
 		
 		if (write) {
-			fd = open(path, O_CREAT|O_TRUNC|O_WRONLY, S_IRUSR|S_IWUSR);
+			fd = ::open(path.c_str(), O_CREAT|O_TRUNC|O_WRONLY, S_IRUSR|S_IWUSR);
 		} else {
-			fd = open(path, O_RDONLY);
+			fd = ::open(path.c_str(), O_RDONLY);
 		}
 		
 		if (fd <= 0) {
@@ -73,7 +73,7 @@ namespace lsql {
 		assert(fd > 0);
 		
 		off_t fileSize = elementCount * sizeof(Element);
-		int ret = ftruncate(fd, 0, fileSize);
+		int ret = ftruncate(fd, fileSize);
 		
 		if (ret == 0) {
 			return true;
