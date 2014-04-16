@@ -13,6 +13,8 @@
 #include <iostream>
 #include "File.h"
 
+using namespace std;
+
 namespace lsql {
 	
 	template<typename Element>
@@ -68,7 +70,7 @@ namespace lsql {
 	
 	template<typename Element>
 	bool File<Element>::allocate(off_t elementCount) {
-		assert(fd > 0, "Failed to allocate: Missing file descriptor.");
+		assert(fd > 0);
 		
 		off_t fileSize = elementCount * sizeof(Element);
 		int ret = ftruncate(fd, 0, fileSize);
@@ -83,7 +85,7 @@ namespace lsql {
 	
 	template<typename Element>
 	bool File<Element>::readVector(std::vector<Element>& data, off_t count, off_t offset) {
-		assert(fd > 0, "Failed to read vector: Missing file descriptor.");
+		assert(fd > 0);
 		
 		data.resize(count);
 		Element* rawData = data.data();
@@ -101,7 +103,7 @@ namespace lsql {
 	
 	template<typename Element>
 	bool File<Element>::writeVector(const std::vector<Element>& data) {
-		assert(fd > 0, "Failed to write vector: Missing file descriptor.");
+		assert(fd > 0);
 		
 		const Element* rawData = data.data();
 		size_t rawSize = sizeof(Element) * data.size();
