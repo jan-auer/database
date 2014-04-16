@@ -6,10 +6,12 @@
 //  Copyright (c) 2014 LightningSQL. All rights reserved.
 //
 
+#include <stdio.h>
 #include <algorithm>    // std::sort
 #include <vector>       // std::vector
 #include <queue>        // std::priority_queue
 
+#include "File.h"
 #include "FileUtils.h"
 #include "Chunk.h"
 #include "Sorting.h"
@@ -18,103 +20,97 @@ using namespace std;
 
 namespace lsql {
 
-	const char* BUCKET_FILE_NAME = "./buckets";
-	
-	typedef uint64_t BucketValue;
-	typedef vector<BucketValue> Bucket;
-	typedef Chunk<BucketValue> BucketChunk;
-	
+	template<typename Element>
 	struct ChunkComparator {
-		bool operator()(const BucketChunk* a, const BucketChunk* b) const {
+		bool operator()(const Chunk<Element>* a, const Chunk<Element>* b) const {
 			return *a->current() > *b->current();
 		}
 	};
-	
-	typedef priority_queue<BucketChunk*, vector<BucketChunk*>, ChunkComparator> ChunkQueue;
-	
-	
-	//ToDo: Add documentation
-	uint64_t prepareBuckets(int fdInput, uint64_t inputCount, int fdBuckets, uint64_t bucketSize);
-	void mergeBuckets(int fdBuckets, uint64_t bucketSize, uint64_t bucketCount, int fdOutput);
-	void shiftSmallest(ChunkQueue& outputQueue, Bucket& outputBuffer, int fdOutput);
 
-	void Sorting::externalSort(int fdInput, uint64_t inputCount, int fdOutput, uint64_t memSize) {
-		size_t bucketSize = memSize / sizeof(BucketValue);
+	///
+	template<typename Element>
+	struct ChunkQueue : priority_queue<Chunk<Element>*, vector<Chunk<Element>*>, ChunkComparator<Element>> {};
+		
+	/**
+	 *
+	 */
+	template<typename Element>
+	off_t prepareBuckets(File<Element>& inputFile, off_t inputCount, File<Element>& buckets, size_t bucketSize);
 
-		int fdBuckets = FileUtils::openWrite(BUCKET_FILE_NAME);
-		FileUtils::allocate<BucketValue>(fdBuckets, inputCount);
-		uint64_t bucketCount = prepareBuckets(fdInput, inputCount, fdBuckets, bucketSize);
-		FileUtils::close(fdBuckets);
+	/**
+	 *
+	 */
+	template<typename Element>
+	void mergeBuckets(File<Element>& buckets, off_t bucketCount, size_t bucketSize, File<Element>& outputFile, size_t memSize);
+
+	/**
+	 *
+	 */
+	template<typename Element>
+	void shiftSmallest(ChunkQueue<Element>& outputQueue, vector<Element>& outputBuffer, File<Element>& outputFile);
+
+	template<typename Element>
+	void externalSort(File<Element>& inputFile, off_t inputCount, File<Element>& outputFile, size_t memSize) {
+		size_t memElements = memSize / sizeof(Element);
 		
-		fdBuckets = FileUtils::openRead(BUCKET_FILE_NAME);
-		mergeBuckets(fdBuckets, bucketSize, bucketCount, fdOutput);
-		FileUtils::close(fdBuckets);
+		File<Element> buckets;
+		buckets.allocate(memElements);
 		
-		FileUtils::remove(BUCKET_FILE_NAME);
+		off_t bucketCount = prepareBuckets(inputFile, inputCount, buckets, memElements);
+		mergeBuckets(buckets, bucketCount, memElements, outputFile, memSize);
 	};
 	
-	uint64_t prepareBuckets(int fdInput, uint64_t inputCount, int fdBuckets, uint64_t bucketSize) {
+	template<typename Element>
+	off_t prepareBuckets(File<Element>& inputFile, off_t inputCount, File<Element>& buckets, size_t bucketSize) {
 		int64_t bucketCount = -1;
-		uint64_t elementOffset = 0;
+		off_t elementOffset = 0;
 		
-		Bucket bucket(0);
-			
-		//FIXME: Crash with bad alloc if size is too big, e.g. 2048 MiB Memory
+		vector<Element> bucket;
 		bucket.reserve(bucketSize);
 		
 		do {
-			FileUtils::readVector(fdInput, bucket, bucketSize, elementOffset);
+			inputFile.readVector(bucket, bucketSize, elementOffset);
 			sort(bucket.begin(), bucket.end());
-//			for (auto e : bucket) cout << " - " << hex << e << endl;
-			FileUtils::writeVector(fdBuckets, bucket);
+			buckets.writeVector(bucket);
 			
 			bucketCount++;
 			elementOffset += bucketSize;
-			
-			cout << "INFO: Finished preparing bucket " << bucketCount << endl;
-
 		} while (bucket.size() > 0);
 		
 		return bucketCount;
 	}
 	
-	void mergeBuckets(int fdBuckets, uint64_t bucketSize, uint64_t bucketCount, int fdOutput) {
+	template<typename Element>
+	void mergeBuckets(File<Element>& buckets, off_t bucketCount, size_t bucketSize, File<Element>& outputFile, size_t memSize) {
+		off_t chunkSize = (memSize /*- bucketCount * sizeof(Chunk<Element>)*/) / sizeof(Element) / (bucketCount + 1);
 		
-		uint64_t chunkSize = bucketSize / (bucketCount + 1);
-
-		ChunkQueue outputQueue;
-		Bucket outputBuffer;
+		ChunkQueue<Element> outputQueue;
+		vector<Element> outputBuffer;
 		outputBuffer.reserve(chunkSize);
 		
-		cout << "INFO: Starting k-way merge" << endl;
-
 		for (int i = 0; i < bucketCount; i++) {
-			BucketChunk* chunk = new BucketChunk(fdBuckets, i * bucketSize, chunkSize, bucketSize);
+			Chunk<Element>* chunk = new Chunk<Element>(buckets, i * bucketSize, chunkSize, bucketSize);
 			chunk->next();
 			outputQueue.push(chunk);
-//			cout << "Inserting: " << hex << *chunk->current()
-//			     << " (top: " << *outputQueue.top()->current() << ")" << endl;
 		}
-			
+		
 		while (!outputQueue.empty())
-			shiftSmallest(outputQueue, outputBuffer, fdOutput);
+			shiftSmallest(outputQueue, outputBuffer, outputFile);
 	}
-	
-	void shiftSmallest(ChunkQueue& outputQueue, Bucket& outputBuffer, int fdOutput) {
-		BucketChunk* chunk = outputQueue.top();
+
+	template<typename Element>
+	void shiftSmallest(ChunkQueue<Element>& outputQueue, vector<Element>& outputBuffer, File<Element>& outputFile) {
+		Chunk<Element>* chunk = outputQueue.top();
 		outputQueue.pop();
 		
-//		cout << "Writing: " << hex << *chunk->current() << endl;
 		outputBuffer.push_back(*chunk->current());
 		if (outputBuffer.size() == outputBuffer.capacity()) {
-			FileUtils::writeVector(fdOutput, outputBuffer);
+			outputFile.writeVector(outputBuffer);
 			outputBuffer.clear();
 		}
 		
 		if (chunk->next() != 0) {
 			outputQueue.push(chunk);
-//			cout << "Inserting: " << hex << *chunk->current()
-//			     << " (top: " << *outputQueue.top()->current() << ")" << endl;
 		} else {
 			delete chunk;
 		}

@@ -9,41 +9,52 @@
 #ifndef __database__Chunk__
 #define __database__Chunk__
 
-#include <iostream>
+#include <stdint.h>
 #include <vector>
+#include "File.h"
 
 namespace lsql {
 
-	//
-	template<typename T>
+	/**
+	 *
+	 */
+	template<typename Element>
 	class Chunk {
 		
-		int fd;
+		File<Element>& file;
 		size_t offset, index;
 		size_t size, totalSize;
-		std::vector<T> data;
-		T* curr;
+		std::vector<Element> data;
+		Element* curr;
 		
 	public:
 		
-		//
-		Chunk(int fd, off_t offset, size_t size, size_t totalSize = 0);
+		/**
+		 *
+		 */
+		Chunk(File<Element>& file, off_t offset, size_t size, size_t totalSize = 0);
 		
-		// Prevent the copy constructor from being called.
+		/// Prevent the copy constructor from being called.
 		Chunk(const Chunk& c) = delete;
 		
-		// Prevent any assignments which could lead to duplication.
+		/// Prevent any assignments which could lead to duplication.
 		Chunk& operator=(const Chunk& c) const = delete;
 		
-		//
-		const T* next();
+		/**
+		 *
+		 */
+		const Element* next();
 		
-		//
-		const T* current() const;
+		/**
+		 *
+		 */
+		const Element* current() const;
 		
 	private:
 
-		//
+		/**
+		 *
+		 */
 		void reload();
 		
 	};
