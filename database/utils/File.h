@@ -9,7 +9,7 @@
 #ifndef __database__File__
 #define __database__File__
 
-#include <sys/types.h>  
+#include <stdint.h>
 #include <string>
 #include <vector>
 
@@ -30,6 +30,13 @@ namespace lsql {
 	public:
 		
 		/**
+		 * Creates a new temporary file with a unique name.
+		 * The file is automatically opened in w+ mode and removed
+		 * when closed or destructed.
+		 */
+		File();
+		
+		/**
 		 * Creates a new file for the given file descriptor.
 		 * NOTE: The file is closed, when this object is destructed!
 		 *
@@ -40,16 +47,26 @@ namespace lsql {
 		/**
 		 * Creates a new file at the given location.
 		 *
-		 * @param path A fully qualified path to the file. The path
-		 *             must exist, but the file does not.
+		 * @param path  A fully qualified path to the file. The path
+		 *              must exist, but the file does not.
+		 * @param write Specifies whether to open the file in read
+		 *              or write mode.
 		 */
-		File(const std::string& path);
+		File(const std::string& path, bool write = false);
 		
 		/**
 		 * Destructs this object. If the file is open, it will be
 		 * closed automatically.
 		 */
 		~File();
+		
+		/**
+		 * Gets the internal file descriptor. If the file is not 
+		 * opened, this method returns zero.
+		 *
+		 * @return The internal file descriptor.
+		 */
+		int descriptor() const;
 		
 		/**
 		 * Opens the file. If @c write is @c true and does not exist,
@@ -61,12 +78,13 @@ namespace lsql {
 		bool open(bool write);
 		
 		/**
-		 * Closes the file.
+		 * Closes the file, if it is open in any mode.
 		 */
 		bool close();
 		
 		/**
 		 * Removes the file.
+		 * If the file is open, it will be closed first.
 		 */
 		bool remove();
 		

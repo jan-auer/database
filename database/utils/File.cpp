@@ -7,6 +7,7 @@
 //
 
 #include <assert.h>
+#include <stdio.h>
 #include <fcntl.h>
 #include <sys/uio.h>
 #include <unistd.h>
@@ -18,10 +19,17 @@ using namespace std;
 namespace lsql {
 	
 	template<typename Element>
+	File<Element>::File() {
+		fd = fileno(tmpfile());
+	}
+
+	template<typename Element>
 	File<Element>::File(int fd) : fd(fd) {}
 	
 	template<typename Element>
-	File<Element>::File(const std::string& path) : fd(0), path(path) {}
+	File<Element>::File(const std::string& path, bool write) : fd(0), path(path) {
+		open(write);
+	}
 	
 	template<typename Element>
 	File<Element>::~File() {
@@ -29,11 +37,16 @@ namespace lsql {
 	}
 	
 	template<typename Element>
+	int File<Element>::descriptor() const {
+		return fd;
+	}
+	
+	template<typename Element>
 	bool File<Element>::open(bool write) {
 		close();
 		
 		if (write) {
-			fd = ::open(path.c_str(), O_CREAT|O_TRUNC|O_WRONLY, S_IRUSR|S_IWUSR);
+			fd = ::open(path.c_str(), O_CREAT|O_TRUNC|O_RDWR, S_IRUSR|S_IWUSR);
 		} else {
 			fd = ::open(path.c_str(), O_RDONLY);
 		}
@@ -61,7 +74,9 @@ namespace lsql {
 	
 	template<typename Element>
 	bool File<Element>::remove() {
-		if (::remove(path) == 0)
+		close();
+		
+		if (::remove(path.c_str()) == 0)
 			return true;
 		
 		cerr << "Cannot delete file: " << strerror(errno) << endl;
