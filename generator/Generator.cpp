@@ -6,22 +6,30 @@
 //  Copyright (c) 2014 LightningSQL. All rights reserved.
 //
 
-#include "FileUtils.h"
+#include "File.h"
 #include "Generator.h"
 
 namespace lsql {
 	
-	
+	/**
+	 * Generates random uint64_t nubers.
+	 */
 	class RandomLong {
 		
 		uint64_t state;
 		
 	public:
 		
-		//
+		/**
+		 * Creates a new random number generator.
+		 * 
+		 * @param seed A seed for deterministic number generation.
+		 */
 		explicit RandomLong(uint64_t seed) : state(seed) {}
 		
-		//
+		/**
+		 * Creates the next random number.
+		 */
 		uint64_t next() {
 			state ^= state << 13;
 			state ^= state >> 7;
@@ -30,12 +38,11 @@ namespace lsql {
 		
 	};
 
-	
-	Generator::Generator(uint64_t bufferSize, uint64_t seed) :
+	Generator::Generator(size_t bufferSize, uint64_t seed) :
 		bufferSize(bufferSize),
 		seed(seed) {}
 	
-	bool Generator::generate(const char* fileName, uint64_t n) const {
+	bool Generator::generate(const char* fileName, off_t n) const {
 		RandomLong rand(seed);
 		
 		if (n <= 0) {
@@ -43,32 +50,27 @@ namespace lsql {
 			return false;
 		}
 		
-		int fd = FileUtils::openWrite(fileName);
-		if (fd < 0)
+		File<uint64_t> f(fileName);
+		if (!f.open(true))
 			return false;
-		
-		if (!FileUtils::allocate<uint64_t>(fd, n))
+		if (!f.allocate(n))
 			return false;
-		
 		
 		vector<uint64_t> data;
 		data.reserve(bufferSize);
 		
-		for (int i = 0; i < n; i++) {
+		for (off_t i = 0; i < n; i++) {
 			uint64_t num = rand.next();
 			data.push_back(num);
 			if (i % bufferSize == 0) {
-				if (!FileUtils::writeVector(fd, data))
+				if (!f.writeVector(data))
 					return false;
 				
 				data.clear();
 			}
 		}
 		
-		if (!FileUtils::writeVector(fd, data))
-			return false;
-		
-		if (!FileUtils::close(fd))
+		if (!f.writeVector(data))
 			return false;
 		
 		return true;
