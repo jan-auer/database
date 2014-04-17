@@ -7,9 +7,9 @@
 //
 
 #include <stdio.h>
-#include <algorithm>    // std::sort
-#include <vector>       // std::vector
-#include <queue>        // std::priority_queue
+#include <algorithm>    
+#include <vector>       
+#include <queue>
 
 #include "File.h"
 #include "Chunk.h"
