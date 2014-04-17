@@ -50,9 +50,7 @@ namespace lsql {
 			return false;
 		}
 		
-		File<uint64_t> f(fileName);
-		if (!f.open(true))
-			return false;
+		File<uint64_t> f(fileName, true);
 		if (!f.allocate(n))
 			return false;
 		
