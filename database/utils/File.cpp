@@ -86,6 +86,7 @@ namespace lsql {
 	template<typename Element>
 	bool File<Element>::allocate(off_t elementCount) {
 		assert(fd > 0);
+		assert(elementCount >= 0);
 		
 		off_t fileSize = elementCount * sizeof(Element);
 		int ret = ftruncate(fd, fileSize);
@@ -100,31 +101,47 @@ namespace lsql {
 	
 	template<typename Element>
 	bool File<Element>::readVector(std::vector<Element>& data, off_t count, off_t offset) {
-		assert(fd > 0);
-		
 		data.resize(count);
+
 		Element* rawData = data.data();
-		size_t rawSize = sizeof(Element) * count;
+		off_t rawSize = data.size() * sizeof(Element);
+		off_t rawOffset = offset * sizeof(Element);
 		
-		ssize_t readSize = pread(fd, rawData, rawSize, offset * sizeof(Element));
-		if (readSize < 0) {
-			cerr << "Cannot read from file: " << strerror(errno) << endl;
+		ssize_t readSize = read(rawData, rawSize, rawOffset);
+		if (readSize < 0)
 			return false;
-		} else {
-			data.resize(readSize / sizeof(Element));
-			return true;
-		}
+		
+		data.resize(readSize / sizeof(Element));
+		return true;
 	}
 	
 	template<typename Element>
 	bool File<Element>::writeVector(const std::vector<Element>& data) {
+		return write(data.data(), data.size() * sizeof(Element));
+	}
+	
+	template<typename Element>
+	ssize_t File<Element>::read(void* data, off_t size, off_t offset) {
 		assert(fd > 0);
+		assert(size >= 0);
+		assert(offset >= 0);
 		
-		const Element* rawData = data.data();
-		size_t rawSize = sizeof(Element) * data.size();
+		ssize_t readSize = ::pread(fd, data, size, offset);
+		if (readSize < 0) {
+			cerr << "Cannot read from file: " << strerror(errno) << endl;
+			return -1;
+		} else {
+			return readSize;
+		}
+	}
+	
+	template<typename Element>
+	bool File<Element>::write(const void* data, off_t size) {
+		assert(fd > 0);
+		assert(size >= 0);
 		
-		ssize_t writtenSize = write(fd, rawData, rawSize);
-		if (writtenSize == rawSize) {
+		ssize_t writtenSize = ::write(fd, data, size);
+		if (writtenSize == size) {
 			return true;
 		} else {
 			cerr << "Cannot write to file: " << strerror(errno) << endl;

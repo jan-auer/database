@@ -101,18 +101,37 @@ namespace lsql {
 		 *
 		 * @param data   A reference to the data vector.
 		 * @param count  The number of elements to read.
-		 * @param offset Number of elements to skip.
+		 * @param offset Number of elements to skip in the file.
 		 */
 		bool readVector(std::vector<Element>& data, off_t count, off_t offset = 0);
 		
 		/**
-		 * Writes all elements in the vector to the file.
+		 * Writes all elements from the vector to the file.
 		 * The file will automatically be resized, if the elements exceed
 		 * the file size.
 		 *
 		 * @param data A reference to a vector containing the elements.
 		 */
 		bool writeVector(const std::vector<Element>& data);
+		
+		/**
+		 * Reads file contents into the given array.
+		 *
+		 * @param data   A pointer to the data array.
+		 * @param size   The length of the file segment to read.
+		 * @param offset Number of elements to skip in the file.
+		 */
+		ssize_t read(void* data, off_t size, off_t offset = 0);
+		
+		/**
+		 * Writes all elements from the array to the file.
+		 * The file will automatically be resized, if the elements exceed
+		 * the file size.
+		 *
+		 * @param data  A reference to a vector containing the elements.
+		 * @param size  The length of the memory segment to write.
+		 */
+		bool write(const void* data, off_t size);
 		
 	};
 	
