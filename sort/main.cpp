@@ -8,52 +8,51 @@
 
 #include <iostream>
 #include <string.h>
+#include <chrono>
 
 #include "Generator.h"
-#include "FileUtils.h"
+#include "File.h"
 #include "Sorting.h"
-
 
 using namespace std;
 using namespace lsql;
 
+typedef chrono::high_resolution_clock Clock;
+
 const int GENERATOR_BUFFER_SIZE = 1000;
-const long long TEST_FILE_SIZE = 5368709120; // 5 * 1024 * 1024 * 1024 B = 5 GiB
 
 int main(int argc, char* argv[]) {
-		
-		
-		if (argc < 4 || argc > 5) {
-				cerr << "usage: " <<  argv[0]  << " <inputFile> <outputFile> <memoryBufferInMB> (-Generate)" << endl;
-				return 1;
-		}
-		
-		if (argc == 5 && strncmp("-Generate", argv[4], 9)  ==  0) {  // std::string implements ==, however comparison with "..." is undefined
-				
-				uint32_t numberOfElements = TEST_FILE_SIZE / sizeof(uint64_t);
-				
-				Generator gen(GENERATOR_BUFFER_SIZE);
-				bool success = gen.generate(argv[1], numberOfElements);
-				
-				if (!success) {
-						cerr << "Generation of input File " << argv[1] << " failed!";
-						return 2;
-				}
-				
-		}
-		
-		int input = FileUtils::openRead(argv[1]);
-		int output = FileUtils::openWrite(argv[2]);
+	if (argc < 5 || argc > 6) {
+		cerr << "usage: " << argv[0] << " <inputFile> <outputFile> <fileSizeInMB> <memoryBufferInMB> (-Generate)" << endl;
+		return 1;
+	}
 	
- 
-		uint64_t inputCount = TEST_FILE_SIZE / sizeof(uint64_t);
-		uint64_t memSize = atoi(argv[3]) * 1024 * 1024; // MiB to B
- 
-		Sorting::externalSort(input, inputCount, output, memSize);
+	uint64_t elementCount = atoi(argv[3]) * 1024 * 1024 / sizeof(uint64_t);
+	
+	// std::string implements ==, however comparison with "..." is undefined
+	if (argc == 6 && strncmp("-Generate", argv[5], 9) == 0) {
+		cout << "Generating " << elementCount << " random numbers in '" << argv[1] << "'" << endl;
 		
-		FileUtils::close(output);
-		FileUtils::close(input);
+		Generator gen(GENERATOR_BUFFER_SIZE);
+		bool success = gen.generate(argv[1], elementCount);
 		
+		if (!success) {
+			cerr << "Generation of input File " << argv[1] << " failed!";
+			return 2;
+		}
+	}
+	
+	File<uint64_t> input(argv[1], false);
+	File<uint64_t> output(argv[2], true);
+	
+	uint64_t memSize = atoi(argv[4]) * 1024 * 1024; // MiB to B
+
+	cout << "Starting to sort..." << endl;
+	auto s = Clock::now();
+	externalSort(input, elementCount, output, memSize);
+	auto e = Clock::now();
+	cout << "Sorting completed in " << chrono::duration_cast<chrono::milliseconds>(e-s).count() << "ms." << endl;
+
     return 0;
 }
 

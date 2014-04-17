@@ -8,20 +8,17 @@
 
 #include <iostream>
 
-#include "FileUtils.h"
+#include "File.h"
 #include "Sorting.h"
 
 using namespace lsql;
 
 int main(int argc, const char * argv[])
 {
-	int input = FileUtils::openRead("numbers");
-	int output = FileUtils::openWrite("sorted");
+	File<uint64_t> input("numbers", false);
+	File<uint64_t> output("sorted", true);
 	
-	Sorting::externalSort(input, 20, output, 10 * sizeof(uint64_t));
-	
-	FileUtils::close(output);
-	FileUtils::close(input);
+	externalSort(input, 20, output, 10 * sizeof(uint64_t));
 	
     return 0;
 }
