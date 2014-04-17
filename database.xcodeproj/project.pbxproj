@@ -82,6 +82,10 @@
 		4A5E081E18F56D630062E0A3 /* database.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = database.1; sourceTree = "<group>"; };
 		4A9D8F1218F5742400E700F6 /* test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; name = test; path = unit_test; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A9D8F1618F5742400E700F6 /* test.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = test.1; sourceTree = "<group>"; };
+		4AD5B03D190023D10090B8A6 /* BufferManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BufferManager.cpp; sourceTree = "<group>"; };
+		4AD5B03E190023D10090B8A6 /* BufferManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BufferManager.h; sourceTree = "<group>"; };
+		4AD5B040190023E90090B8A6 /* BufferFrame.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BufferFrame.cpp; sourceTree = "<group>"; };
+		4AD5B041190023E90090B8A6 /* BufferFrame.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BufferFrame.h; sourceTree = "<group>"; };
 		4AE60BA518F909DB00717C22 /* Generator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Generator.cpp; sourceTree = "<group>"; };
 		4AE60BA618F909DB00717C22 /* Generator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Generator.h; sourceTree = "<group>"; };
 		4AE60BA918F9230200717C22 /* Chunk.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Chunk.cpp; sourceTree = "<group>"; };
@@ -185,6 +189,7 @@
 		4A5E081B18F56D630062E0A3 /* database */ = {
 			isa = PBXGroup;
 			children = (
+				4AD5B03C190021D80090B8A6 /* buffer */,
 				4AE60B9D18F836A500717C22 /* utils */,
 				4A44DA8B18F826B0001AF70E /* sorting */,
 				4A5E081E18F56D630062E0A3 /* database.1 */,
@@ -203,6 +208,17 @@
 			);
 			name = unit_test;
 			path = test;
+			sourceTree = "<group>";
+		};
+		4AD5B03C190021D80090B8A6 /* buffer */ = {
+			isa = PBXGroup;
+			children = (
+				4AD5B03D190023D10090B8A6 /* BufferManager.cpp */,
+				4AD5B03E190023D10090B8A6 /* BufferManager.h */,
+				4AD5B040190023E90090B8A6 /* BufferFrame.cpp */,
+				4AD5B041190023E90090B8A6 /* BufferFrame.h */,
+			);
+			path = buffer;
 			sourceTree = "<group>";
 		};
 		4AE60B9D18F836A500717C22 /* utils */ = {
