@@ -27,7 +27,7 @@ int main(int argc, char* argv[]) {
 		return 1;
 	}
 	
-	uint64_t elementCount = atoi(argv[3]) * 1024 * 1024 / sizeof(uint64_t);
+	uint64_t elementCount = atoi(argv[3]) / sizeof(uint64_t) * 1024 * 1024;
 	
 	// std::string implements ==, however comparison with "..." is undefined
 	if (argc == 6 && strncmp("-Generate", argv[5], 9) == 0) {
