@@ -1,6 +1,17 @@
-.PHONY: sort
+EXECUTABLES=database sort
 
-sort:
-	g++ ./sort/main.cpp -std=c++11 -Igenerator -Idatabase/utils -Idatabase/sorting -o products/sort
+.PHONY: $(EXECUTABLES)
+
+CC=g++
+STD=-std=c++11
+INC=-I generator -I database/utils -I database/sorting
+CPP=./$@/main.cpp
+OUT=-o bin/$@
+
+all: $(EXECUTABLES)
+
+$(EXECUTABLES):
+	$(CC) $(CPP) $(STD) $(INC) $(OUT)
+
 clean:
-	rm -rf products
+	rm bin/*
