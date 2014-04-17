@@ -9,6 +9,9 @@
 #ifndef __database__BufferFrame__
 #define __database__BufferFrame__
 
+#include <stdint.h>
+#include <sys/types.h>
+
 namespace lsql {
 
 	/**
@@ -21,6 +24,8 @@ namespace lsql {
 	struct PID {
 		uint32_t page;
 		uint16_t segment;
+		
+		PID(uint16_t segment, uint32_t page) : segment(segment), page(page) {}
 	};
 	
 	/**
@@ -28,16 +33,21 @@ namespace lsql {
 	 */
 	class BufferFrame {
 		
+		PID id;
+		void* data;
+		bool dirty;
+		
 	public:
 		
 		/**
-		 * The size of BufferFrame data arrays.
+		 * The size of BufferFrame data arrays. Typically 4096.
 		 */
 		static size_t SIZE;
 		
 		/**
 		 * Creates a new buffer frame and allocates enough space to fit
-		 * @c BufferFrame::SIZE byte pages.
+		 * @c BufferFrame::SIZE byte pages. Initially, the frame is not
+		 * dirty.
 		 *
 		 * @param id A unique identifier for this page frame.
 		 */
