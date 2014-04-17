@@ -3,7 +3,7 @@ EXECUTABLES=database sort
 .PHONY: $(EXECUTABLES)
 
 CC=g++
-STD=-std=c++11
+FLAGS=-std=c++11 -O3
 INC=-I generator -I database/utils -I database/sorting
 CPP=./$@/main.cpp
 OUT=-o bin/$@
@@ -11,7 +11,7 @@ OUT=-o bin/$@
 all: $(EXECUTABLES)
 
 $(EXECUTABLES):
-	$(CC) $(CPP) $(STD) $(INC) $(OUT)
+	$(CC) $(CPP) $(FLAGS) $(INC) $(OUT)
 
 clean:
 	rm bin/*
