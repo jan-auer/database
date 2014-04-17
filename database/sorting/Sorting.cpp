@@ -126,6 +126,8 @@ namespace lsql {
 		
 		while (!outputQueue.empty())
 			shiftSmallest(outputQueue, outputBuffer, outputFile);
+		
+		outputFile.writeVector(outputBuffer);
 	}
 
 	template<typename Element>
