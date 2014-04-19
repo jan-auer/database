@@ -15,7 +15,7 @@ namespace lsql {
 	
 	size_t BufferFrame::SIZE = (size_t) sysconf(_SC_PAGESIZE);
 	
-	BufferFrame::BufferFrame(PID& id) : id(id), dirty(false) {
+	BufferFrame::BufferFrame(const PID& id) : id(id), dirty(false) {
 		data = malloc(SIZE);
 	}
 	

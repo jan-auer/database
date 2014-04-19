@@ -51,7 +51,7 @@ namespace lsql {
 		 *
 		 * @param id A unique identifier for this page frame.
 		 */
-		BufferFrame(PID& id);
+		BufferFrame(const PID& id);
 		
 		/**
 		 * Destroys this buffer frame and releases all memory allocated
