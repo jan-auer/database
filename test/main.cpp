@@ -30,6 +30,10 @@
 #include <stdio.h>
 
 #include "gtest/gtest.h"
+#include "FileTest.cpp"
+#include "BufferFrameTest.cpp"
+#include "ConcurrentMapTest.cpp"
+#include "LockingTest.cpp"
 
 GTEST_API_ int main(int argc, char **argv) {
   printf("Running main() from gtest_main.cc\n");
