@@ -15,12 +15,16 @@ namespace lsql {
 namespace test {
 
 	void* testSharedLock(void* arg) {
-		if (pthread_rwlock_tryrdlock((pthread_rwlock_t*) arg) != 0)
-			return (void*) 1;
 		if (pthread_rwlock_trywrlock((pthread_rwlock_t*) arg) == 0)
 			return (void*) 2;
-		
+		if (pthread_rwlock_tryrdlock((pthread_rwlock_t*) arg) != 0)
+			return (void*) 1;
+
 		return (void*) 0;
+	}
+
+	void* testUnlocked(void* arg) {
+		return (void*) pthread_rwlock_trywrlock((pthread_rwlock_t*) arg);
 	}
 
 	void* testExclusiveLock(void* arg) {

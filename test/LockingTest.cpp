@@ -41,9 +41,9 @@ namespace test {
 		pthread_rwlock_rdlock(&l);
 		
 		unlock(&l);
-		int ret = pthread_rwlock_unlock(&l);
-		
-		EXPECT_EQ(EPERM, ret);
+		ssize_t ret = testThreadded(&testUnlocked, (void*) &l);
+
+		EXPECT_EQ(0, ret);
 	}
 
 	TEST(LockingTest, UnlocksExclusive) {
@@ -51,9 +51,9 @@ namespace test {
 		pthread_rwlock_wrlock(&l);
 		
 		unlock(&l);
-		int ret = pthread_rwlock_unlock(&l);
-		
-		EXPECT_EQ(EPERM, ret);
+		ssize_t ret = testThreadded(&testUnlocked, (void*) &l);
+
+		EXPECT_EQ(0, ret);
 	}
 
 }
