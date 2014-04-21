@@ -87,9 +87,9 @@
 		4AD5B041190023E90090B8A6 /* BufferFrame.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BufferFrame.h; sourceTree = "<group>"; };
 		4AD5B04219004D9D0090B8A6 /* BufferFrameTest.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BufferFrameTest.cpp; sourceTree = "<group>"; };
 		4AD5B0461900A0600090B8A6 /* ConcurrentMapTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ConcurrentMapTest.cpp; sourceTree = "<group>"; };
-		4AE034EE1901F2DD00C48F5E /* Locking.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Locking.cpp; sourceTree = "<group>"; };
-		4AE034EF1901F2DD00C48F5E /* Locking.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Locking.h; sourceTree = "<group>"; };
-		4AE034F01901F37C00C48F5E /* LockingTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LockingTest.cpp; sourceTree = "<group>"; };
+		4AE034EE1901F2DD00C48F5E /* Lock.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Lock.cpp; sourceTree = "<group>"; };
+		4AE034EF1901F2DD00C48F5E /* Lock.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Lock.h; sourceTree = "<group>"; };
+		4AE034F01901F37C00C48F5E /* LockTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LockTest.cpp; sourceTree = "<group>"; };
 		4AE034F31901F45E00C48F5E /* ThreadHelpers.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ThreadHelpers.cpp; sourceTree = "<group>"; };
 		4AE60BA518F909DB00717C22 /* Generator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Generator.cpp; sourceTree = "<group>"; };
 		4AE60BA618F909DB00717C22 /* Generator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Generator.h; sourceTree = "<group>"; };
@@ -213,7 +213,8 @@
 				4A0C3FC018FF2DAE0070FD98 /* FileTest.cpp */,
 				4AD5B04219004D9D0090B8A6 /* BufferFrameTest.cpp */,
 				4AD5B0461900A0600090B8A6 /* ConcurrentMapTest.cpp */,
-				4AE034F01901F37C00C48F5E /* LockingTest.cpp */,
+				4AE034F01901F37C00C48F5E /* LockTest.cpp */,
+				4A412E6E1905252E00E2969B /* BufferManagerTest.cpp */,
 			);
 			name = unit_test;
 			path = test;
@@ -243,10 +244,8 @@
 			children = (
 				4A0C3FB918FF1F2F0070FD98 /* File.cpp */,
 				4A0C3FBA18FF1F2F0070FD98 /* File.h */,
-				4AD5B044190069460090B8A6 /* ConcurrentMap.cpp */,
-				4AD5B045190069460090B8A6 /* ConcurrentMap.h */,
-				4AE034EE1901F2DD00C48F5E /* Locking.cpp */,
-				4AE034EF1901F2DD00C48F5E /* Locking.h */,
+				4AE034EE1901F2DD00C48F5E /* Lock.cpp */,
+				4AE034EF1901F2DD00C48F5E /* Lock.h */,
 			);
 			path = utils;
 			sourceTree = "<group>";
