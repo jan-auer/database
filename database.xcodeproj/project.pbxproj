@@ -71,6 +71,9 @@
 		4A192C4218F8227D005941E4 /* generator */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = generator; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A192C4618F8227D005941E4 /* generator.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = generator.1; sourceTree = "<group>"; };
 		4A192C4C18F822EF005941E4 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		4A412E6E1905252E00E2969B /* BufferManagerTest.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BufferManagerTest.cpp; sourceTree = "<group>"; };
+		4A412E6F19054B5300E2969B /* PageId.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PageId.h; sourceTree = "<group>"; };
+		4A412E7019054BED00E2969B /* PageIdTest.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PageIdTest.cpp; sourceTree = "<group>"; };
 		4A44DA8C18F826C2001AF70E /* Sorting.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Sorting.cpp; sourceTree = "<group>"; };
 		4A44DA8D18F826C2001AF70E /* Sorting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sorting.h; sourceTree = "<group>"; };
 		4A44DA9318F82B58001AF70E /* gtest-all.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "gtest-all.cc"; sourceTree = "<group>"; };
@@ -215,6 +218,7 @@
 				4AD5B0461900A0600090B8A6 /* ConcurrentMapTest.cpp */,
 				4AE034F01901F37C00C48F5E /* LockTest.cpp */,
 				4A412E6E1905252E00E2969B /* BufferManagerTest.cpp */,
+				4A412E7019054BED00E2969B /* PageIdTest.cpp */,
 			);
 			name = unit_test;
 			path = test;
@@ -227,6 +231,7 @@
 				4AD5B03E190023D10090B8A6 /* BufferManager.h */,
 				4AD5B040190023E90090B8A6 /* BufferFrame.cpp */,
 				4AD5B041190023E90090B8A6 /* BufferFrame.h */,
+				4A412E6F19054B5300E2969B /* PageId.h */,
 			);
 			path = buffer;
 			sourceTree = "<group>";

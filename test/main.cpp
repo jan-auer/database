@@ -32,6 +32,7 @@
 
 #include "FileTest.cpp"
 #include "LockTest.cpp"
+#include "PageIdTest.cpp"
 #include "BufferFrameTest.cpp"
 
 GTEST_API_ int main(int argc, char **argv) {
