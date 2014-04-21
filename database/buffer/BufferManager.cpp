@@ -69,7 +69,14 @@ namespace lsql {
 
 		// Load data into the new frame
 		file.read(frame->getData(), BufferFrame::SIZE);
-		frame->unlock();
+
+		// Downgrade the lock, if only a shared lock is desired
+		if (!exclusive) {
+			// Downgrading the lock requires to release it first. It is very
+			// unlikely, that the page gets paged out so quickly.
+			frame->unlock();
+			frame->lock(false);
+		}
 
 		return *frame;
 	}
