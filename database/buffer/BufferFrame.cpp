@@ -12,10 +12,14 @@
 #include "BufferFrame.h"
 
 namespace lsql {
+
+	bool operator==(const PageId& a, const PageId& b) {
+		return a.id == b.id;
+	}
 	
 	size_t BufferFrame::SIZE = (size_t) sysconf(_SC_PAGESIZE);
 	
-	BufferFrame::BufferFrame(const PID& id) : id(id), dirty(false) {
+	BufferFrame::BufferFrame(const PageId& id) : id(id), dirty(false) {
 		data = malloc(SIZE);
 	}
 	
@@ -23,10 +27,10 @@ namespace lsql {
 		free(data);
 	}
 	
-	const PID& BufferFrame::getId() const {
+	const PageId& BufferFrame::getId() const {
 		return id;
 	}
-	
+
 	void* BufferFrame::getData() {
 		return data;
 	}
@@ -37,6 +41,14 @@ namespace lsql {
 	
 	void BufferFrame::setDirty() {
 		dirty = true;
+	}
+
+	bool BufferFrame::lock(bool exclusive) {
+		return l.lock(exclusive) == 0;
+	}
+	
+	bool BufferFrame::unlock() {
+		return l.unlock() == 0;
 	}
 	
 }
