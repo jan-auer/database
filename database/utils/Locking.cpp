@@ -16,7 +16,7 @@
         }
 
 namespace lsql {
-	
+
 	int lock(Lock* lock, bool exclusive) {
 		if (exclusive) {
 			return pthread_rwlock_wrlock(lock);
