@@ -86,8 +86,6 @@
 		4AD5B040190023E90090B8A6 /* BufferFrame.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BufferFrame.cpp; sourceTree = "<group>"; };
 		4AD5B041190023E90090B8A6 /* BufferFrame.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BufferFrame.h; sourceTree = "<group>"; };
 		4AD5B04219004D9D0090B8A6 /* BufferFrameTest.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BufferFrameTest.cpp; sourceTree = "<group>"; };
-		4AD5B044190069460090B8A6 /* ConcurrentMap.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ConcurrentMap.cpp; sourceTree = "<group>"; };
-		4AD5B045190069460090B8A6 /* ConcurrentMap.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConcurrentMap.h; sourceTree = "<group>"; };
 		4AD5B0461900A0600090B8A6 /* ConcurrentMapTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ConcurrentMapTest.cpp; sourceTree = "<group>"; };
 		4AE034EE1901F2DD00C48F5E /* Locking.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Locking.cpp; sourceTree = "<group>"; };
 		4AE034EF1901F2DD00C48F5E /* Locking.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Locking.h; sourceTree = "<group>"; };
