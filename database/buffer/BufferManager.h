@@ -9,6 +9,11 @@
 #ifndef __database__BufferManager__
 #define __database__BufferManager__
 
+#include <stdint.h>
+#include <utility>
+#include <vector>
+
+#include "Lock.h"
 #include "BufferFrame.h"
 
 namespace lsql {
@@ -19,6 +24,16 @@ namespace lsql {
 	 * information about frames, see @c BufferFrame.
 	 */
 	class BufferManager {
+
+		typedef std::pair<PageId, BufferFrame*> BufferEntry;
+		typedef std::vector<BufferEntry> BufferSlot;
+
+		Lock* slotLocks;
+		BufferSlot* slots;
+		uint64_t slotCount;
+
+		File<void> file;
+		uint64_t maxPages;
 		
 	public:
 		
@@ -30,7 +45,7 @@ namespace lsql {
 		 *                 the frames. The file will be opened with r+.
 		 * @param size     The maximum number of frames in memory.
 		 */
-		BufferManager(const std::string& fileName, size_t size);
+		BufferManager(const std::string& fileName, uint64_t size);
 		
 		/**
 		 * Destroys this buffer manager instance and writes all dirty
@@ -53,7 +68,7 @@ namespace lsql {
 		 * @return A reference to the buffer frame. See @c BufferFrame
 		 *         for more details.
 		 */
-		BufferFrame& fixPage(PID id, bool exclusive);
+		BufferFrame& fixPage(const PageId& id, bool exclusive);
 		
 		/**
 		 * Releases the given frame. Thus, the frame can be paged out,
@@ -61,6 +76,42 @@ namespace lsql {
 		 * the @c exclusive option will continue now.
 		 */
 		void unfixPage(BufferFrame& frame, bool isDirty);
+
+	private:
+
+		/**
+		 * Creates a hash value for the specified page using an internal 
+		 * hashing algorithm. 
+		 * 
+		 * The hash is guaranteed not to exceed @c slotCount, if slotCount is 
+		 * a power of two. Otherwise, the hashed value is undefined. 
+		 *
+		 * @param id The page identifier to obtain the hash value from.
+		 * @return The hashed value of @c id.
+		 */
+		uint64_t hash(const PageId& id) const;
+
+		/**
+		 * Resolves a buffer frame within the given slot.
+		 *
+		 * @param slot      A reference to the slot to search in.
+		 * @param id        The id of the page.
+		 * @param exclusive Whether or not the frame is exclusive to the caller 
+		 *                  of this method.
+		 *
+		 * @return A pointer to the page frame, if found; otherwise @c nullptr.
+		 */
+		BufferFrame* acquirePage(BufferSlot& slot, const PageId& id, bool exclusive);
+
+		/**
+		 * Creates a new buffer frame and allocates space for the page contents. 
+		 * 
+		 * @param slot A reference to the slot which will contain the frame.
+		 * @param id   The id of the page.
+		 *
+		 * @return A pointer to the new page frame.
+		 */
+		BufferFrame* allocatePage(BufferSlot& slot, const PageId& id);
 		
 	};
 	

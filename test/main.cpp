@@ -34,6 +34,7 @@
 #include "LockTest.cpp"
 #include "PageIdTest.cpp"
 #include "BufferFrameTest.cpp"
+#include "BufferManagerTest.cpp"
 
 GTEST_API_ int main(int argc, char **argv) {
   printf("Running main() from gtest_main.cc\n");
