@@ -130,8 +130,9 @@ namespace lsql {
 		 *
 		 * @param data  A reference to a vector containing the elements.
 		 * @param size  The length of the memory segment to write.
+		 * @param offset Number of elements to skip in the file.
 		 */
-		bool write(const void* data, off_t size);
+		bool write(const void* data, off_t size, off_t offset = 0);
 		
 	};
 	

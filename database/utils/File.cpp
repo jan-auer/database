@@ -136,11 +136,12 @@ namespace lsql {
 	}
 	
 	template<typename Element>
-	bool File<Element>::write(const void* data, off_t size) {
+	bool File<Element>::write(const void* data, off_t size, off_t offset) {
 		assert(fd > 0);
 		assert(size >= 0);
-		
-		ssize_t writtenSize = ::write(fd, data, size);
+		assert(offset >= 0);
+
+		ssize_t writtenSize = ::pwrite(fd, data, size, offset);
 		if (writtenSize == size) {
 			return true;
 		} else {
