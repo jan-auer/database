@@ -91,6 +91,8 @@ namespace lsql {
 		 */
 		bool lock(bool exclusive);
 
+		bool tryLock(bool exclusive);
+
 		/**
 		 * Unlocks the previously locked page.
 		 *

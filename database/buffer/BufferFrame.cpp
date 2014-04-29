@@ -46,7 +46,11 @@ namespace lsql {
 	bool BufferFrame::lock(bool exclusive) {
 		return l.lock(exclusive) == 0;
 	}
-	
+
+	bool BufferFrame::tryLock(bool exclusive) {
+		return l.tryLock(exclusive) == 0;
+	}
+
 	bool BufferFrame::unlock() {
 		return l.unlock() == 0;
 	}
