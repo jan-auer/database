@@ -65,6 +65,10 @@
 		01D2818118FC5DB400F60DA7 /* sort */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = sort; sourceTree = BUILT_PRODUCTS_DIR; };
 		01D2818218FC5E0300F60DA7 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = sort/main.cpp; sourceTree = "<group>"; tabWidth = 4; usesTabs = 1; };
 		01D2818418FC6EF400F60DA7 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		01D76ACC190EC0DC00E5DC65 /* Mutex.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Mutex.cpp; sourceTree = "<group>"; };
+		01D76ACD190EC0DC00E5DC65 /* Mutex.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Mutex.h; sourceTree = "<group>"; };
+		01D76AD0190EC21A00E5DC65 /* BufferQueue.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BufferQueue.cpp; sourceTree = "<group>"; };
+		01D76AD1190EC21A00E5DC65 /* BufferQueue.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BufferQueue.h; sourceTree = "<group>"; };
 		4A0C3FB918FF1F2F0070FD98 /* File.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = File.cpp; sourceTree = "<group>"; };
 		4A0C3FBA18FF1F2F0070FD98 /* File.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = File.h; sourceTree = "<group>"; };
 		4A0C3FC018FF2DAE0070FD98 /* FileTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileTest.cpp; sourceTree = "<group>"; };
@@ -72,7 +76,7 @@
 		4A192C4618F8227D005941E4 /* generator.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = generator.1; sourceTree = "<group>"; };
 		4A192C4C18F822EF005941E4 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		4A412E6E1905252E00E2969B /* BufferManagerTest.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BufferManagerTest.cpp; sourceTree = "<group>"; };
-		4A412E6F19054B5300E2969B /* PageId.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PageId.h; sourceTree = "<group>"; };
+		4A412E6F19054B5300E2969B /* PageId.h */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.c.h; path = PageId.h; sourceTree = "<group>"; };
 		4A412E7019054BED00E2969B /* PageIdTest.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PageIdTest.cpp; sourceTree = "<group>"; };
 		4A44DA8C18F826C2001AF70E /* Sorting.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Sorting.cpp; sourceTree = "<group>"; };
 		4A44DA8D18F826C2001AF70E /* Sorting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sorting.h; sourceTree = "<group>"; };
@@ -82,10 +86,10 @@
 		4A5E081918F56D630062E0A3 /* database */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = database; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A5E081C18F56D630062E0A3 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		4A5E081E18F56D630062E0A3 /* database.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = database.1; sourceTree = "<group>"; };
-		4A9D8F1218F5742400E700F6 /* test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; name = test; path = unit_test; sourceTree = BUILT_PRODUCTS_DIR; };
+		4A9D8F1218F5742400E700F6 /* unit_test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = unit_test; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A9D8F1618F5742400E700F6 /* test.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = test.1; sourceTree = "<group>"; };
-		4AD5B03D190023D10090B8A6 /* BufferManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BufferManager.cpp; sourceTree = "<group>"; };
-		4AD5B03E190023D10090B8A6 /* BufferManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BufferManager.h; sourceTree = "<group>"; };
+		4AD5B03D190023D10090B8A6 /* BufferManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.cpp.cpp; path = BufferManager.cpp; sourceTree = "<group>"; };
+		4AD5B03E190023D10090B8A6 /* BufferManager.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.h; path = BufferManager.h; sourceTree = "<group>"; };
 		4AD5B040190023E90090B8A6 /* BufferFrame.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BufferFrame.cpp; sourceTree = "<group>"; };
 		4AD5B041190023E90090B8A6 /* BufferFrame.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BufferFrame.h; sourceTree = "<group>"; };
 		4AD5B04219004D9D0090B8A6 /* BufferFrameTest.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BufferFrameTest.cpp; sourceTree = "<group>"; };
@@ -187,7 +191,7 @@
 			isa = PBXGroup;
 			children = (
 				4A5E081918F56D630062E0A3 /* database */,
-				4A9D8F1218F5742400E700F6 /* test */,
+				4A9D8F1218F5742400E700F6 /* unit_test */,
 				4A192C4218F8227D005941E4 /* generator */,
 				01D2818118FC5DB400F60DA7 /* sort */,
 			);
@@ -232,6 +236,8 @@
 				4AD5B040190023E90090B8A6 /* BufferFrame.cpp */,
 				4AD5B041190023E90090B8A6 /* BufferFrame.h */,
 				4A412E6F19054B5300E2969B /* PageId.h */,
+				01D76AD0190EC21A00E5DC65 /* BufferQueue.cpp */,
+				01D76AD1190EC21A00E5DC65 /* BufferQueue.h */,
 			);
 			path = buffer;
 			sourceTree = "<group>";
@@ -251,6 +257,8 @@
 				4A0C3FBA18FF1F2F0070FD98 /* File.h */,
 				4AE034EE1901F2DD00C48F5E /* Lock.cpp */,
 				4AE034EF1901F2DD00C48F5E /* Lock.h */,
+				01D76ACC190EC0DC00E5DC65 /* Mutex.cpp */,
+				01D76ACD190EC0DC00E5DC65 /* Mutex.h */,
 			);
 			path = utils;
 			sourceTree = "<group>";
@@ -323,7 +331,7 @@
 			);
 			name = unit_test;
 			productName = test;
-			productReference = 4A9D8F1218F5742400E700F6 /* test */;
+			productReference = 4A9D8F1218F5742400E700F6 /* unit_test */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */

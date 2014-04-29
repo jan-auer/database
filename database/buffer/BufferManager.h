@@ -15,9 +15,11 @@
 
 #include "Lock.h"
 #include "BufferFrame.h"
+#include "Mutex.h"
+
 
 namespace lsql {
-
+	
 	/**
 	 * Manages buffer frames and controls concurrent access to these frames.
 	 * Frames are loaded from and stored into a file on the disc. For more
@@ -25,27 +27,41 @@ namespace lsql {
 	 */
 	class BufferManager {
 
-		typedef std::pair<PageId, BufferFrame*> BufferEntry;
+		// 2Q page replacement
+		
+		enum QueueType {
+			Am, A1
+		};
+		
+		BufferQueue<BufferFrame> queueAm;
+		BufferQueue<BufferFrame> queueA1;
+		
+		// page table
+		
+		struct BufferEntry {
+			PageId id;
+			BufferQueue<BufferFrame>::Item* queueItem;
+			QueueType queueType;
+		};
+		
 		typedef std::vector<BufferEntry> BufferSlot;
 
 		Lock* slotLocks;
 		BufferSlot* slots;
 		uint64_t slotCount;
+		
+		// General stuff
 
-		File<void> file;
-		uint64_t maxPages;
+		std::atomic<int64_t> freePages;
 		
 	public:
 		
 		/**
-		 * Creates a new buffer manager instance which operates on the
-		 * specified file.
+		 * Creates a new buffer manager instance.
 		 *
-		 * @param fileName Fully qualified path to the file containing
-		 *                 the frames. The file will be opened with r+.
-		 * @param size     The maximum number of frames in memory.
+		 * @param size The maximum number of frames in memory.
 		 */
-		BufferManager(const std::string& fileName, uint64_t size);
+		BufferManager(uint64_t size);
 		
 		/**
 		 * Destroys this buffer manager instance and writes all dirty
@@ -112,6 +128,21 @@ namespace lsql {
 		 * @return A pointer to the new page frame.
 		 */
 		BufferFrame* allocatePage(BufferSlot& slot, const PageId& id);
+		
+		/**
+		 *
+		 */
+		void accessQueueItem(BufferQueue<BufferFrame>::Item* queueItem, QueueType& type);
+		
+		/**
+		 *
+		 */
+		void readPage(BufferFrame* frame);
+		
+		/**
+		 *
+		 */
+		void writePage(BufferFrame* frame);
 		
 	};
 	

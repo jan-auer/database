@@ -7,15 +7,25 @@
 //
 
 #include <cmath>
+#include <cunistd>
+#include <sstream>
 #include "BufferManager.h"
 
-using namespace std;
+template <class T>
+inline std::string toString (const T& t)
+{
+	std::stringstream ss;
+	return (ss << t).str();
+}
 
 namespace lsql {
 
-	BufferManager::BufferManager(const string& fileName, uint64_t size)
-	: file(fileName, true), maxPages(size) {
-		assert(maxPages > 0);
+	bool isUnfixed(BufferFrame* frame) {
+		return frame->tryLock(true);
+	}
+
+	BufferManager::BufferManager(const string& fileName, uint64_t size) : freePages(size) {
+		assert(freePages > 0);
 
 		// TODO: Come up with something better than log2(float)
 		slotCount = uint64_t(1) << int(ceil(log2(maxPages)));
@@ -24,17 +34,19 @@ namespace lsql {
 		slotLocks = new Lock[slotCount];
 	}
 
-	BufferManager::~BufferManager() {
-		for (int i = 0; i < slotCount; i++) {
-			for (BufferEntry& entry : slots[i]) {
-				// TODO: Flush page contents to disc
-				delete entry.second;
-			}
-		}
+	/* BufferManager::~BufferManager() {
+	 for (int i = 0; i < slotCount; i++) {
+	 for (BufferEntry& entry : slots[i]) {
+	 // TODO: Flush page contents to disc
+	 delete entry.queueElement;
+	 }
+	 }
 
-		delete[] slots;
-		delete[] slotLocks;
-	}
+	 delete[] slots;
+	 delete[] slotLocks;
+	 }
+
+	 */
 
 	BufferFrame& BufferManager::fixPage(const PageId& id, bool exclusive) {
 		BufferFrame* frame;
@@ -68,7 +80,7 @@ namespace lsql {
 		slotLock.unlock();
 
 		// Load data into the new frame
-		file.read(frame->getData(), BufferFrame::SIZE);
+		readPage(frame);
 
 		// Downgrade the lock, if only a shared lock is desired
 		if (!exclusive) {
@@ -95,21 +107,100 @@ namespace lsql {
 
 	BufferFrame* BufferManager::acquirePage(BufferSlot& slot, const PageId& id, bool exclusive) {
 		for (BufferEntry& entry : slot) {
-			if (id == entry.first) {
-				entry.second->lock(exclusive);
-				return entry.second;
-			}
+			if (id != entry.id)
+				continue;
+
+			auto queueItem = entry.queueItem;
+			BufferFrame* frame = queueItem->value;
+
+			frame->lock(exclusive);
+			accessQueueItem(queueItem, entry.queueType);
+
+			return frame;
 		}
 
 		return nullptr;
 	}
 
 	BufferFrame* BufferManager::allocatePage(BufferSlot& slot, const PageId& id) {
-		// TODO: Page out old pages, if necessary.
+		if (freePages.fetch_sub(1) < 1) {
+			bool success = pageOut();
+			if (!success) exit(1);
+		}
 
 		BufferFrame* frame = new BufferFrame(id);
-		slot.emplace_back(id, frame);
+		auto queueItem = queueA1.enqueue(frame);
+		slot.emplace_back(id, queueItem, A1);
+
 		return frame;
+	}
+
+	void BufferManager::pageOut() {
+		while (true) {
+			BufferFrame* frame = queueAm.dequeueIf(isUnfixed);
+			BufferSlot& slot = slots[hash(frame->id)];
+
+			Lock slotLock = slotLocks[hash(frame->id)];
+			bool locked = (slotLock.tryLock(true) == 0);
+
+			if (!locked) {
+				usleep(1000);
+				locked = (slotLock.tryLock(true) == 0);
+			}
+
+			if (!locked) {
+				frame->unlock();
+				usleep(1000);
+			} else {
+				for (auto it = slot.begin(); it != slot.end(); ++it) {
+					if (it->id == frame->id) {
+						slot.erase(it);
+						break;
+					}
+				}
+				slot.unlock()
+
+				writePage(frame);
+				freePages++;
+				delete frame;
+
+				return;
+			}
+		}
+	}
+
+	void BufferManager::accessQueueItem(BufferQueue<BufferFrame>::Item* queueItem, QueueType& type) {
+		switch (type) {
+			case Am:
+				queueAm.moveFront(queueItem);
+				break;
+
+			case A1:
+				BufferFrame* frame = queueA1.remove(queueItem);
+				type = Am;
+				queueAm.enqueue(frame);
+				break;
+
+			default:
+				break;
+		}
+	}
+
+	void BufferManager::readPage(BufferFrame* frame) {
+		char* fileName = toString(frame->getId()->segment()).c_str();
+		File<void> file(fileName);
+
+		file.read(frame->getData(), BufferFrame::SIZE, id.page() * BufferFrame::SIZE);
+	}
+
+	void BufferManager::writePage(BufferFrame* frame) {
+		if (!frame->isDirty())
+			return;
+
+		char* fileName = toString(frame->getId()->segment()).c_str();
+		File<void> file(fileName);
+
+		file.write(frame->getData(), BufferFrame::SIZE, id.page() * BufferFrame::SIZE);
 	}
 
 }
