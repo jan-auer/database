@@ -27,12 +27,15 @@ namespace lsql {
 		BufferQueue();
 		
 		~BufferQueue();
+
+
+		Item* createItemAndEnqueue(Value* value);
 		
-		BufferQueue::Item* enqueue(Value* value);
+		void enqueue(Item* item);
 		
-		Value* dequeue();
+		Item* dequeue();
 		
-		Value* dequeueIf(bool (*filter)(Value*));
+		Item* dequeueIf(bool (*filter)(Value*));
 		
 		Value* remove(Item* item);
 		

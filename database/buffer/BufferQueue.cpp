@@ -11,8 +11,9 @@
 
 namespace lsql {
 	
+
 	template<typename Value>
-	BufferQueue::Item* BufferQueue::enqueue(Value* value) {
+	typename BufferQueue<Value>::Item* BufferQueue<Value>::createItemAndEnqueue(Value* value) {
 		Item* item = new Item();
 		item->value = value;
 		
@@ -20,12 +21,21 @@ namespace lsql {
 		return item;
 	}
 	
+
 	template<typename Value>
-	Value* BufferQueue::dequeue() {
+	void BufferQueue<Value>::enqueue(Item* item) {
+
+		insertItem(item);
+		return;
+	}
+
+	template<typename Value>
+	typename BufferQueue<Value>::Item* BufferQueue<Value>::dequeue() {
 		return remove(last);
 	}
-	
-	Value* dequeueIf(bool (*filter)(Value*)) {
+
+	template<typename Value>
+	typename BufferQueue<Value>::Item* BufferQueue<Value>::dequeueIf(bool (*filter)(Value*)) {
 		assert(filter != nullptr);
 
 		mutex.lock();
@@ -43,16 +53,14 @@ namespace lsql {
 			return nullptr;
 		}
 		
-		removeItem(item);
+		removeItem(found);
 		mutex.unlock();
 			
-		Value* value = item->value;
-		delete item;
-		return value;
+		return found;
 	}
 	
 	template<typename Value>
-	Value* BufferQueue::remove(BufferQueue::Item* item) {
+	Value* BufferQueue<Value>::remove(Item* item) {
 		assert(item != nullptr);
 		
 		mutex.lock();
@@ -65,7 +73,7 @@ namespace lsql {
 	}
 	
 	template<typename Value>
-	BufferQueue::moveFront(BufferQueue::Item* item) {
+	void BufferQueue<Value>::moveFront(Item* item) {
 		assert(item != nullptr);
 		
 		mutex.lock();
@@ -75,7 +83,7 @@ namespace lsql {
 	}
 	
 	template<typename Value>
-	void BufferQueue::insertItem(Item* item) {
+	void BufferQueue<Value>::insertItem(Item* item) {
 		assert(item != nullptr);
 		mutex.lock();
 		
@@ -90,12 +98,12 @@ namespace lsql {
 	}
 	
 	template<typename Value>
-	void BufferQueue::removeItem(Item* item) {
+	void BufferQueue<Value>::removeItem(Item* item) {
+
 		if (item->prev) {
 			item->prev->next = item->next;
 		} else {
-			mutex.unlock();
-			break;
+			first = item->next;
 		}
 		
 		if (item->next) {
