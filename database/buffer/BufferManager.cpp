@@ -195,21 +195,21 @@ namespace lsql {
 	}
 
 	void BufferManager::readPage(BufferFrame* frame) {
-		char* fileName = toString(frame->getId()->segment()).c_str();
+		const char* fileName = toString(frame->getId().segment()).c_str();
 		File<void> file(fileName);
 
-		file.read(frame->getData(), BufferFrame::SIZE, id.page() * BufferFrame::SIZE);
+		file.read(frame->getData(), BufferFrame::SIZE, frame->getId().page() * BufferFrame::SIZE);
 	}
 
 	void BufferManager::writePage(BufferFrame* frame) {
 		if (!frame->isDirty())
 			return;
 
-		char* fileName = toString(frame->getId()->segment()).c_str();
+		const char* fileName = toString(frame->getId().segment()).c_str();
 		File<void> file(fileName);
 
-		file.write(frame->getData(), BufferFrame::SIZE, id.page() * BufferFrame::SIZE);
+		file.write(frame->getData(), BufferFrame::SIZE, frame->getId().page() * BufferFrame::SIZE);
 	}
-
+	
 }
 

@@ -12,9 +12,9 @@
 
 namespace lsql {
 
-	bool operator==(const PageId& a, const PageId& b) {
+	/* bool operator==(const PageId& a, const PageId& b) {
 		return a.id == b.id;
-	}
+	} */
 	
 	size_t BufferFrame::SIZE = (size_t) sysconf(_SC_PAGESIZE);
 	
