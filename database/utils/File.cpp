@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 LightningSQL. All rights reserved.
 //
 
-#include <assert.h>
-#include <stdio.h>
+#include <cassert>
+#include <cstdio>
 #include <fcntl.h>
 #include <sys/uio.h>
 #include <unistd.h>

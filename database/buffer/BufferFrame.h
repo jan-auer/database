@@ -9,7 +9,7 @@
 #ifndef __database__BufferFrame__
 #define __database__BufferFrame__
 
-#include <stdint.h>
+#include <cstdint>
 #include <sys/types.h>
 #include "PageId.h"
 #include "Lock.h"

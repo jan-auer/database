@@ -14,7 +14,6 @@
 #include "File.h"
 #include "Sorting.h"
 
-using namespace std;
 using namespace lsql;
 
 typedef chrono::high_resolution_clock Clock;
@@ -27,7 +26,7 @@ int main(int argc, char* argv[]) {
 		return 1;
 	}
 	
-	uint64_t elementCount = atoi(argv[3]) / sizeof(uint64_t) * 1024 * 1024;
+	uint64_t elementCount = std::stoi(argv[3]) / sizeof(uint64_t) * 1024 * 1024;
 	
 	// std::string implements ==, however comparison with "..." is undefined
 	if (argc == 6 && strncmp("-Generate", argv[5], 9) == 0) {
@@ -45,7 +44,7 @@ int main(int argc, char* argv[]) {
 	File<uint64_t> input(argv[1], false);
 	File<uint64_t> output(argv[2], true);
 	
-	uint64_t memSize = atoi(argv[4]) * 1024 * 1024; // MiB to B
+	uint64_t memSize = std::stoi(argv[4]) * 1024 * 1024; // MiB to B
 
 	cout << "Starting to sort..." << endl;
 	auto s = Clock::now();

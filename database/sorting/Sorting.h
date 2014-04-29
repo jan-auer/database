@@ -9,7 +9,7 @@
 #ifndef __database__sorting__
 #define __database__sorting__
 
-#include <stdint.h>
+#include <cstdint>
 #include "File.h"
 
 namespace lsql {

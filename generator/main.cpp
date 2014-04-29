@@ -1,7 +1,6 @@
 #include <iostream>
 #include "Generator.h"
 
-using namespace std;
 using namespace lsql;
 
 const int GENERATOR_BUFFER_SIZE = 1000;
@@ -13,7 +12,7 @@ int main(int argc, char* argv[]) {
 	}
 	
 	Generator gen(GENERATOR_BUFFER_SIZE);
-	bool success = gen.generate(argv[1], atoi(argv[2]));
+	bool success = gen.generate(argv[1], std::stoi(argv[2]));
 	
 	return success ? 0 : 1;
 }

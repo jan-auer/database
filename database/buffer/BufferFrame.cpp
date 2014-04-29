@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 LightningSQL. All rights reserved.
 //
 
-#include <stdlib.h>
-#include <unistd.h>
+#include <cstdlib>
+#include <cunistd>
 #include <sys/sysctl.h>
 #include "BufferFrame.h"
 

@@ -9,8 +9,8 @@
 #ifndef __database__File__
 #define __database__File__
 
-#include <stdint.h>
-#include <string>
+#include <cstdint>
+#include <cstring>
 #include <vector>
 
 namespace lsql {

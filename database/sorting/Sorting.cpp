@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 LightningSQL. All rights reserved.
 //
 
-#include <stdio.h>
+#include <cstdio>
 #include <algorithm>    
 #include <vector>       
 #include <queue>

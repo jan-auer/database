@@ -9,7 +9,7 @@
 #ifndef __database__Chunk__
 #define __database__Chunk__
 
-#include <stdint.h>
+#include <cstdint>
 #include <vector>
 #include "File.h"
 

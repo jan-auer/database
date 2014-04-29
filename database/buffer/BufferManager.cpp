@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 LightningSQL. All rights reserved.
 //
 
-#include <math.h>
+#include <cmath>
 #include "BufferManager.h"
 
 using namespace std;
