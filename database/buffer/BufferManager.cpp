@@ -7,8 +7,9 @@
 //
 
 #include <cmath>
-#include <cunistd>
 #include <sstream>
+#include <chrono>
+#include <thread>
 #include "BufferManager.h"
 
 template <class T>
@@ -53,7 +54,7 @@ namespace lsql {
 		BufferSlot& slot = slots[hash(id)];
 
 		// Get a slot lock to prevent it from being changed
-		Lock slotLock = slotLocks[hash(id)];
+		Lock& slotLock = slotLocks[hash(id)];
 		slotLock.lock(false);
 
 		// Search for the frame
@@ -140,17 +141,17 @@ namespace lsql {
 			BufferFrame* frame = queueAm.dequeueIf(isUnfixed);
 			BufferSlot& slot = slots[hash(frame->id)];
 
-			Lock slotLock = slotLocks[hash(frame->id)];
+			Lock& slotLock = slotLocks[hash(frame->id)];
 			bool locked = (slotLock.tryLock(true) == 0);
 
 			if (!locked) {
-				usleep(1000);
+				std::this_thread::sleep_for(std::chrono::milliseconds(1));
 				locked = (slotLock.tryLock(true) == 0);
 			}
 
 			if (!locked) {
 				frame->unlock();
-				usleep(1000);
+				std::this_thread::sleep_for(std::chrono::milliseconds(1));
 			} else {
 				for (auto it = slot.begin(); it != slot.end(); ++it) {
 					if (it->id == frame->id) {
