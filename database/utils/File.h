@@ -121,7 +121,7 @@ namespace lsql {
 		 * @param size   The length of the file segment to read.
 		 * @param offset Number of elements to skip in the file.
 		 */
-		ssize_t read(char* data, off_t size, off_t offset = 0);
+		ssize_t read(void* data, off_t size, off_t offset = 0);
 		
 		/**
 		 * Writes all elements from the array to the file.
@@ -132,7 +132,7 @@ namespace lsql {
 		 * @param size  The length of the memory segment to write.
 		 * @param offset Number of elements to skip in the file.
 		 */
-		bool write(const char* data, off_t size, off_t offset = 0);
+		bool write(const void* data, off_t size, off_t offset = 0);
 		
 	};
 	
