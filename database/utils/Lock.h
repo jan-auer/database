@@ -49,6 +49,8 @@ namespace lsql {
 		 */
 		inline int lock(bool exclusive);
 
+		inline int tryLock(bool exclusive);
+
 		/**
 		 * Releases the previously acquired lock.
 		 *
