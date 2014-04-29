@@ -36,4 +36,19 @@ struct PageId {
 
 };
 
+
+bool operator==(const PageId& a, const PageId& b) {
+	
+	return a.id == b.id;
+	
+}
+
+
+bool operator!=(const PageId& a, const PageId& b) {
+	
+	return !(a == b);
+	
+}
+
+
 #endif
