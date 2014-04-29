@@ -121,32 +121,57 @@ namespace lsql {
 	}
 	
 	template<typename Element>
-	ssize_t File<Element>::read(void* data, off_t size, off_t offset) {
+	ssize_t File<Element>::read(char* data, off_t size, off_t offset) {
 		assert(fd > 0);
 		assert(size >= 0);
 		assert(offset >= 0);
 		
-		ssize_t readSize = ::pread(fd, data, size, offset);
-		if (readSize < 0) {
-			cerr << "Cannot read from file: " << strerror(errno) << endl;
-			return -1;
-		} else {
-			return readSize;
+		while (ssize_t readSize = ::pread(fd, data, size, offset)) {
+
+			static ssize_t totalReadSize = 0;
+
+			totalReadSize += readSize;
+
+			if (readSize < 0) {
+				cerr << "Cannot read from file: " << strerror(errno) << endl;
+				return -1;
+			} else if (readSize == 0) {
+				//End of File or all requested bytes read
+				return totalReadSize;
+			}
+
+			//less bytes returned than requested, continue reading
+			//set values
+			assert((offset += readSize) > 0);
+			assert((size -= readSize) > 0);
+
+			data += readSize; //pointer arithmetics
+
+
+			//ToDo: Momentan wird Schleife einmal mit size = 0 ausgeführt, aus Performancegründen sollte dies noch mit einer Fallunterscheidung abgefangen werden
 		}
 	}
 	
 	template<typename Element>
-	bool File<Element>::write(const void* data, off_t size, off_t offset) {
+	bool File<Element>::write(const char* data, off_t size, off_t offset) {
 		assert(fd > 0);
 		assert(size >= 0);
 		assert(offset >= 0);
 
-		ssize_t writtenSize = ::pwrite(fd, data, size, offset);
-		if (writtenSize == size) {
-			return true;
-		} else {
-			cerr << "Cannot write to file: " << strerror(errno) << endl;
-			return false;
+		while (ssize_t writtenSize = ::pwrite(fd, data, size, offset)) {
+
+			if (writtenSize == size) {
+				return true;
+			} else if (writtenSize < 0) {
+				cerr << "Cannot write to file: " << strerror(errno) << endl;
+				return false;
+			}
+
+			offset += writtenSize;
+			assert((size -= writtenSize) > 0);
+
+			data += writtenSize; //pointer arithmetics
+
 		}
 	}
 	
