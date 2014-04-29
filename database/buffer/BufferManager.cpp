@@ -131,22 +131,35 @@ namespace lsql {
 		}
 
 		BufferFrame* frame = new BufferFrame(id);
-		auto queueItem = queueA1.enqueue(frame);
+		BufferQueue<BufferFrame>::Item* queueItem = queueA1.createItemAndEnqueue(frame);
 		slot.emplace_back(id, queueItem, A1);
 
 		return frame;
 	}
 
-	void BufferManager::pageOut() {
-		while (true) {
+	bool BufferManager::pageOut() {
 
+		//Let's try for 3 times at most
+		for (int i = 0; i < 3; ++i) {
 
 			//FixME: Select correct Queue
-			BufferFrame* frame = queueAm.dequeueIf(isUnfixed);
+			BufferQueue<BufferFrame>::Item* item = queueAm.dequeueIf(isUnfixed);
+
+			BufferFrame* frame = item->value;
 
 			BufferSlot& slot = slots[hash(frame->getId())];
+			Lock& slotLock = slotLocks[hash(frame->getId())];
 
-			Lock& slotLock = slotLocks[hash(frame->id)];
+			// Try to get a lock for the slot containing the
+			// frame chosen by the queue to be paged out.
+			// If this fails, wait for 1 ms and try again. If it
+			// fails again, we probably have a deadlock with
+			// another thread who has locked the slot and
+			// is waiting for exactly this frame.
+			// In this case we unlock the frame. The following
+			// access changes the queue, so we start from the
+			// beginning again.
+
 			bool locked = (slotLock.tryLock(true) == 0);
 
 			if (!locked) {
@@ -157,22 +170,35 @@ namespace lsql {
 			if (!locked) {
 				frame->unlock();
 				std::this_thread::sleep_for(std::chrono::milliseconds(1));
+				continue;
 			} else {
+
 				for (auto it = slot.begin(); it != slot.end(); ++it) {
-					if (it->id == frame->id) {
+					if ((it->id) == frame->getId()) {
 						slot.erase(it);
 						break;
 					}
 				}
-				slot.unlock()
 
-				writePage(frame);
-				freePages++;
-				delete frame;
-
-				return;
 			}
+			
+			slotLock.unlock();
+
+			writePage(frame);
+			freePages++;
+
+			//clean up the memory
+			delete frame;
+			delete item;
+
+			return true;
 		}
+
+		// after trying for 3 times, the for-loop has exited.
+		// that means, we have not been able to successfully
+		// page out and return true. Signal failure
+		return false;
+
 	}
 
 	void BufferManager::accessQueueItem(BufferQueue<BufferFrame>::Item* queueItem, QueueType& type) {
@@ -183,10 +209,9 @@ namespace lsql {
 
 			case A1:
 
-				//FixMe: reconstructing frames renders pointers in hashmap invalid
-				BufferFrame* frame = queueA1.remove(queueItem);
+				queueA1.remove(queueItem);
 				type = Am;
-				queueAm.enqueue(frame);
+				queueAm.enqueue(queueItem);
 				break;
 
 			default:
