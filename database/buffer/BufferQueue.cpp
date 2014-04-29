@@ -43,6 +43,8 @@ namespace lsql {
 
 		Item* found = nullptr;
 		for (Item* item = last; item != nullptr; item = item->prev) {
+
+
 			if (filter(item->value)) {
 				found = item;
 				break;
@@ -53,7 +55,12 @@ namespace lsql {
 			mutex.unlock();
 			return nullptr;
 		}
-		
+
+		BufferFrame* frame = found->value;
+
+		cout << "Item in queue to be freed: " << frame->getId().id << endl;
+
+
 		removeItem(found);
 		mutex.unlock();
 			
@@ -69,7 +76,7 @@ namespace lsql {
 		mutex.unlock();
 		
 		Value* value = item->value;
-		delete item;
+		//delete item;
 		return value;
 	}
 	

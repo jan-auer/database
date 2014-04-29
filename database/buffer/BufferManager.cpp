@@ -51,6 +51,10 @@ namespace lsql {
 	}
 
 	BufferFrame& BufferManager::fixPage(const PageId& id, bool exclusive) {
+
+
+		cerr << "Fixing page " << id.id << endl;
+
 		BufferFrame* frame;
 		BufferSlot& slot = slots[hash(id)];
 
@@ -96,6 +100,9 @@ namespace lsql {
 	}
 
 	void BufferManager::unfixPage(BufferFrame& frame, bool isDirty) {
+
+		cout << "Unfixing page " << frame.getId().id << endl;
+
 		if (isDirty)
 			frame.setDirty();
 
@@ -143,8 +150,12 @@ namespace lsql {
 		for (int i = 0; i < 3; ++i) {
 
 			//FixME: Select correct Queue
-			BufferQueue<BufferFrame>::Item* item = queueAm.dequeueIf(isUnfixed);
+			BufferQueue<BufferFrame>::Item* item = queueA1.dequeueIf(isUnfixed);
 
+			if (item == nullptr)
+				exit(2);
+
+			
 			BufferFrame* frame = item->value;
 
 			BufferSlot& slot = slots[hash(frame->getId())];
@@ -163,6 +174,8 @@ namespace lsql {
 			bool locked = (slotLock.tryLock(true) == 0);
 
 			if (!locked) {
+				cerr << "Warning! Slot Locked" << endl;
+				
 				std::this_thread::sleep_for(std::chrono::milliseconds(1));
 				locked = (slotLock.tryLock(true) == 0);
 			}
@@ -175,6 +188,10 @@ namespace lsql {
 
 				for (auto it = slot.begin(); it != slot.end(); ++it) {
 					if ((it->id) == frame->getId()) {
+
+						cout << "erasing " << it->queueItem->value->getId().id << " from slot " << &slot << endl;
+
+
 						slot.erase(it);
 						break;
 					}
@@ -185,12 +202,14 @@ namespace lsql {
 			slotLock.unlock();
 
 			writePage(frame);
-			freePages++;
 
 			//clean up the memory
-			delete frame;
 			delete item;
 
+			frame->unlock();
+			delete frame;
+
+			freePages++;
 			return true;
 		}
 
