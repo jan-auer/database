@@ -10,6 +10,7 @@
 
 #include "File.h"
 #include "Sorting.h"
+#include "BufferManager.h"
 
 using namespace lsql;
 

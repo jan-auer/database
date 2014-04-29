@@ -235,9 +235,9 @@
 				4AD5B03E190023D10090B8A6 /* BufferManager.h */,
 				4AD5B040190023E90090B8A6 /* BufferFrame.cpp */,
 				4AD5B041190023E90090B8A6 /* BufferFrame.h */,
-				4A412E6F19054B5300E2969B /* PageId.h */,
 				01D76AD0190EC21A00E5DC65 /* BufferQueue.cpp */,
 				01D76AD1190EC21A00E5DC65 /* BufferQueue.h */,
+				4A412E6F19054B5300E2969B /* PageId.h */,
 			);
 			path = buffer;
 			sourceTree = "<group>";

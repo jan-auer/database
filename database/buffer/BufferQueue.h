@@ -14,14 +14,8 @@
 namespace lsql {
 	
 	template<typename Value>
-	class Queue {
-		
-		uint64_t count = 0;
-		Item* first;
-		Item* last;
-		
-		Mutex mutex;
-		
+	class BufferQueue {
+
 	public:
 		
 		struct Item {
@@ -30,9 +24,9 @@ namespace lsql {
 			Item* next;
 		};
 		
-		Queue();
+		BufferQueue();
 		
-		~Queue();
+		~BufferQueue();
 		
 		BufferQueue::Item* enqueue(Value* value);
 		
@@ -45,7 +39,13 @@ namespace lsql {
 		void moveFront(Item* item);
 		
 	private:
-		
+
+		uint64_t count = 0;
+		Item* first;
+		Item* last;
+
+		Mutex mutex;
+
 		void insertItem(Item* item);
 		
 		void removeItem(Item* item);

@@ -7,7 +7,6 @@
 //
 
 #include <cstdlib>
-#include <cunistd>
 #include <sys/sysctl.h>
 #include "BufferFrame.h"
 

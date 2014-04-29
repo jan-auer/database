@@ -16,6 +16,7 @@
 #include "Lock.h"
 #include "BufferFrame.h"
 #include "Mutex.h"
+#include "BufferQueue.h"
 
 
 namespace lsql {
@@ -137,13 +138,18 @@ namespace lsql {
 		/**
 		 *
 		 */
+		bool pageOut();
+
+		/**
+		 *
+		 */
 		void readPage(BufferFrame* frame);
 		
 		/**
 		 *
 		 */
 		void writePage(BufferFrame* frame);
-		
+
 	};
 	
 }

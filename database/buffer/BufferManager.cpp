@@ -16,7 +16,8 @@ template <class T>
 inline std::string toString (const T& t)
 {
 	std::stringstream ss;
-	return (ss << t).str();
+	ss << t;
+	return ss.str();
 }
 
 namespace lsql {
@@ -25,11 +26,11 @@ namespace lsql {
 		return frame->tryLock(true);
 	}
 
-	BufferManager::BufferManager(const string& fileName, uint64_t size) : freePages(size) {
+	BufferManager::BufferManager(uint64_t size) : freePages(size) {
 		assert(freePages > 0);
 
 		// TODO: Come up with something better than log2(float)
-		slotCount = uint64_t(1) << int(ceil(log2(maxPages)));
+		slotCount = uint64_t(1) << int(ceil(log2(size)));
 
 		slots = new BufferSlot[slotCount];
 		slotLocks = new Lock[slotCount];
@@ -138,8 +139,12 @@ namespace lsql {
 
 	void BufferManager::pageOut() {
 		while (true) {
+
+
+			//FixME: Select correct Queue
 			BufferFrame* frame = queueAm.dequeueIf(isUnfixed);
-			BufferSlot& slot = slots[hash(frame->id)];
+
+			BufferSlot& slot = slots[hash(frame->getId())];
 
 			Lock& slotLock = slotLocks[hash(frame->id)];
 			bool locked = (slotLock.tryLock(true) == 0);
@@ -177,6 +182,8 @@ namespace lsql {
 				break;
 
 			case A1:
+
+				//FixMe: reconstructing frames renders pointers in hashmap invalid
 				BufferFrame* frame = queueA1.remove(queueItem);
 				type = Am;
 				queueAm.enqueue(frame);
