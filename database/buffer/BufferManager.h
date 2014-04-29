@@ -43,7 +43,12 @@ namespace lsql {
 			PageId id;
 			BufferQueue<BufferFrame>::Item* queueItem;
 			QueueType queueType;
+
+			BufferEntry(PageId id, BufferQueue<BufferFrame>::Item* queueItem, QueueType queueType) : id(id), queueItem(queueItem), queueType(queueType) {};
+
 		};
+
+
 		
 		typedef std::vector<BufferEntry> BufferSlot;
 

@@ -36,19 +36,19 @@ namespace lsql {
 		slotLocks = new Lock[slotCount];
 	}
 
-	/* BufferManager::~BufferManager() {
-	 for (int i = 0; i < slotCount; i++) {
-	 for (BufferEntry& entry : slots[i]) {
-	 // TODO: Flush page contents to disc
-	 delete entry.queueElement;
-	 }
-	 }
+	BufferManager::~BufferManager() {
+		/*
+		for (int i = 0; i < slotCount; i++) {
+			for (BufferEntry& entry : slots[i]) {
+				// TODO: Flush page contents to disc
+				delete entry.queueElement;
+			}
+		}
 
-	 delete[] slots;
-	 delete[] slotLocks;
-	 }
-
-	 */
+		delete[] slots;
+		delete[] slotLocks;
+		*/
+	}
 
 	BufferFrame& BufferManager::fixPage(const PageId& id, bool exclusive) {
 		BufferFrame* frame;
@@ -220,8 +220,16 @@ namespace lsql {
 	}
 
 	void BufferManager::readPage(BufferFrame* frame) {
+
+		const PageId& p_id = frame->getId();
+
+		long seg = p_id.segment();
+		long pg = p_id.page();
+
+		cout << "reading frame page " << pg << " of segment " << seg << endl;
+
 		const char* fileName = toString(frame->getId().segment()).c_str();
-		File<void> file(fileName);
+		File<void> file(fileName, false);
 
 		file.read(frame->getData(), BufferFrame::SIZE, frame->getId().page() * BufferFrame::SIZE);
 	}
@@ -231,7 +239,7 @@ namespace lsql {
 			return;
 
 		const char* fileName = toString(frame->getId().segment()).c_str();
-		File<void> file(fileName);
+		File<void> file(fileName, true);
 
 		file.write(frame->getData(), BufferFrame::SIZE, frame->getId().page() * BufferFrame::SIZE);
 	}

@@ -22,7 +22,7 @@ struct PageId {
 
 	PageId(uint64_t id) : id(id) {}
 
-	PageId(uint32_t segment = 0, uint32_t page = 0) {
+	PageId(uint32_t segment, uint32_t page) {
 		id = uint64_t(segment) << 32 | page;
 	}
 

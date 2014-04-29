@@ -16,6 +16,7 @@ namespace lsql {
 	typename BufferQueue<Value>::Item* BufferQueue<Value>::createItemAndEnqueue(Value* value) {
 		Item* item = new Item();
 		item->value = value;
+		item->prev = item->next = nullptr;
 		
 		insertItem(item);
 		return item;
@@ -90,9 +91,15 @@ namespace lsql {
 		item->prev = nullptr;
 		item->next = first;
 		
-		first->prev = item;
-		first = item;
+		if(first) {
+			first->prev = item;
+		}
 		
+		first = item;
+
+		if(!last)
+			last = item;
+
 		count++;
 		mutex.unlock();
 	}
