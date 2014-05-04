@@ -50,6 +50,19 @@ namespace lsql {
 		inline bool lock(bool exclusive);
 
 		/**
+		 * Tries to acquire the lock.
+		 *
+		 * If another thread currently holds a conflicting lock on the desired
+		 * entry, this function returns false. Conflicts are:
+		 *  1. An exclusive lock, if @c exclusive is false.
+		 *  2. Any lock mode, if @c exclusive is true.
+		 *
+		 * @param exclusive Whether or not the lock should be exclusive.
+		 * @return True if the lock could be acquired; otherwise false.
+		 */
+		inline bool tryLock(bool exclusive);
+
+		/**
 		 * Releases the previously acquired lock.
 		 *
 		 * If this thread holds no more locks on the specified object, another 

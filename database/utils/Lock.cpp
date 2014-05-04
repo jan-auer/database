@@ -27,7 +27,15 @@ namespace lsql {
 			return pthread_rwlock_rdlock(&l) == 0;
 		}
 	}
-	
+
+	bool Lock::tryLock(bool exclusive) {
+		if (exclusive) {
+			return pthread_rwlock_trywrlock(&l) == 0;
+		} else {
+			return pthread_rwlock_tryrdlock(&l) == 0;
+		}
+	}
+
 	bool Lock::unlock() {
 		return pthread_rwlock_unlock(&l) == 0;
 	}
