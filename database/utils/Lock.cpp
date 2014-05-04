@@ -20,16 +20,16 @@ namespace lsql {
 		assert(rc == 0);
 	}
 
-	int Lock::lock(bool exclusive) {
+	bool Lock::lock(bool exclusive) {
 		if (exclusive) {
-			return pthread_rwlock_wrlock(&l);
+			return pthread_rwlock_wrlock(&l) == 0;
 		} else {
-			return pthread_rwlock_rdlock(&l);
+			return pthread_rwlock_rdlock(&l) == 0;
 		}
 	}
 	
-	int Lock::unlock() {
-		return pthread_rwlock_unlock(&l);
+	bool Lock::unlock() {
+		return pthread_rwlock_unlock(&l) == 0;
 	}
 
 	pthread_rwlock_t* Lock::object() {

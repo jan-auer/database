@@ -45,9 +45,9 @@ namespace lsql {
 		 *  2. Any lock mode, if @c exclusive is true.
 		 *
 		 * @param exclusive Whether or not the lock should be exclusive.
-		 * @return A return code as described in @c pthread_rwlock_rdlock().
+		 * @return True if the lock could be acquired; otherwise false.
 		 */
-		inline int lock(bool exclusive);
+		inline bool lock(bool exclusive);
 
 		/**
 		 * Releases the previously acquired lock.
@@ -56,9 +56,9 @@ namespace lsql {
 		 * waiting thread can acquire the lock. For more information, see @c 
 		 * pthread_rwlock_unlock().
 		 *
-		 * @return A return code as described in @c pthread_rwlock_unlock().
+		 * @return True if the lock could be released; otherwise false.
 		 */
-		inline int unlock();
+		inline bool unlock();
 
 		/**
 		 * Retrieves a handle to the internal lock object.
