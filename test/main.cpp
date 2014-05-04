@@ -32,6 +32,7 @@
 
 #include "FileTest.cpp"
 #include "LockTest.cpp"
+#include "ConcurrentListTest.cpp"
 #include "PageIdTest.cpp"
 #include "BufferFrameTest.cpp"
 #include "BufferManagerTest.cpp"
