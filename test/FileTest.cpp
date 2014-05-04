@@ -6,8 +6,6 @@
 //  Copyright (c) 2014 LightningSQL. All rights reserved.
 //
 
-#include <stdio.h>
-#include "gtest.h"
-#include "File.h"
+#include "utils/File.h"
 
 #warning Tests not implemented.

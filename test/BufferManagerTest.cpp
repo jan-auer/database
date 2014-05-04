@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 LightningSQL. All rights reserved.
 //
 
-#include "BufferManager.h"
+#include "buffer/BufferManager.h"
 
 namespace lsql {
 namespace test {

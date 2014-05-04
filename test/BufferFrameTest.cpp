@@ -6,9 +6,7 @@
 //  Copyright (c) 2014 LightningSQL. All rights reserved.
 //
 
-#include <stdio.h>
-#include "gtest/gtest.h"
-#include "BufferFrame.h"
+#include "buffer/BufferFrame.h"
 
 namespace lsql {
 namespace test {

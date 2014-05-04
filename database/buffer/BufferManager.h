@@ -9,11 +9,11 @@
 #ifndef __database__BufferManager__
 #define __database__BufferManager__
 
-#include <stdint.h>
+#include <cstdint>
 #include <utility>
 #include <vector>
 
-#include "Lock.h"
+#include "utils/Lock.h"
 #include "BufferFrame.h"
 
 namespace lsql {

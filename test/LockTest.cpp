@@ -6,10 +6,8 @@
 //  Copyright (c) 2014 LightningSQL. All rights reserved.
 //
 
-#include <iostream>
-#include "gtest/gtest.h"
 #include "helpers/ThreadHelpers.cpp"
-#include "Lock.h"
+#include "utils/Lock.h"
 
 using namespace lsql;
 

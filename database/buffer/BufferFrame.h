@@ -11,8 +11,9 @@
 
 #include <cstdint>
 #include <sys/types.h>
+
+#include "utils/Lock.h"
 #include "PageId.h"
-#include "Lock.h"
 
 namespace lsql {
 

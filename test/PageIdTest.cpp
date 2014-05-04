@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 LightningSQL. All rights reserved.
 //
 
-#include "PageId.h"
+#include "buffer/PageId.h"
 
 TEST(PageIdTest, StoresSegmentId) {
 	PageId id(1, 2);

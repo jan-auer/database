@@ -82,14 +82,13 @@
 		4A5E081918F56D630062E0A3 /* database */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = database; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A5E081C18F56D630062E0A3 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		4A5E081E18F56D630062E0A3 /* database.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = database.1; sourceTree = "<group>"; };
-		4A9D8F1218F5742400E700F6 /* test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; name = test; path = unit_test; sourceTree = BUILT_PRODUCTS_DIR; };
+		4A9D8F1218F5742400E700F6 /* unit_test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = unit_test; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A9D8F1618F5742400E700F6 /* test.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = test.1; sourceTree = "<group>"; };
 		4AD5B03D190023D10090B8A6 /* BufferManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BufferManager.cpp; sourceTree = "<group>"; };
 		4AD5B03E190023D10090B8A6 /* BufferManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BufferManager.h; sourceTree = "<group>"; };
 		4AD5B040190023E90090B8A6 /* BufferFrame.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BufferFrame.cpp; sourceTree = "<group>"; };
 		4AD5B041190023E90090B8A6 /* BufferFrame.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BufferFrame.h; sourceTree = "<group>"; };
 		4AD5B04219004D9D0090B8A6 /* BufferFrameTest.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BufferFrameTest.cpp; sourceTree = "<group>"; };
-		4AD5B0461900A0600090B8A6 /* ConcurrentMapTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ConcurrentMapTest.cpp; sourceTree = "<group>"; };
 		4AE034EE1901F2DD00C48F5E /* Lock.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Lock.cpp; sourceTree = "<group>"; };
 		4AE034EF1901F2DD00C48F5E /* Lock.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Lock.h; sourceTree = "<group>"; };
 		4AE034F01901F37C00C48F5E /* LockTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LockTest.cpp; sourceTree = "<group>"; };
@@ -187,7 +186,7 @@
 			isa = PBXGroup;
 			children = (
 				4A5E081918F56D630062E0A3 /* database */,
-				4A9D8F1218F5742400E700F6 /* test */,
+				4A9D8F1218F5742400E700F6 /* unit_test */,
 				4A192C4218F8227D005941E4 /* generator */,
 				01D2818118FC5DB400F60DA7 /* sort */,
 			);
@@ -215,7 +214,6 @@
 				4A9D8F1618F5742400E700F6 /* test.1 */,
 				4A0C3FC018FF2DAE0070FD98 /* FileTest.cpp */,
 				4AD5B04219004D9D0090B8A6 /* BufferFrameTest.cpp */,
-				4AD5B0461900A0600090B8A6 /* ConcurrentMapTest.cpp */,
 				4AE034F01901F37C00C48F5E /* LockTest.cpp */,
 				4A412E6E1905252E00E2969B /* BufferManagerTest.cpp */,
 				4A412E7019054BED00E2969B /* PageIdTest.cpp */,
@@ -323,7 +321,7 @@
 			);
 			name = unit_test;
 			productName = test;
-			productReference = 4A9D8F1218F5742400E700F6 /* test */;
+			productReference = 4A9D8F1218F5742400E700F6 /* unit_test */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -435,7 +433,7 @@
 		4A5E082018F56D630062E0A3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -467,13 +465,14 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
+				USER_HEADER_SEARCH_PATHS = "${PROJECT_DIR}/database";
 			};
 			name = Debug;
 		};
 		4A5E082118F56D630062E0A3 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -499,6 +498,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				SDKROOT = macosx;
+				USER_HEADER_SEARCH_PATHS = "${PROJECT_DIR}/database";
 			};
 			name = Release;
 		};
