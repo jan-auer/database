@@ -12,7 +12,7 @@ namespace lsql {
 
 	template<typename Item, typename AccessPolicy>
 	ConcurrentList<Item, AccessPolicy>::ConcurrentList()
-	: first(nullptr), last(nullptr) {
+	: first(nullptr), last(nullptr), size(0) {
 	}
 
 	template<typename Item, typename AccessPolicy>
@@ -30,9 +30,9 @@ namespace lsql {
 	}
 
 	template<typename Item, typename AccessPolicy>
-	void ConcurrentList<Item, AccessPolicy>::append(Item* item) {
+	void ConcurrentList<Item, AccessPolicy>::append(Item* item, bool l) {
 		assert(item != nullptr);
-		lock(true);
+		if (l) lock(true);
 
 		prev(item) = last;
 		next(item) = nullptr;
@@ -45,13 +45,14 @@ namespace lsql {
 
 		last = item;
 
-		unlock();
+		size++;
+		if (l) unlock();
 	}
 	
 	template<typename Item, typename AccessPolicy>
-	void ConcurrentList<Item, AccessPolicy>::prepend(Item* item) {
+	void ConcurrentList<Item, AccessPolicy>::prepend(Item* item, bool l) {
 		assert(item != nullptr);
-		lock(true);
+		if (l) lock(true);
 
 		prev(item) = nullptr;
 		next(item) = first;
@@ -64,17 +65,18 @@ namespace lsql {
 
 		first = item;
 
-		unlock();
+		size++;
+		if (l) unlock();
 	}
 	
 	template<typename Item, typename AccessPolicy>
-	void ConcurrentList<Item, AccessPolicy>::bringFront(Item* item) {
+	void ConcurrentList<Item, AccessPolicy>::bringFront(Item* item, bool l) {
 		assert(item != nullptr);
 
 		if (item == first)
 			return;
 
-		lock(true);
+		if (l) lock(true);
 
 		if (item == last)
 			last = prev(item);
@@ -90,13 +92,13 @@ namespace lsql {
 		prev(first) = item;
 		first = item;
 
-		unlock();
+		if (l) unlock();
 	}
 	
 	template<typename Item, typename AccessPolicy>
-	void ConcurrentList<Item, AccessPolicy>::remove(Item* item) {
+	void ConcurrentList<Item, AccessPolicy>::remove(Item* item, bool l) {
 		assert(item != nullptr);
-		lock(true);
+		if (l) lock(true);
 
 		if (item == first)
 			first = next(item);
@@ -111,13 +113,15 @@ namespace lsql {
 		next(item) = nullptr;
 		prev(item) = nullptr;
 
-		unlock();
+		size--;
+		if (l) unlock();
 	}
 
 	template<typename Item, typename AccessPolicy>
 	void ConcurrentList<Item, AccessPolicy>::empty() {
 		lock(true);
 		first = last = nullptr;
+		size = 0;
 		unlock();
 	}
 
@@ -133,7 +137,13 @@ namespace lsql {
 		}
 
 		first = last = nullptr;
+		size = 0;
 		unlock();
+	}
+
+	template<typename Item, typename AccessPolicy>
+	uint64_t ConcurrentList<Item, AccessPolicy>::getSize() const {
+		return size;
 	}
 
 	template<typename Item, typename AccessPolicy>

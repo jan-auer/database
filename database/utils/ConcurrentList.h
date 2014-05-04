@@ -9,6 +9,8 @@
 #ifndef __database__ConcurrentList__
 #define __database__ConcurrentList__
 
+#include <atomic>
+
 namespace lsql {
 
 	/**
@@ -44,6 +46,7 @@ namespace lsql {
 		Lock l;
 		Item* first;
 		Item* last;
+		atomic<uint64_t> size;
 
 	public:
 
@@ -81,8 +84,9 @@ namespace lsql {
 		 * item, behavior is undefined.
 		 *
 		 * @param item A pointer to the new list item.
+		 * @param lock Whether or not to lock the queue.
 		 */
-		void append(Item* item);
+		void append(Item* item, bool lock = false);
 
 		/**
 		 * Prepends a new item to the start of this list.
@@ -91,8 +95,9 @@ namespace lsql {
 		 * item, behavior is undefined.
 		 *
 		 * @param item A pointer to the new list item.
+		 * @param lock Whether or not to lock the queue.
 		 */
-		void prepend(Item* item);
+		void prepend(Item* item, bool lock = false);
 
 		/**
 		 * Moves an item of this list to the very front.
@@ -101,8 +106,9 @@ namespace lsql {
 		 * list, behavior is undefined.
 		 *
 		 * @param item An item to move to the front.
+		 * @param lock Whether or not to lock the queue.
 		 */
-		void bringFront(Item* item);
+		void bringFront(Item* item, bool lock = false);
 
 		/**
 		 * Removes the given item from the list.
@@ -111,8 +117,9 @@ namespace lsql {
 		 * the given item, behavior is undefined.
 		 *
 		 * @param item An item to remove.
+		 * @param lock Whether or not to lock the queue.
 		 */
-		void remove(Item* item);
+		void remove(Item* item, bool lock = false);
 
 		/**
 		 * Removes all items from the list.
@@ -123,6 +130,11 @@ namespace lsql {
 		 * Removes all items from the list and deletes them.
 		 */
 		void cleanup();
+
+		/**
+		 * Returns the current number of elements in the list.
+		 */
+		uint64_t getSize() const;
 
 		/**
 		 * Locks this list.

@@ -43,6 +43,14 @@ namespace test {
 	TEST_F(ConcurrentListTest, InitializesEmpty) {
 		EXPECT_EQ(nullptr, list->getFirst());
 		EXPECT_EQ(nullptr, list->getLast());
+		EXPECT_EQ(0, list->getSize());
+	}
+
+	TEST_F(ConcurrentListTest, AppendIncrementsSize) {
+		uint64_t size = list->getSize();
+		list->append(new TestItem());
+
+		EXPECT_EQ(size + 1, list->getSize());
 	}
 
 	TEST_F(ConcurrentListTest, AppendsInCorrectOrder) {
@@ -61,6 +69,13 @@ namespace test {
 		EXPECT_EQ(nullptr, item2->next);
 	}
 
+	TEST_F(ConcurrentListTest, PrependIncrementsSize) {
+		uint64_t size = list->getSize();
+		list->prepend(new TestItem());
+
+		EXPECT_EQ(size + 1, list->getSize());
+	}
+	
 	TEST_F(ConcurrentListTest, PrependsInCorrectOrder) {
 		TestItem* item1 = new TestItem();
 		TestItem* item2 = new TestItem();
@@ -75,6 +90,16 @@ namespace test {
 
 		EXPECT_EQ(item1, item2->prev);
 		EXPECT_EQ(nullptr, item2->next);
+	}
+
+	TEST_F(ConcurrentListTest, BringFrontLeavesSize) {
+		TestItem* item = new TestItem();
+		list->append(item);
+
+		uint64_t size = list->getSize();
+		list->bringFront(item);
+
+		EXPECT_EQ(size, list->getSize());
 	}
 
 	TEST_F(ConcurrentListTest, MovesFirstItem) {
@@ -96,7 +121,25 @@ namespace test {
 	}
 	
 	TEST_F(ConcurrentListTest, MovesMiddleItem) {
+		TestItem* item1 = new TestItem();
+		TestItem* item2 = new TestItem();
+		TestItem* item3 = new TestItem();
+		list->append(item1);
+		list->append(item2);
+		list->append(item3);
 
+		list->bringFront(item2);
+		EXPECT_EQ(item2, list->getFirst());
+		EXPECT_EQ(item3, list->getLast());
+
+		EXPECT_EQ(nullptr, item2->prev);
+		EXPECT_EQ(item1, item2->next);
+
+		EXPECT_EQ(item2, item1->prev);
+		EXPECT_EQ(item3, item1->next);
+
+		EXPECT_EQ(item1, item3->prev);
+		EXPECT_EQ(nullptr, item3->next);
 	}
 	
 	TEST_F(ConcurrentListTest, MovesLastItem) {
@@ -115,6 +158,16 @@ namespace test {
 
 		EXPECT_EQ(item2, item1->prev);
 		EXPECT_EQ(nullptr, item1->next);
+	}
+
+	TEST_F(ConcurrentListTest, RemoveDecrementsSize) {
+		TestItem* item = new TestItem();
+		list->append(item);
+
+		uint64_t size = list->getSize();
+		list->remove(item);
+
+		EXPECT_EQ(size - 1, list->getSize());
 	}
 	
 	TEST_F(ConcurrentListTest, RemovesMiddleItem) {
@@ -184,6 +237,14 @@ namespace test {
 		EXPECT_EQ(nullptr, item->next);
 	}
 
+	TEST_F(ConcurrentListTest, EmptyResetsSize) {
+		TestItem* item = new TestItem();
+		list->append(item);
+
+		list->empty();
+		EXPECT_EQ(0, list->getSize());
+	}
+
 	TEST_F(ConcurrentListTest, Empties) {
 		TestItem* item = new TestItem();
 		list->append(item);
@@ -194,6 +255,14 @@ namespace test {
 		EXPECT_EQ(nullptr, list->getLast());
 	}
 
+	TEST_F(ConcurrentListTest, CleanupResetsSize) {
+		TestItem* item = new TestItem();
+		list->append(item);
+
+		list->cleanup();
+		EXPECT_EQ(0, list->getSize());
+	}
+	
 	TEST_F(ConcurrentListTest, CleansPointers) {
 		TestItem* item = new TestItem();
 		list->append(item);
