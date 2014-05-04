@@ -24,9 +24,9 @@ namespace lsql {
 			Item* next;
 		};
 		
-		/* BufferQueue();
+		 BufferQueue();
 		
-		~BufferQueue(); */
+		/* ~BufferQueue(); */
 
 
 		Item* createItemAndEnqueue(Value* value);

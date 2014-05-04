@@ -20,7 +20,12 @@ struct PageId {
 
 	uint64_t id;
 
-	PageId(uint64_t id) : id(id) {}
+	PageId(uint64_t id) : id(id) {
+
+		cout << "constructing PageId " << id << endl;
+
+		
+	}
 
 	PageId(uint32_t segment, uint32_t page) {
 		id = uint64_t(segment) << 32 | page;

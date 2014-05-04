@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		012517331916ADDC00852C78 /* buffertest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 012517321916ADDC00852C78 /* buffertest.cpp */; };
 		018D00E4190FC8A900C42636 /* database.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4A5E081E18F56D630062E0A3 /* database.1 */; };
-		018D00E9190FC8C100C42636 /* buffertest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 018D00DE190FC85D00C42636 /* buffertest.cpp */; };
 		01D2817D18FC5DB400F60DA7 /* database.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4A5E081E18F56D630062E0A3 /* database.1 */; };
 		01D2818318FC5E0300F60DA7 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 01D2818218FC5E0300F60DA7 /* main.cpp */; };
 		4A192C4718F8227D005941E4 /* generator.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4A192C4618F8227D005941E4 /* generator.1 */; };
@@ -74,7 +74,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		018D00DE190FC85D00C42636 /* buffertest.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = buffertest.cpp; path = ../../../../Downloads/buffertest.cpp; sourceTree = "<group>"; };
+		012517321916ADDC00852C78 /* buffertest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = buffertest.cpp; path = test/buffertest.cpp; sourceTree = SOURCE_ROOT; };
 		018D00E8190FC8A900C42636 /* buffertest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = buffertest; sourceTree = BUILT_PRODUCTS_DIR; };
 		01D2818118FC5DB400F60DA7 /* sort */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = sort; sourceTree = BUILT_PRODUCTS_DIR; };
 		01D2818218FC5E0300F60DA7 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = sort/main.cpp; sourceTree = "<group>"; tabWidth = 4; usesTabs = 1; };
@@ -223,7 +223,7 @@
 		4A5E081B18F56D630062E0A3 /* database */ = {
 			isa = PBXGroup;
 			children = (
-				018D00DE190FC85D00C42636 /* buffertest.cpp */,
+				012517321916ADDC00852C78 /* buffertest.cpp */,
 				4AD5B03C190021D80090B8A6 /* buffer */,
 				4AE60B9D18F836A500717C22 /* utils */,
 				4A44DA8B18F826B0001AF70E /* sorting */,
@@ -409,7 +409,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				018D00E9190FC8C100C42636 /* buffertest.cpp in Sources */,
+				012517331916ADDC00852C78 /* buffertest.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

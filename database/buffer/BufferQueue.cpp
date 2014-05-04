@@ -10,7 +10,14 @@
 #include "BufferQueue.h"
 
 namespace lsql {
+
 	
+	template<typename Value>
+	BufferQueue<Value>::BufferQueue() {
+		BufferQueue<Value>::first = nullptr;
+		BufferQueue<Value>::last = nullptr;
+
+	}
 
 	template<typename Value>
 	typename BufferQueue<Value>::Item* BufferQueue<Value>::createItemAndEnqueue(Value* value) {
