@@ -152,6 +152,11 @@ namespace lsql {
 	}
 
 	template<typename Item, typename AccessPolicy>
+	bool ConcurrentList<Item, AccessPolicy>::tryLock(bool exclusive) {
+		return l.tryLock(exclusive);
+	}
+
+	template<typename Item, typename AccessPolicy>
 	bool ConcurrentList<Item, AccessPolicy>::unlock() {
 		return l.unlock();
 	}

@@ -47,9 +47,9 @@ namespace lsql {
 		close();
 		
 		if (write) {
-			fd = ::open(path.c_str(), O_CREAT|O_TRUNC|O_RDWR, S_IRUSR|S_IWUSR);
+			fd = ::open(path.c_str(), O_CREAT|O_RDWR, S_IRUSR|S_IWUSR);
 		} else {
-			fd = ::open(path.c_str(), O_RDONLY);
+			fd = ::open(path.c_str(), O_CREAT|O_RDONLY, S_IRUSR|S_IWUSR);
 		}
 		
 		if (fd <= 0) {
