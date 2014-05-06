@@ -50,7 +50,6 @@ namespace lsql {
 		// Search for the frame
 		frame = acquirePage(slot, id, exclusive);
 		if (frame != nullptr) {
-			slot.unlock();
 			return *frame;
 		}
 
@@ -61,7 +60,6 @@ namespace lsql {
 		// Research for the frame, in case someone was faster than us
 		frame = acquirePage(slot, id, exclusive);
 		if (frame != nullptr) {
-			slot.unlock();
 			return *frame;
 		}
 
@@ -104,6 +102,8 @@ namespace lsql {
 
 			log( frame->getId().page() << ": Locking (" << exclusive << ")" );
 			frame->lock(exclusive);
+			slot.unlock();
+
 			registerPageAccess(frame);
 			return frame;
 		}
@@ -122,7 +122,13 @@ namespace lsql {
 	}
 
 	BufferFrame* BufferManager::allocatePage(Slot& slot, const PageId& id) {
-		// TODO: Allocate space AFTER unlocking the slot BEFORE loading.
+		log( id.page() << ": Creating frame (1)" );
+		BufferFrame* frame = new BufferFrame(id);
+		frame->lock(true);
+		slot.prepend(frame);
+		slot.unlock();
+
+		// TODO: reuse the data pointer of the old page.
 		log( id.page() << ": Allocating space" );
 		if (freePages.fetch_sub(1) < 1) {
 			if (!freePage()) {
@@ -130,12 +136,6 @@ namespace lsql {
 				exit(77);
 			}
 		}
-
-		log( id.page() << ": Creating frame (1)" );
-		BufferFrame* frame = new BufferFrame(id);
-		frame->lock(true);
-		slot.prepend(frame);
-		slot.unlock();
 
 		queueA1.prepend(frame, true);
 		return frame;
@@ -152,7 +152,7 @@ namespace lsql {
 	}
 
 	bool BufferManager::freeLastPage(Queue& queue) {
-		queue.lock(false);
+		queue.lock(true);
 
 		for (BufferFrame* frame = queue.getLast(); frame != nullptr; frame = frame->queuePrev) {
 			Slot& slot = pageTable[hash(frame->getId())];
@@ -160,8 +160,10 @@ namespace lsql {
 
 			// TODO: Lock the frame first, then try the slot
 			// TODO: Try to lock the slot multiple times with a small timeout
-			if (!frame->tryLock(true))
+			if (!frame->tryLock(true)) {
+				slot.unlock();
 				continue;
+			}
 
 //			if (!slot.tryLock(true)) {
 //				frame->unlock();
