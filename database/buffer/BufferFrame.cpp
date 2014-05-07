@@ -16,7 +16,7 @@ namespace lsql {
 
 	size_t BufferFrame::SIZE = (size_t) sysconf(_SC_PAGESIZE);
 
-	BufferFrame::BufferFrame(const PageId& id) : id(id), dirty(false), queue(NONE) {
+	BufferFrame::BufferFrame(const PageId& id) : id(id), dirty(false), queue(QUEUE_NONE) {
 		data = valloc(SIZE);
 		assert(data != nullptr);
 

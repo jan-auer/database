@@ -125,6 +125,7 @@ namespace lsql {
 		log( id.page() << ": Creating frame (1)" );
 		BufferFrame* frame = new BufferFrame(id);
 		frame->lock(true);
+
 		slot.prepend(frame);
 		slot.unlock();
 
@@ -137,6 +138,7 @@ namespace lsql {
 			}
 		}
 
+		frame->queue = QUEUE_A1;
 		queueA1.prepend(frame, true);
 		return frame;
 	}
@@ -164,11 +166,6 @@ namespace lsql {
 				slot.unlock();
 				continue;
 			}
-
-//			if (!slot.tryLock(true)) {
-//				frame->unlock();
-//				continue;
-//			}
 
 			log( frame->id.page() << ": Removing page (slot: " << hash(frame->id) << ")" );
 			slot.remove(frame);

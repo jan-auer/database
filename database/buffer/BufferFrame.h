@@ -18,7 +18,7 @@ namespace lsql {
 	 *
 	 */
 	enum QueueType {
-		NONE = 0,
+		QUEUE_NONE = 0,
 		QUEUE_A1,
 		QUEUE_AM
 	};
