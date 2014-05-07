@@ -77,6 +77,7 @@
 		01251734191A5C4C00852C78 /* Mutex.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Mutex.cpp; sourceTree = "<group>"; };
 		01251735191A5C4C00852C78 /* Mutex.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Mutex.h; sourceTree = "<group>"; };
 		01251736191A63B300852C78 /* Logger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Logger.h; sourceTree = "<group>"; };
+		01A30255191AA03E007A1957 /* MutexTest.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MutexTest.cpp; sourceTree = "<group>"; };
 		01D2818118FC5DB400F60DA7 /* sort */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = sort; sourceTree = BUILT_PRODUCTS_DIR; };
 		01D2818218FC5E0300F60DA7 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = sort/main.cpp; sourceTree = "<group>"; tabWidth = 4; usesTabs = 1; };
 		01D2818418FC6EF400F60DA7 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
@@ -245,6 +246,7 @@
 				4A0C3FC018FF2DAE0070FD98 /* FileTest.cpp */,
 				4AD5B04219004D9D0090B8A6 /* BufferFrameTest.cpp */,
 				4AE034F01901F37C00C48F5E /* LockTest.cpp */,
+				01A30255191AA03E007A1957 /* MutexTest.cpp */,
 				4A412E6E1905252E00E2969B /* BufferManagerTest.cpp */,
 				4A412E7019054BED00E2969B /* PageIdTest.cpp */,
 				4A8859AE191665FE001A42AB /* ConcurrentListTest.cpp */,

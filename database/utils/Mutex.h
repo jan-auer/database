@@ -18,6 +18,7 @@ namespace lsql {
 		pthread_mutex_t m;
 
 	public:
+
 		Mutex();
 
 		~Mutex();
@@ -27,6 +28,13 @@ namespace lsql {
 		bool lock();
 
 		bool unlock();
+
+		/**
+		 * Retrieves a handle to the internal lock object.
+		 *
+		 * @return A pointer to the initialized pthread_rwlock.
+		 */
+		pthread_mutex_t* object();
 
 	};
 

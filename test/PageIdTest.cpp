@@ -8,12 +8,18 @@
 
 #include "buffer/PageId.h"
 
-TEST(PageIdTest, StoresSegmentId) {
-	PageId id(1, 2);
-	EXPECT_EQ(1, id.segment());
-}
+namespace lsql {
+namespace test {
 
-TEST(PageIdTest, StoresPageId) {
-	PageId id(1, 2);
-	EXPECT_EQ(2, id.page());
+	TEST(PageIdTest, StoresSegmentId) {
+		PageId id(1, 2);
+		EXPECT_EQ(1, id.segment());
+	}
+
+	TEST(PageIdTest, StoresPageId) {
+		PageId id(1, 2);
+		EXPECT_EQ(2, id.page());
+	}
+
+}
 }

@@ -34,4 +34,8 @@ namespace lsql {
 		return pthread_mutex_unlock(&m) == 0;
 	}
 
+	pthread_mutex_t* Mutex::object() {
+		return &m;
+	}
+
 }
