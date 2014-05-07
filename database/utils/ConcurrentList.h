@@ -11,6 +11,8 @@
 
 #include <atomic>
 
+#include "Lock.h"
+
 namespace lsql {
 
 	/**
@@ -46,7 +48,7 @@ namespace lsql {
 		Lock l;
 		Item* first;
 		Item* last;
-		atomic<uint64_t> size;
+		std::atomic<uint64_t> size;
 
 	public:
 
@@ -153,6 +155,19 @@ namespace lsql {
 		 * @return True if the lock could be acquired; otherwise false.
 		 */
 		bool lock(bool exclusive);
+
+		/**
+		 * Tries to lock this list.
+		 *
+		 * If another thread currently holds a conflicting lock on this list,
+		 * the method returns false. Conflicts are:
+		 *  1. An exclusive lock, if @c exclusive is false.
+		 *  2. Any lock mode, if @c exclusive is true.
+		 *
+		 * @param exclusive Whether or not the lock should be exclusive.
+		 * @return True if the lock could be acquired; otherwise false.
+		 */
+		bool tryLock(bool exclusive);
 
 		/**
 		 * Unlocks the previously locked list.
