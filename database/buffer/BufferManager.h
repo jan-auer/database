@@ -12,10 +12,12 @@
 #include <atomic>
 
 #include "utils/ConcurrentList.h"
+#include "utils/Mutex.h"
 #include "PageId.h"
 #include "BufferFrame.h"
 
-#define QUEUE_A1_THRESHOLD 0.66
+#define BUFFER_MANAGER_QUEUE_THRESHOLD 0.5
+#define EXIT_CODE_NO_MORE_MEMORY 42
 
 namespace lsql {
 
@@ -52,7 +54,8 @@ namespace lsql {
 		 */
 		typedef ConcurrentList<BufferFrame, TablePolicy> Slot;
 
-		std::atomic<int64_t> freePages;
+		Mutex mutex;
+		uint64_t freePages;
 		uint64_t queueThreshold;
 		uint64_t slotCount;
 
@@ -82,7 +85,7 @@ namespace lsql {
 		 * frames to get flushed to disc and removed from memory.
 		 *
 		 * If there is no space left for new frames, this method might
-		 * fail to return a frame.
+		 * fail to return a frame and will exit with an error message.
 		 *
 		 * @param id        An identifier for the page to load.
 		 * @param exclusive Whether or not this frame is exclusive to the
@@ -115,16 +118,23 @@ namespace lsql {
 		uint64_t hash(const PageId& id) const;
 
 		/**
+		 * Returns a reference to the appropriate slot in the page table
+		 * determined by the internal hash function.
+		 *
+		 * @param id The page identifier to obtain the hash value from.
+		 * @return A reference to the slot.
+		 */
+		Slot& getSlot(const PageId& id) const;
+
+		/**
 		 * Resolves a buffer frame within the given slot.
 		 *
-		 * @param slot      A reference to the slot to search in.
-		 * @param id        The id of the page.
-		 * @param exclusive Whether or not the frame is exclusive to the caller
-		 *                  of this method.
+		 * @param slot A reference to the slot to search in.
+		 * @param id   The id of the page.
 		 *
 		 * @return A pointer to the page frame, if found; otherwise @c nullptr.
 		 */
-		BufferFrame* acquirePage(Slot& slot, const PageId& id, bool exclusive);
+		BufferFrame* acquirePage(Slot& slot, const PageId& id);
 
 		/**
 		 * Registers an access to the specified page for the page replacement
@@ -134,6 +144,8 @@ namespace lsql {
 
 		/**
 		 * Creates a new buffer frame and allocates space for the page contents.
+		 * If there is no more memory for new pages, an old page is written to 
+		 * disk and removed from memory first
 		 *
 		 * @param slot A reference to the slot which will contain the frame.
 		 * @param id   The id of the page.
@@ -143,21 +155,20 @@ namespace lsql {
 		BufferFrame* allocatePage(Slot& slot, const PageId& id);
 
 		/**
-		 * Selects an unused page and removes it from memory. If the selected
-		 * page is dirty, it's contents are first written to disc. Further, 
-		 * the @c freePages counter is incremented.
+		 * Finds an unused page according to the page replacement algorithm.
+		 * This method might fail, if there are no unused pages in memory.
+		 * In this case an error message is printed and the function
+		 * exits with code EXIT_CODE_NO_MORE_MEMORY.
+		 * A BufferFrame is returned so that the memory can be reused and no new
+		 * malloc calls needs to be done.
 		 *
-		 * This method might fail to remove a page, if there are no unused 
-		 * pages.
-		 *
-		 * @return True, if a page was freed; otherwise false;
+		 * @return BufferFrame* an unused buffer frame, removed from the queue
 		 */
-		bool freePage();
+		BufferFrame* findUnusedPage();
 
 		/**
 		 * Finds the last unused page in the given queue and removes it from 
-		 * memory. If the selected page is dirty, it's contents are first 
-		 * written to disc. Further, the @c freePages counter is incremented.
+		 * memory.
 		 *
 		 * To find the last unused page, this method scans all BufferFrames 
 		 * in this queue in reverse order. To prevent deadlocks, first the table 
@@ -172,17 +183,7 @@ namespace lsql {
 		 *
 		 * @return True, if a page was freed; otherwise false;
 		 */
-		bool freeLastPage(Queue& queue);
-
-		/**
-		 * Reads data of the specified page from disc into the page frame.
-		 */
-		void readPage(BufferFrame* frame);
-
-		/**
-		 * Writes data from the given page frame to disc.
-		 */
-		void writePage(BufferFrame* frame);
+		BufferFrame* getLastUnusedPage(Queue& queue);
 
 	};
 

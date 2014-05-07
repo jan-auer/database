@@ -12,6 +12,8 @@
 #include "utils/Lock.h"
 #include "PageId.h"
 
+#define BUFFER_FRAME_SIZE 8
+
 namespace lsql {
 
 	/**
@@ -27,8 +29,6 @@ namespace lsql {
 	 * Contains information about one page managed by a buffer manager.
 	 */
 	class BufferFrame {
-
-	public:
 
 		// Frame data
 		PageId id;
@@ -78,6 +78,17 @@ namespace lsql {
 		BufferFrame(const PageId& id);
 
 		/**
+		 * Creates a new buffer frame and inherits the memory pages of
+		 * that frame. The unused frame is deleted by this operation and
+		 * should already have been removed from all queues and tables.
+		 * The given BufferFrame* will be set to @c nullptr.
+		 *
+		 * @param id     A unique identifier for this page frame.
+		 * @param unused An old buffer frame.
+		 */
+		BufferFrame(const PageId& id, BufferFrame&& unused);
+
+		/**
 		 * Destroys this buffer frame and releases all memory allocated
 		 * by it. This effectively removes all data stored in this frame.
 		 */
@@ -95,6 +106,8 @@ namespace lsql {
 		 */
 		void* getData();
 
+		void setData(void* data);
+
 		/**
 		 * Returns whether this frame is dirty or not. By default, the
 		 * frame is not dirty.
@@ -107,6 +120,16 @@ namespace lsql {
 		 * to disc.
 		 */
 		void setDirty();
+
+		/**
+		 * Reads data of the specified page from disc into the page frame.
+		 */
+		bool load();
+
+		/**
+		 * Writes data from the given page frame to disc.
+		 */
+		bool save();
 
 		/**
 		 * Locks this page.

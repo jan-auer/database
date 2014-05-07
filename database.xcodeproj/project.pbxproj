@@ -74,6 +74,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		01251734191A5C4C00852C78 /* Mutex.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Mutex.cpp; sourceTree = "<group>"; };
+		01251735191A5C4C00852C78 /* Mutex.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Mutex.h; sourceTree = "<group>"; };
+		01251736191A63B300852C78 /* Logger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Logger.h; sourceTree = "<group>"; };
 		01D2818118FC5DB400F60DA7 /* sort */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = sort; sourceTree = BUILT_PRODUCTS_DIR; };
 		01D2818218FC5E0300F60DA7 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = sort/main.cpp; sourceTree = "<group>"; tabWidth = 4; usesTabs = 1; };
 		01D2818418FC6EF400F60DA7 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
@@ -288,6 +291,9 @@
 				4AE034EF1901F2DD00C48F5E /* Lock.h */,
 				4A8859AB1916581A001A42AB /* ConcurrentList.cpp */,
 				4A8859AC1916581A001A42AB /* ConcurrentList.h */,
+				01251734191A5C4C00852C78 /* Mutex.cpp */,
+				01251735191A5C4C00852C78 /* Mutex.h */,
+				01251736191A63B300852C78 /* Logger.h */,
 			);
 			path = utils;
 			sourceTree = "<group>";
@@ -684,6 +690,7 @@
 				4AD7E6CD1916B547000EEEF3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

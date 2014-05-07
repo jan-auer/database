@@ -7,25 +7,17 @@
 //
 
 #include <cmath>
-#include <sstream>
 
+#include "utils/Logger.h"
 #include "utils/File.h"
 #include "BufferManager.h"
 
-#define log(__msg__) \
-	pthread_mutex_lock(&m); \
-	std::cout << "[" << pthread_self() << "] " << __msg__ << std::endl; \
-	pthread_mutex_unlock(&m);
-//#define log(__msg__) ;
-
 namespace lsql {
-
-	pthread_mutex_t m = PTHREAD_MUTEX_INITIALIZER;
 
 	BufferManager::BufferManager(uint64_t size) : freePages(size) {
 		assert(freePages > 0);
 
-		queueThreshold = QUEUE_A1_THRESHOLD * size;
+		queueThreshold = BUFFER_MANAGER_QUEUE_THRESHOLD * size;
 		// TODO: Come up with something better than log2(float)
 		slotCount = uint64_t(1) << int(ceil(log2(size)));
 		pageTable = new Slot[slotCount];
@@ -39,41 +31,28 @@ namespace lsql {
 	}
 
 	BufferFrame& BufferManager::fixPage(const PageId& id, bool exclusive) {
-		log( id.page() << ": Searching page (slot: " << hash(id) << ")" );
+		mutex.lock();
 
 		BufferFrame* frame;
-		Slot& slot = pageTable[hash(id)];
-
-		// Get a slot lock to prevent it from being changed
-		slot.lock(false);
+		Slot& slot = getSlot(id);
 
 		// Search for the frame
-		frame = acquirePage(slot, id, exclusive);
+		frame = acquirePage(slot, id);
 		if (frame != nullptr) {
-			return *frame;
-		}
-
-		// Upgrade to an exclusive slot lock
-		slot.unlock();
-		slot.lock(true);
-
-		// Research for the frame, in case someone was faster than us
-		frame = acquirePage(slot, id, exclusive);
-		if (frame != nullptr) {
+			frame->lock(exclusive);
+			mutex.unlock();
 			return *frame;
 		}
 
 		// Create and insert a new frame
 		frame = allocatePage(slot, id);
+		mutex.unlock();
 
 		// Load data into the new frame
-		readPage(frame);
+		frame->load();
 
 		// Downgrade the lock, if only a shared lock is desired
 		if (!exclusive) {
-			log( id.page() << ": Downgrading lock (1 > 0)" );
-			// Downgrading the lock requires to release it first. It is very
-			// unlikely, that the page gets paged out so quickly.
 			frame->unlock();
 			frame->lock(false);
 		}
@@ -85,7 +64,6 @@ namespace lsql {
 		if (isDirty)
 			frame.setDirty();
 
-		log( frame.getId().page() << ": Unlocking." );
 		frame.unlock();
 	}
 
@@ -94,118 +72,88 @@ namespace lsql {
 		return id.page() & (slotCount - 1);
 	}
 
-	BufferFrame* BufferManager::acquirePage(Slot& slot, const PageId& id, bool exclusive) {
-		BufferFrame* frame;
-		for (frame = slot.getFirst(); frame != nullptr; frame = frame->tableNext) {
-			if (id != frame->getId())
-				continue;
+	BufferManager::Slot& BufferManager::getSlot(const PageId& id) const {
+		return pageTable[hash(id)];
+	}
 
-			log( frame->getId().page() << ": Locking (" << exclusive << ")" );
-			frame->lock(exclusive);
-			slot.unlock();
+	BufferFrame* BufferManager::acquirePage(Slot& slot, const PageId& id) {
+		BufferFrame* frame = slot.getFirst();
+		while (frame != nullptr && id != frame->getId())
+			frame = frame->tableNext;
 
+		if (frame != nullptr)
 			registerPageAccess(frame);
-			return frame;
-		}
 
-		return nullptr;
+		return frame;
 	}
 
 	void BufferManager::registerPageAccess(BufferFrame* frame) {
 		if (frame->queue == QUEUE_AM) {
-			queueAm.bringFront(frame, true);
+			queueAm.bringFront(frame);
 		} else {
-			queueA1.remove(frame, true);
+			queueA1.remove(frame);
 			frame->queue = QUEUE_AM;
-			queueAm.prepend(frame, true);
+			queueAm.prepend(frame);
 		}
 	}
 
 	BufferFrame* BufferManager::allocatePage(Slot& slot, const PageId& id) {
-		log( id.page() << ": Creating frame (1)" );
-		BufferFrame* frame = new BufferFrame(id);
-		frame->lock(true);
+		BufferFrame* frame;
 
-		slot.prepend(frame);
-		slot.unlock();
+		if (freePages > 0) {
+			frame = new BufferFrame(id);
+			freePages--;
+		} else {
+			BufferFrame* unused = findUnusedPage();
+			unused->save();
 
-		// TODO: reuse the data pointer of the old page.
-		log( id.page() << ": Allocating space" );
-		if (freePages.fetch_sub(1) < 1) {
-			if (!freePage()) {
-				std::cerr << "ERROR: Out of memory." << std::endl;
-				exit(77);
-			}
+			frame = new BufferFrame(id, std::move(*unused));
+
+			unused->unlock();
+			delete unused;
 		}
 
+		frame->lock(true);
+		slot.prepend(frame);
+
 		frame->queue = QUEUE_A1;
-		queueA1.prepend(frame, true);
+		queueA1.prepend(frame);
+
 		return frame;
 	}
 
-	bool BufferManager::freePage() {
+	BufferFrame* BufferManager::findUnusedPage() {
+		BufferFrame* unused;
+
 		if (queueA1.getSize() > queueThreshold) {
-			log( "    Pulling page from A1, Am" );
-			return freeLastPage(queueA1) || freeLastPage(queueAm);
+			unused = getLastUnusedPage(queueA1);
+			if (unused == nullptr)
+				unused = getLastUnusedPage(queueAm);
 		} else {
-			log( "    Pulling page from Am, A1" );
-			return freeLastPage(queueAm) || freeLastPage(queueA1);
-		}
-	}
-
-	bool BufferManager::freeLastPage(Queue& queue) {
-		queue.lock(true);
-
-		for (BufferFrame* frame = queue.getLast(); frame != nullptr; frame = frame->queuePrev) {
-			Slot& slot = pageTable[hash(frame->getId())];
-			slot.lock(true);
-
-			// TODO: Lock the frame first, then try the slot
-			// TODO: Try to lock the slot multiple times with a small timeout
-			if (!frame->tryLock(true)) {
-				slot.unlock();
-				continue;
-			}
-
-			log( frame->id.page() << ": Removing page (slot: " << hash(frame->id) << ")" );
-			slot.remove(frame);
-			slot.unlock();
-
-			queue.remove(frame);
-			queue.unlock();
-
-			if (frame->isDirty())
-				writePage(frame);
-
-			log( frame->id.page() << ": Unlocking and deleting frame." );
-			frame->unlock();
-			delete frame;
-
-			freePages++;
-			return true;
+			unused = getLastUnusedPage(queueAm);
+			if (unused == nullptr)
+				unused = getLastUnusedPage(queueA1);
 		}
 
-		queue.unlock();
-		return false;
+		if (unused == nullptr) {
+			std::cerr << "ERROR: Out of memory." << std::endl;
+			exit(EXIT_CODE_NO_MORE_MEMORY);
+		}
+
+		return unused;
 	}
 
-	void BufferManager::readPage(BufferFrame* frame) {
-		string fileName = std::to_string(frame->getId().segment());
-		File<void> file(fileName, false);
+	BufferFrame* BufferManager::getLastUnusedPage(Queue& queue) {
+		BufferFrame* frame = queue.getLast();
+		while (frame != nullptr && !frame->tryLock(true))
+			frame = frame->queuePrev;
 
-//		log( frame->getId().page() << ": Reading data from disk" );
-		file.read(frame->getData(), BufferFrame::SIZE,
-				   frame->getId().page() * BufferFrame::SIZE);
-		log( frame->getId().page() << ": Read '" << reinterpret_cast<unsigned*>(frame->getData())[0] << "' from file '" << fileName << "' at offset " << frame->getId().page() * BufferFrame::SIZE);
-	}
-	
-	void BufferManager::writePage(BufferFrame* frame) {
-		string fileName = to_string(frame->getId().segment());
-		File<void> file(fileName, true);
+		if (frame == nullptr)
+			return nullptr;
 
-		log( frame->getId().page() << ": Writing '" << reinterpret_cast<unsigned*>(frame->getData())[0] << "' to file '" << fileName << "' at offset " << frame->getId().page() * BufferFrame::SIZE);
-		file.write(frame->getData(), BufferFrame::SIZE,
-				   frame->getId().page() * BufferFrame::SIZE);
+		getSlot(frame->getId()).remove(frame);
+		queue.remove(frame);
+		return frame;
 	}
 
 }

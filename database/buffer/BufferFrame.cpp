@@ -9,23 +9,38 @@
 #include <cstdlib>
 #include <unistd.h>
 #include <sys/sysctl.h>
+#include <sstream>
 
+#include "utils/File.h"
 #include "BufferFrame.h"
 
 namespace lsql {
 
-	size_t BufferFrame::SIZE = (size_t) sysconf(_SC_PAGESIZE);
+	size_t BufferFrame::SIZE = BUFFER_FRAME_SIZE * (size_t) sysconf(_SC_PAGESIZE);
 
-	BufferFrame::BufferFrame(const PageId& id) : id(id), dirty(false), queue(QUEUE_NONE) {
-		data = valloc(SIZE);
-		assert(data != nullptr);
-
+	BufferFrame::BufferFrame(const PageId& id)
+	: id(id), dirty(false), queue(QUEUE_NONE) {
 		tableNext = tablePrev = nullptr;
 		queueNext = queuePrev = nullptr;
+
+		data = valloc(SIZE);
+		assert(data != nullptr);
+	}
+
+	BufferFrame::BufferFrame(const PageId& id, BufferFrame&& unused)
+	: id(id), dirty(false), queue(QUEUE_NONE) {
+		tableNext = tablePrev = nullptr;
+		queueNext = queuePrev = nullptr;
+
+		data = unused.getData();
+		unused.setData(nullptr);
 	}
 
 	BufferFrame::~BufferFrame() {
-		free(data);
+		if (data != nullptr) {
+			save();
+			free(data);
+		}
 	}
 
 	const PageId& BufferFrame::getId() const {
@@ -36,12 +51,34 @@ namespace lsql {
 		return data;
 	}
 
+	void BufferFrame::setData(void* data) {
+		this->data = data;
+	}
+
 	bool BufferFrame::isDirty() const {
 		return dirty;
 	}
 
 	void BufferFrame::setDirty() {
 		dirty = true;
+	}
+
+	bool BufferFrame::load() {
+		string fileName = std::to_string(id.segment());
+		File<void> file(fileName, false);
+
+		return file.read(data, SIZE, id.page() * SIZE);
+	}
+
+	bool BufferFrame::save() {
+		if (!dirty)
+			return true;
+
+		string fileName = to_string(id.segment());
+		File<void> file(fileName, true);
+
+		return file.write(data, SIZE, id.page() * SIZE);
+		dirty = false;
 	}
 
 	bool BufferFrame::lock(bool exclusive) {
