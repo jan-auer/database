@@ -2,31 +2,48 @@
 //  BufferFrame.cpp
 //  database
 //
-//  Created by Jan Michael Auer on 17/04/14.
+//  Created by Jan Michael Auer on 04/05/14.
 //  Copyright (c) 2014 LightningSQL. All rights reserved.
 //
 
 #include <cstdlib>
 #include <unistd.h>
 #include <sys/sysctl.h>
+#include <sstream>
+
+#include "utils/File.h"
 #include "BufferFrame.h"
 
 namespace lsql {
 
-	bool operator==(const PageId& a, const PageId& b) {
-		return a.id == b.id;
-	}
-	
-	size_t BufferFrame::SIZE = (size_t) sysconf(_SC_PAGESIZE);
-	
-	BufferFrame::BufferFrame(const PageId& id) : id(id), dirty(false) {
+	size_t BufferFrame::SIZE = BUFFER_FRAME_SIZE * (size_t) sysconf(_SC_PAGESIZE);
+
+	BufferFrame::BufferFrame(const PageId& id)
+	: id(id), dirty(false), queue(QUEUE_NONE) {
+		tableNext = tablePrev = nullptr;
+		queueNext = queuePrev = nullptr;
+
+		// use valloc over malloc for aligned memory pages.
 		data = valloc(SIZE);
+		assert(data != nullptr);
 	}
-	
+
+	BufferFrame::BufferFrame(const PageId& id, BufferFrame&& unused)
+	: id(id), dirty(false), queue(QUEUE_NONE) {
+		tableNext = tablePrev = nullptr;
+		queueNext = queuePrev = nullptr;
+
+		data = unused.getData();
+		unused.setData(nullptr);
+	}
+
 	BufferFrame::~BufferFrame() {
-		free(data);
+		if (data != nullptr) {
+			save();
+			free(data);
+		}
 	}
-	
+
 	const PageId& BufferFrame::getId() const {
 		return id;
 	}
@@ -34,21 +51,47 @@ namespace lsql {
 	void* BufferFrame::getData() {
 		return data;
 	}
-	
+
+	void BufferFrame::setData(void* data) {
+		this->data = data;
+	}
+
 	bool BufferFrame::isDirty() const {
 		return dirty;
 	}
-	
+
 	void BufferFrame::setDirty() {
 		dirty = true;
 	}
 
+	bool BufferFrame::load() {
+		std::string fileName = std::to_string(id.segment());
+		File<void> file(fileName, false);
+
+		return file.read(data, SIZE, id.page() * SIZE);
+	}
+
+	bool BufferFrame::save() {
+		if (!dirty)
+			return true;
+
+		std::string fileName = std::to_string(id.segment());
+		File<void> file(fileName, true);
+
+		return file.write(data, SIZE, id.page() * SIZE);
+		dirty = false;
+	}
+
 	bool BufferFrame::lock(bool exclusive) {
-		return l.lock(exclusive) == 0;
+		return l.lock(exclusive);
 	}
-	
+
+	bool BufferFrame::tryLock(bool exclusive) {
+		return l.tryLock(exclusive);
+	}
+
 	bool BufferFrame::unlock() {
-		return l.unlock() == 0;
+		return l.unlock();
 	}
-	
+
 }
