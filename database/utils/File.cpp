@@ -15,8 +15,6 @@
 
 #include "File.h"
 
-using namespace std;
-
 namespace lsql {
 	
 	template<typename Element>
@@ -47,15 +45,15 @@ namespace lsql {
 		close();
 		
 		if (write) {
-			fd = ::open(path.c_str(), O_CREAT|O_TRUNC|O_RDWR, S_IRUSR|S_IWUSR);
+			fd = ::open(path.c_str(), O_CREAT|O_RDWR, S_IRUSR|S_IWUSR);
 		} else {
-			fd = ::open(path.c_str(), O_RDONLY);
+			fd = ::open(path.c_str(), O_CREAT|O_RDONLY, S_IRUSR|S_IWUSR);
 		}
 		
 		if (fd <= 0) {
-			cerr << "Cannot open file '" << path << "' for "
-			     << (write ? "write" : "read") << " access: "
-			     << strerror(errno) << endl;
+			std::cerr << "Cannot open file '" << path << "' for "
+			          << (write ? "write" : "read") << " access: "
+			          << strerror(errno) << std::endl;
 			return false;
 		}
 		
@@ -80,7 +78,7 @@ namespace lsql {
 		if (::remove(path.c_str()) == 0)
 			return true;
 		
-		cerr << "Cannot delete file: " << strerror(errno) << endl;
+		std::cerr << "Cannot delete file: " << strerror(errno) << std::endl;
 		return false;
 	}
 	
@@ -95,7 +93,7 @@ namespace lsql {
 		if (ret == 0) {
 			return true;
 		} else {
-			cerr << "Could not allocate file space: " << strerror(ret) << endl;
+			std::cerr << "Could not allocate file space: " << strerror(ret) << std::endl;
 			return false;
 		}
 	}
@@ -129,7 +127,7 @@ namespace lsql {
 		
 		ssize_t readSize = ::pread(fd, data, size, offset);
 		if (readSize < 0) {
-			cerr << "Cannot read from file: " << strerror(errno) << endl;
+			std::cerr << "Cannot read from file: " << strerror(errno) << std::endl;
 			return -1;
 		} else {
 			return readSize;
@@ -146,7 +144,7 @@ namespace lsql {
 		if (writtenSize == size) {
 			return true;
 		} else {
-			cerr << "Cannot write to file: " << strerror(errno) << endl;
+			std::cerr << "Cannot write to file: " << strerror(errno) << std::endl;
 			return false;
 		}
 	}
