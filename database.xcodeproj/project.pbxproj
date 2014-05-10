@@ -97,6 +97,13 @@
 		4A5E081918F56D630062E0A3 /* database */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = database; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A5E081C18F56D630062E0A3 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		4A5E081E18F56D630062E0A3 /* database.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = database.1; sourceTree = "<group>"; };
+		4A75D788191E4B3700471EEB /* Record.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Record.cpp; sourceTree = "<group>"; };
+		4A75D789191E4B3700471EEB /* Record.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Record.h; sourceTree = "<group>"; };
+		4A75D78B191E4B6200471EEB /* SPSegment.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SPSegment.cpp; sourceTree = "<group>"; };
+		4A75D78C191E4B6200471EEB /* SPSegment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPSegment.h; sourceTree = "<group>"; };
+		4A75D78E191E4B7500471EEB /* TID.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TID.h; sourceTree = "<group>"; };
+		4A75D78F191E4B9000471EEB /* SchemaManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SchemaManager.cpp; sourceTree = "<group>"; };
+		4A75D790191E4B9000471EEB /* SchemaManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SchemaManager.h; sourceTree = "<group>"; };
 		4A8859A41916542D001A42AB /* PageId.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PageId.h; sourceTree = "<group>"; };
 		4A8859A519165491001A42AB /* BufferManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BufferManager.cpp; sourceTree = "<group>"; };
 		4A8859A619165491001A42AB /* BufferManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BufferManager.h; sourceTree = "<group>"; };
@@ -228,12 +235,27 @@
 			isa = PBXGroup;
 			children = (
 				4AD5B03C190021D80090B8A6 /* buffer */,
+				4A75D787191E4B2400471EEB /* schema */,
 				4AE60B9D18F836A500717C22 /* utils */,
 				4A44DA8B18F826B0001AF70E /* sorting */,
 				4A5E081E18F56D630062E0A3 /* database.1 */,
 				4A5E081C18F56D630062E0A3 /* main.cpp */,
 			);
 			path = database;
+			sourceTree = "<group>";
+		};
+		4A75D787191E4B2400471EEB /* schema */ = {
+			isa = PBXGroup;
+			children = (
+				4A75D788191E4B3700471EEB /* Record.cpp */,
+				4A75D789191E4B3700471EEB /* Record.h */,
+				4A75D78B191E4B6200471EEB /* SPSegment.cpp */,
+				4A75D78C191E4B6200471EEB /* SPSegment.h */,
+				4A75D78E191E4B7500471EEB /* TID.h */,
+				4A75D78F191E4B9000471EEB /* SchemaManager.cpp */,
+				4A75D790191E4B9000471EEB /* SchemaManager.h */,
+			);
+			path = schema;
 			sourceTree = "<group>";
 		};
 		4A9D8F1318F5742400E700F6 /* unit_test */ = {
