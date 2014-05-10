@@ -6,8 +6,7 @@
 //  Copyright (c) 2014 LightningSQL. All rights reserved.
 //
 
-#ifndef __database__File__
-#define __database__File__
+#pragma once
 
 #include <cstdint>
 #include <cstring>
@@ -139,5 +138,3 @@ namespace lsql {
 }
 
 #include "File.cpp"
-
-#endif /* defined(__database__File__) */

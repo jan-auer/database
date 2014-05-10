@@ -6,8 +6,7 @@
 //  Copyright (c) 2014 LightningSQL. All rights reserved.
 //
 
-#ifndef __database__Mutex__
-#define __database__Mutex__
+#pragma once
 
 #include <pthread.h>
 
@@ -77,6 +76,3 @@ namespace lsql {
 }
 
 #include "Mutex.cpp"
-
-
-#endif /* defined(__database__Mutex__) */

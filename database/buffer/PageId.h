@@ -6,8 +6,7 @@
 //  Copyright (c) 2014 LightningSQL. All rights reserved.
 //
 
-#ifndef database_PageId_h
-#define database_PageId_h
+#pragma once
 
 namespace lsql {
 
@@ -47,5 +46,3 @@ namespace lsql {
 	}
 
 }
-
-#endif

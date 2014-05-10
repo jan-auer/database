@@ -6,8 +6,7 @@
 //  Copyright (c) 2014 LightningSQL. All rights reserved.
 //
 
-#ifndef __database__ConcurrentList__
-#define __database__ConcurrentList__
+#pragma once
 
 #include <atomic>
 
@@ -185,5 +184,3 @@ namespace lsql {
 }
 
 #include "ConcurrentList.cpp"
-
-#endif /* defined(__database__ConcurrentList__) */

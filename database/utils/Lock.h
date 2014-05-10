@@ -6,8 +6,7 @@
 //  Copyright (c) 2014 LightningSQL. All rights reserved.
 //
 
-#ifndef __database__Locking__
-#define __database__Locking__
+#pragma once
 
 #include <pthread.h>
 #include <algorithm>
@@ -85,5 +84,3 @@ namespace lsql {
 }
 
 #include "Lock.cpp"
-
-#endif /* defined(__database__Locking__) */

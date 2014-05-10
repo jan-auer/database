@@ -6,8 +6,7 @@
 //  Copyright (c) 2014 LightningSQL. All rights reserved.
 //
 
-#ifndef __database__BufferManager__
-#define __database__BufferManager__
+#pragma once
 
 #include <atomic>
 
@@ -190,5 +189,3 @@ namespace lsql {
 }
 
 #include "BufferManager.cpp"
-
-#endif /* defined(__database__BufferManager__) */

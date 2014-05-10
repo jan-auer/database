@@ -6,8 +6,7 @@
 //  Copyright (c) 2014 LightningSQL. All rights reserved.
 //
 
-#ifndef __database__Chunk__
-#define __database__Chunk__
+#pragma once
 
 #include <cstdint>
 #include <vector>
@@ -78,5 +77,3 @@ namespace lsql {
 }
 		
 #include "Chunk.cpp"
-
-#endif /* defined(__database__Chunk__) */

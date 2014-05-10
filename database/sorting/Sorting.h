@@ -6,8 +6,7 @@
 //  Copyright (c) 2014 LightningSQL. All rights reserved.
 //
 
-#ifndef __database__sorting__
-#define __database__sorting__
+#pragma once
 
 #include <cstdint>
 #include "utils/File.h"
@@ -34,5 +33,3 @@ namespace lsql {
 }
 
 #include "Sorting.cpp"
-
-#endif /* defined(__database__sorting__) */

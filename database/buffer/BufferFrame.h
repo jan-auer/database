@@ -6,8 +6,7 @@
 //  Copyright (c) 2014 LightningSQL. All rights reserved.
 //
 
-#ifndef __database__BufferFrame__
-#define __database__BufferFrame__
+#pragma once
 
 #include "utils/Lock.h"
 #include "PageId.h"
@@ -204,5 +203,3 @@ namespace lsql {
 }
 
 #include "BufferFrame.cpp"
-
-#endif /* defined(__database__BufferFrame__) */
