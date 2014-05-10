@@ -12,7 +12,6 @@
 
 #include "utils/ConcurrentList.h"
 #include "utils/Mutex.h"
-#include "common/IDs.h"
 #include "BufferFrame.h"
 
 #define BUFFER_MANAGER_QUEUE_THRESHOLD 0.5
@@ -187,5 +186,3 @@ namespace lsql {
 	};
 
 }
-
-#include "BufferManager.cpp"

@@ -18,5 +18,3 @@ namespace lsql {
 	};
 	
 }
-
-#include "SPSegment.cpp"

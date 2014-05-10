@@ -19,5 +19,3 @@ namespace lsql {
 	};
 
 }
-
-#include "SchemaManager.cpp"

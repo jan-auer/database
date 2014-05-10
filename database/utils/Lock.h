@@ -10,6 +10,7 @@
 
 #include <pthread.h>
 #include <algorithm>
+#include <cassert>
 
 namespace lsql {
 
@@ -46,7 +47,7 @@ namespace lsql {
 		 * @param exclusive Whether or not the lock should be exclusive.
 		 * @return True if the lock could be acquired; otherwise false.
 		 */
-		inline bool lock(bool exclusive);
+		bool lock(bool exclusive);
 
 		/**
 		 * Tries to acquire the lock.
@@ -59,7 +60,7 @@ namespace lsql {
 		 * @param exclusive Whether or not the lock should be exclusive.
 		 * @return True if the lock could be acquired; otherwise false.
 		 */
-		inline bool tryLock(bool exclusive);
+		bool tryLock(bool exclusive);
 
 		/**
 		 * Releases the previously acquired lock.
@@ -70,7 +71,7 @@ namespace lsql {
 		 *
 		 * @return True if the lock could be released; otherwise false.
 		 */
-		inline bool unlock();
+		bool unlock();
 
 		/**
 		 * Retrieves a handle to the internal lock object.
@@ -82,5 +83,3 @@ namespace lsql {
 	};
 
 }
-
-#include "Lock.cpp"

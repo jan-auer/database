@@ -8,6 +8,8 @@
 
 #pragma once
 
+#include "schema/parser/Schema.h"
+
 namespace lsql {
 
 	/**
@@ -18,5 +20,3 @@ namespace lsql {
 	};
 
 }
-
-#include "Record.cpp"
