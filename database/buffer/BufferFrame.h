@@ -68,6 +68,12 @@ namespace lsql {
 		 */
 		BufferFrame(const PageId& id);
 
+		/** Prevent the copy constructor. */
+		BufferFrame(const BufferFrame& other) = delete;
+
+		/** Prevent copy assignments. */
+		BufferFrame& operator=(const BufferFrame& other) = delete;
+
 		/**
 		 * Creates a new buffer frame and inherits the memory pages of
 		 * that frame. The reference to the memory page is removed from 
@@ -100,16 +106,7 @@ namespace lsql {
 		void* getData();
 
 		/**
-		 * Changes the pointer to the raw data owned by this frame.
-		 *
-		 * THIS METHOD SHOULD ONLY BE USED BY THE OWNING @c Buffermanager.
-		 */
-		void setData(void* data);
-
-		/**
 		 * Returns whether this frame is dirty or not.
-		 *
-		 * This method should only be used by the owning @c Buffermanager.
 		 */
 		bool isDirty() const;
 
@@ -188,6 +185,19 @@ namespace lsql {
 		 * @return True if the lock has been released; otherwise false.
 		 */
 		bool unlock();
+
+	private:
+
+		/**
+		 * Detaches this buffer frame from the underlying memory page. 
+		 *
+		 * After calling this method, the frame can safely be destroyed without the 
+		 * underlying memory data to be destroyed. However, if this frame is dirty,
+		 * data is not written to disk and might be lost.
+		 *
+		 * THIS METHOD SHOULD ONLY BE USED BY THE OWNING @c Buffermanager.
+		 */
+		void invalidate();
 
 	};
 

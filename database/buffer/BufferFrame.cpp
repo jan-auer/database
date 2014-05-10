@@ -34,7 +34,7 @@ namespace lsql {
 		queueNext = queuePrev = nullptr;
 
 		data = unused.getData();
-		unused.setData(nullptr);
+		unused.invalidate();
 	}
 
 	BufferFrame::~BufferFrame() {
@@ -50,10 +50,6 @@ namespace lsql {
 
 	void* BufferFrame::getData() {
 		return data;
-	}
-
-	void BufferFrame::setData(void* data) {
-		this->data = data;
 	}
 
 	bool BufferFrame::isDirty() const {
@@ -92,6 +88,10 @@ namespace lsql {
 
 	bool BufferFrame::unlock() {
 		return l.unlock();
+	}
+
+	void BufferFrame::invalidate() {
+		this->data = nullptr;
 	}
 
 }
