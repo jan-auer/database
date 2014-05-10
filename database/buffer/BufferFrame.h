@@ -9,7 +9,7 @@
 #pragma once
 
 #include "utils/Lock.h"
-#include "PageId.h"
+#include "common/IDs.h"
 
 #define BUFFER_FRAME_SIZE 8
 
@@ -31,7 +31,7 @@ namespace lsql {
 	class BufferFrame {
 
 		// Frame data
-		PageId id;
+		PID id;
 		Lock l;
 		void* data;
 		bool dirty;
@@ -65,7 +65,7 @@ namespace lsql {
 		 *
 		 * @param id A unique identifier for this page frame.
 		 */
-		BufferFrame(const PageId& id);
+		BufferFrame(const PID& id);
 
 		/** Prevent the copy constructor. */
 		BufferFrame(const BufferFrame& other) = delete;
@@ -84,7 +84,7 @@ namespace lsql {
 		 * @param id     A unique identifier for this page frame.
 		 * @param unused An old buffer frame to take over.
 		 */
-		BufferFrame(const PageId& id, BufferFrame&& unused);
+		BufferFrame(const PID& id, BufferFrame&& unused);
 
 		/**
 		 * Destroys this buffer frame and releases all memory allocated
@@ -95,7 +95,7 @@ namespace lsql {
 		/**
 		 * Returns the id of this frame.
 		 */
-		const PageId& getId() const;
+		const PID& getId() const;
 
 		/**
 		 * Returns a pointer to the raw data owned by this frame. Each

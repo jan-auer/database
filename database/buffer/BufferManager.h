@@ -12,7 +12,7 @@
 
 #include "utils/ConcurrentList.h"
 #include "utils/Mutex.h"
-#include "PageId.h"
+#include "common/IDs.h"
 #include "BufferFrame.h"
 
 #define BUFFER_MANAGER_QUEUE_THRESHOLD 0.5
@@ -93,7 +93,7 @@ namespace lsql {
 		 * @return A reference to the buffer frame. See @c BufferFrame
 		 *         for more details.
 		 */
-		BufferFrame& fixPage(const PageId& id, bool exclusive);
+		BufferFrame& fixPage(const PID& id, bool exclusive);
 
 		/**
 		 * Releases the given frame. Thus, the frame can be paged out,
@@ -114,7 +114,7 @@ namespace lsql {
 		 * @param id The page identifier to obtain the hash value from.
 		 * @return The hashed value of @c id.
 		 */
-		uint64_t hash(const PageId& id) const;
+		uint64_t hash(const PID& id) const;
 
 		/**
 		 * Returns a reference to the appropriate slot in the page table
@@ -123,7 +123,7 @@ namespace lsql {
 		 * @param id The page identifier to obtain the hash value from.
 		 * @return A reference to the slot.
 		 */
-		Slot& getSlot(const PageId& id) const;
+		Slot& getSlot(const PID& id) const;
 
 		/**
 		 * Resolves a buffer frame within the given slot.
@@ -133,7 +133,7 @@ namespace lsql {
 		 *
 		 * @return A pointer to the page frame, if found; otherwise @c nullptr.
 		 */
-		BufferFrame* acquirePage(Slot& slot, const PageId& id);
+		BufferFrame* acquirePage(Slot& slot, const PID& id);
 
 		/**
 		 * Registers an access to the specified page for the page replacement
@@ -151,7 +151,7 @@ namespace lsql {
 		 *
 		 * @return A pointer to the new page frame.
 		 */
-		BufferFrame* allocatePage(Slot& slot, const PageId& id);
+		BufferFrame* allocatePage(Slot& slot, const PID& id);
 
 		/**
 		 * Finds an unused page according to the page replacement algorithm.

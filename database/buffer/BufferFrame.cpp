@@ -18,7 +18,7 @@ namespace lsql {
 
 	size_t BufferFrame::SIZE = BUFFER_FRAME_SIZE * (size_t) sysconf(_SC_PAGESIZE);
 
-	BufferFrame::BufferFrame(const PageId& id)
+	BufferFrame::BufferFrame(const PID& id)
 	: id(id), dirty(false), queue(QUEUE_NONE) {
 		tableNext = tablePrev = nullptr;
 		queueNext = queuePrev = nullptr;
@@ -28,7 +28,7 @@ namespace lsql {
 		assert(data != nullptr);
 	}
 
-	BufferFrame::BufferFrame(const PageId& id, BufferFrame&& unused)
+	BufferFrame::BufferFrame(const PID& id, BufferFrame&& unused)
 	: id(id), dirty(false), queue(QUEUE_NONE) {
 		tableNext = tablePrev = nullptr;
 		queueNext = queuePrev = nullptr;
@@ -44,7 +44,7 @@ namespace lsql {
 		}
 	}
 
-	const PageId& BufferFrame::getId() const {
+	const PID& BufferFrame::getId() const {
 		return id;
 	}
 

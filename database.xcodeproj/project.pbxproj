@@ -104,7 +104,7 @@
 		4A75D78E191E4B7500471EEB /* TID.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TID.h; sourceTree = "<group>"; };
 		4A75D78F191E4B9000471EEB /* SchemaManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SchemaManager.cpp; sourceTree = "<group>"; };
 		4A75D790191E4B9000471EEB /* SchemaManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SchemaManager.h; sourceTree = "<group>"; };
-		4A8859A41916542D001A42AB /* PageId.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PageId.h; sourceTree = "<group>"; };
+		4A75D792191E512900471EEB /* IDs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IDs.h; sourceTree = "<group>"; };
 		4A8859A519165491001A42AB /* BufferManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BufferManager.cpp; sourceTree = "<group>"; };
 		4A8859A619165491001A42AB /* BufferManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BufferManager.h; sourceTree = "<group>"; };
 		4A8859A81916549A001A42AB /* BufferFrame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BufferFrame.cpp; sourceTree = "<group>"; };
@@ -234,6 +234,7 @@
 		4A5E081B18F56D630062E0A3 /* database */ = {
 			isa = PBXGroup;
 			children = (
+				4A75D791191E512900471EEB /* common */,
 				4AD5B03C190021D80090B8A6 /* buffer */,
 				4A75D787191E4B2400471EEB /* schema */,
 				4AE60B9D18F836A500717C22 /* utils */,
@@ -247,15 +248,23 @@
 		4A75D787191E4B2400471EEB /* schema */ = {
 			isa = PBXGroup;
 			children = (
+				4A75D78E191E4B7500471EEB /* TID.h */,
 				4A75D788191E4B3700471EEB /* Record.cpp */,
 				4A75D789191E4B3700471EEB /* Record.h */,
 				4A75D78B191E4B6200471EEB /* SPSegment.cpp */,
 				4A75D78C191E4B6200471EEB /* SPSegment.h */,
-				4A75D78E191E4B7500471EEB /* TID.h */,
 				4A75D78F191E4B9000471EEB /* SchemaManager.cpp */,
 				4A75D790191E4B9000471EEB /* SchemaManager.h */,
 			);
 			path = schema;
+			sourceTree = "<group>";
+		};
+		4A75D791191E512900471EEB /* common */ = {
+			isa = PBXGroup;
+			children = (
+				4A75D792191E512900471EEB /* IDs.h */,
+			);
+			path = common;
 			sourceTree = "<group>";
 		};
 		4A9D8F1318F5742400E700F6 /* unit_test */ = {
@@ -280,7 +289,6 @@
 		4AD5B03C190021D80090B8A6 /* buffer */ = {
 			isa = PBXGroup;
 			children = (
-				4A8859A41916542D001A42AB /* PageId.h */,
 				4A8859A519165491001A42AB /* BufferManager.cpp */,
 				4A8859A619165491001A42AB /* BufferManager.h */,
 				4A8859A81916549A001A42AB /* BufferFrame.cpp */,

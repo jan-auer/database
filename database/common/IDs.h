@@ -10,6 +10,8 @@
 
 namespace lsql {
 
+	typedef uint32_t SID;
+
 	/**
 	 * A page id containing the unique segment identifier and the page identifier
 	 * which is unique within the segment.
@@ -17,18 +19,18 @@ namespace lsql {
 	 * The memory layout allows the PageId to be casted from and to uint64_t.
 	 * Additionally, an implicit constructor from uint64_t allows quick conversions.
 	 */
-	struct PageId {
+	struct PID {
 
 		uint64_t id;
 
-		PageId(uint64_t id) : id(id) {}
+		PID(uint64_t id) : id(id) {}
 
-		PageId(uint32_t segment, uint32_t page) {
+		PID(SID segment, uint32_t page) {
 			id = uint64_t(segment) << 32 | page;
 		}
 
-		const uint32_t segment() const {
-			return uint32_t(id >> 32);
+		const SID segment() const {
+			return SID(id >> 32);
 		}
 
 		const uint32_t page() const {
@@ -37,12 +39,19 @@ namespace lsql {
 
 	};
 
-	bool operator==(const PageId& a, const PageId& b) {
+	bool operator==(const PID& a, const PID& b) {
 		return a.id == b.id;
 	}
 
-	bool operator!=(const PageId& a, const PageId& b) {
+	bool operator!=(const PID& a, const PID& b) {
 		return !(a == b);
 	}
+
+	/**
+	 *
+	 */
+	struct TID {
+
+	};
 
 }

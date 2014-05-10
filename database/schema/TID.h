@@ -10,11 +10,4 @@
 
 namespace lsql {
 
-	/**
-	 *
-	 */
-	struct TID {
-
-	};
-
 }

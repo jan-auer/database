@@ -31,7 +31,7 @@ namespace lsql {
 		delete[] pageTable;
 	}
 
-	BufferFrame& BufferManager::fixPage(const PageId& id, bool exclusive) {
+	BufferFrame& BufferManager::fixPage(const PID& id, bool exclusive) {
 		mutex.lock();
 
 		BufferFrame* frame;
@@ -68,16 +68,16 @@ namespace lsql {
 		frame.unlock();
 	}
 
-	uint64_t BufferManager::hash(const PageId& id) const {
+	uint64_t BufferManager::hash(const PID& id) const {
 		// TODO: try out crc, murmur, fnv1a instead of identity
 		return id.page() & (slotCount - 1);
 	}
 
-	BufferManager::Slot& BufferManager::getSlot(const PageId& id) const {
+	BufferManager::Slot& BufferManager::getSlot(const PID& id) const {
 		return pageTable[hash(id)];
 	}
 
-	BufferFrame* BufferManager::acquirePage(Slot& slot, const PageId& id) {
+	BufferFrame* BufferManager::acquirePage(Slot& slot, const PID& id) {
 		BufferFrame* frame = slot.getFirst();
 		while (frame != nullptr && id != frame->getId())
 			frame = frame->tableNext;
@@ -98,7 +98,7 @@ namespace lsql {
 		}
 	}
 
-	BufferFrame* BufferManager::allocatePage(Slot& slot, const PageId& id) {
+	BufferFrame* BufferManager::allocatePage(Slot& slot, const PID& id) {
 		BufferFrame* frame;
 
 		if (freePages > 0) {
