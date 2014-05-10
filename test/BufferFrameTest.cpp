@@ -15,7 +15,7 @@ namespace test {
 		BufferFrame* frame;
 		
 		virtual void SetUp() {
-			PageId p(1,2);
+			PID p(1,2);
 			frame = new BufferFrame(p);
 		}
 		
