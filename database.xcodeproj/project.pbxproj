@@ -188,9 +188,6 @@
 			children = (
 				01A30257191EBD5C007A1957 /* Parser.cpp */,
 				01A30258191EBD5C007A1957 /* Parser.h */,
-				01A30259191EBD5C007A1957 /* Schema.cpp */,
-				01A3025A191EBD5C007A1957 /* Schema.h */,
-				01A3025B191EBD5C007A1957 /* Types.h */,
 			);
 			name = parser;
 			sourceTree = "<group>";
@@ -288,6 +285,9 @@
 		4A75D787191E4B2400471EEB /* schema */ = {
 			isa = PBXGroup;
 			children = (
+				01A30259191EBD5C007A1957 /* Schema.cpp */,
+				01A3025A191EBD5C007A1957 /* Schema.h */,
+				01A3025B191EBD5C007A1957 /* Types.h */,
 				01A30256191EBD21007A1957 /* parser */,
 				4A75D78E191E4B7500471EEB /* TID.h */,
 				4A75D78F191E4B9000471EEB /* SchemaManager.cpp */,
