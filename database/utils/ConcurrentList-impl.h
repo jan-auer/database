@@ -48,7 +48,7 @@ namespace lsql {
 		size++;
 		if (l) unlock();
 	}
-	
+
 	template<typename Item, typename AccessPolicy>
 	void ConcurrentList<Item, AccessPolicy>::prepend(Item* item, bool l) {
 		assert(item != nullptr);
@@ -68,7 +68,7 @@ namespace lsql {
 		size++;
 		if (l) unlock();
 	}
-	
+
 	template<typename Item, typename AccessPolicy>
 	void ConcurrentList<Item, AccessPolicy>::bringFront(Item* item, bool l) {
 		assert(item != nullptr);
@@ -94,7 +94,7 @@ namespace lsql {
 
 		if (l) unlock();
 	}
-	
+
 	template<typename Item, typename AccessPolicy>
 	void ConcurrentList<Item, AccessPolicy>::remove(Item* item, bool l) {
 		assert(item != nullptr);

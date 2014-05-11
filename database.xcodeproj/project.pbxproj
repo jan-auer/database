@@ -109,7 +109,7 @@
 		01D2818118FC5DB400F60DA7 /* sort */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = sort; sourceTree = BUILT_PRODUCTS_DIR; };
 		01D2818218FC5E0300F60DA7 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = sort/main.cpp; sourceTree = "<group>"; tabWidth = 4; usesTabs = 1; };
 		01D2818418FC6EF400F60DA7 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
-		4A0C3FB918FF1F2F0070FD98 /* File.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = File.cpp; sourceTree = "<group>"; };
+		4A0C3FB918FF1F2F0070FD98 /* File-impl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "File-impl.h"; sourceTree = "<group>"; };
 		4A0C3FBA18FF1F2F0070FD98 /* File.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = File.h; sourceTree = "<group>"; };
 		4A0C3FC018FF2DAE0070FD98 /* FileTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileTest.cpp; sourceTree = "<group>"; };
 		4A192C4218F8227D005941E4 /* generator */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = generator; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -138,7 +138,7 @@
 		4A8859A619165491001A42AB /* BufferManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BufferManager.h; sourceTree = "<group>"; };
 		4A8859A81916549A001A42AB /* BufferFrame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BufferFrame.cpp; sourceTree = "<group>"; };
 		4A8859A91916549A001A42AB /* BufferFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BufferFrame.h; sourceTree = "<group>"; };
-		4A8859AB1916581A001A42AB /* ConcurrentList.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ConcurrentList.cpp; sourceTree = "<group>"; };
+		4A8859AB1916581A001A42AB /* ConcurrentList-impl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ConcurrentList-impl.h"; sourceTree = "<group>"; };
 		4A8859AC1916581A001A42AB /* ConcurrentList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConcurrentList.h; sourceTree = "<group>"; };
 		4A8859AE191665FE001A42AB /* ConcurrentListTest.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ConcurrentListTest.cpp; sourceTree = "<group>"; };
 		4A9D8F1218F5742400E700F6 /* unit_test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = unit_test; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -368,11 +368,11 @@
 		4AE60B9D18F836A500717C22 /* utils */ = {
 			isa = PBXGroup;
 			children = (
-				4A0C3FB918FF1F2F0070FD98 /* File.cpp */,
+				4A0C3FB918FF1F2F0070FD98 /* File-impl.h */,
 				4A0C3FBA18FF1F2F0070FD98 /* File.h */,
 				4AE034EE1901F2DD00C48F5E /* Lock.cpp */,
 				4AE034EF1901F2DD00C48F5E /* Lock.h */,
-				4A8859AB1916581A001A42AB /* ConcurrentList.cpp */,
+				4A8859AB1916581A001A42AB /* ConcurrentList-impl.h */,
 				4A8859AC1916581A001A42AB /* ConcurrentList.h */,
 				01251734191A5C4C00852C78 /* Mutex.cpp */,
 				01251735191A5C4C00852C78 /* Mutex.h */,
