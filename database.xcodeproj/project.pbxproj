@@ -26,6 +26,18 @@
 		4A44DA9718F82B58001AF70E /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A44DA9518F82B58001AF70E /* main.cpp */; };
 		4A5E081D18F56D630062E0A3 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A5E081C18F56D630062E0A3 /* main.cpp */; };
 		4A5E081F18F56D630062E0A3 /* database.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4A5E081E18F56D630062E0A3 /* database.1 */; };
+		4A6C4F85191FA764003B8AB9 /* IDs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A6C4F84191FA764003B8AB9 /* IDs.cpp */; };
+		4A6C4F86191FA764003B8AB9 /* IDs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A6C4F84191FA764003B8AB9 /* IDs.cpp */; };
+		4A6C4F87191FA764003B8AB9 /* IDs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A6C4F84191FA764003B8AB9 /* IDs.cpp */; };
+		4A6C4F88191FA92D003B8AB9 /* BufferManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A8859A519165491001A42AB /* BufferManager.cpp */; };
+		4A6C4F89191FA92D003B8AB9 /* BufferFrame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A8859A81916549A001A42AB /* BufferFrame.cpp */; };
+		4A6C4F8A191FA92D003B8AB9 /* Lock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4AE034EE1901F2DD00C48F5E /* Lock.cpp */; };
+		4A6C4F8B191FA92D003B8AB9 /* Mutex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 01251734191A5C4C00852C78 /* Mutex.cpp */; };
+		4A6C4F8C191FA962003B8AB9 /* Mutex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 01251734191A5C4C00852C78 /* Mutex.cpp */; };
+		4A6C4F8D191FA979003B8AB9 /* Mutex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 01251734191A5C4C00852C78 /* Mutex.cpp */; };
+		4A6C4F8E191FAA17003B8AB9 /* BufferFrame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A8859A81916549A001A42AB /* BufferFrame.cpp */; };
+		4A6C4F8F191FAA1A003B8AB9 /* BufferManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A8859A519165491001A42AB /* BufferManager.cpp */; };
+		4A6C4F90191FAA20003B8AB9 /* BufferFrame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A8859A81916549A001A42AB /* BufferFrame.cpp */; };
 		4A9D8F1718F5742400E700F6 /* test.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4A9D8F1618F5742400E700F6 /* test.1 */; };
 		4AD7E6C91916B547000EEEF3 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4AD7E6C81916B547000EEEF3 /* main.cpp */; };
 		4AD7E6CB1916B547000EEEF3 /* buffertest.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4AD7E6CA1916B547000EEEF3 /* buffertest.1 */; };
@@ -113,6 +125,7 @@
 		4A5E081918F56D630062E0A3 /* database */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = database; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A5E081C18F56D630062E0A3 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		4A5E081E18F56D630062E0A3 /* database.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = database.1; sourceTree = "<group>"; };
+		4A6C4F84191FA764003B8AB9 /* IDs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IDs.cpp; sourceTree = "<group>"; };
 		4A75D788191E4B3700471EEB /* Record.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Record.cpp; path = schema/Record.cpp; sourceTree = "<group>"; };
 		4A75D789191E4B3700471EEB /* Record.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Record.h; path = schema/Record.h; sourceTree = "<group>"; };
 		4A75D78B191E4B6200471EEB /* SPSegment.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SPSegment.cpp; path = schema/SPSegment.cpp; sourceTree = "<group>"; };
@@ -300,6 +313,7 @@
 			isa = PBXGroup;
 			children = (
 				4A75D792191E512900471EEB /* IDs.h */,
+				4A6C4F84191FA764003B8AB9 /* IDs.cpp */,
 			);
 			path = common;
 			sourceTree = "<group>";
@@ -506,6 +520,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4A6C4F85191FA764003B8AB9 /* IDs.cpp in Sources */,
 				4A5E081D18F56D630062E0A3 /* main.cpp in Sources */,
 				01A3025E191EBF22007A1957 /* Record.cpp in Sources */,
 				01A3025C191EBF17007A1957 /* SchemaManager.cpp in Sources */,
@@ -513,6 +528,8 @@
 				01A3025F191EBF2E007A1957 /* Schema.cpp in Sources */,
 				01A30263191EC097007A1957 /* Lock.cpp in Sources */,
 				01A30262191EC014007A1957 /* BufferManager.cpp in Sources */,
+				4A6C4F90191FAA20003B8AB9 /* BufferFrame.cpp in Sources */,
+				4A6C4F8C191FA962003B8AB9 /* Mutex.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -520,6 +537,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4A6C4F86191FA764003B8AB9 /* IDs.cpp in Sources */,
 				4A44DA9618F82B58001AF70E /* gtest-all.cc in Sources */,
 				4A44DA9718F82B58001AF70E /* main.cpp in Sources */,
 				01A30264191EC26C007A1957 /* Record.cpp in Sources */,
@@ -527,6 +545,9 @@
 				01A30266191EC27B007A1957 /* SPSegment.cpp in Sources */,
 				01A30267191EC287007A1957 /* Schema.cpp in Sources */,
 				01A30268191EC28D007A1957 /* Lock.cpp in Sources */,
+				4A6C4F8D191FA979003B8AB9 /* Mutex.cpp in Sources */,
+				4A6C4F8E191FAA17003B8AB9 /* BufferFrame.cpp in Sources */,
+				4A6C4F8F191FAA1A003B8AB9 /* BufferManager.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -534,6 +555,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4A6C4F87191FA764003B8AB9 /* IDs.cpp in Sources */,
+				4A6C4F88191FA92D003B8AB9 /* BufferManager.cpp in Sources */,
+				4A6C4F89191FA92D003B8AB9 /* BufferFrame.cpp in Sources */,
+				4A6C4F8A191FA92D003B8AB9 /* Lock.cpp in Sources */,
+				4A6C4F8B191FA92D003B8AB9 /* Mutex.cpp in Sources */,
 				4AD7E6C91916B547000EEEF3 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

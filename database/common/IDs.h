@@ -8,6 +8,8 @@
 
 #pragma once
 
+#include <cstdint>
+
 namespace lsql {
 
 	typedef uint32_t SID;
@@ -23,29 +25,25 @@ namespace lsql {
 
 		uint64_t id;
 
-		PID(uint64_t id) : id(id) {}
+		/** */
+		PID(uint64_t id);
 
-		PID(SID segment, uint32_t page) {
-			id = uint64_t(segment) << 32 | page;
-		}
+		/** */
+		PID(SID segment, uint32_t page);
 
-		const SID segment() const {
-			return SID(id >> 32);
-		}
+		/** */
+		const SID segment() const;
 
-		const uint32_t page() const {
-			return uint32_t(id);
-		}
+		/** */
+		const uint32_t page() const;
 
 	};
 
-	bool operator==(const PID& a, const PID& b) {
-		return a.id == b.id;
-	}
+	/** */
+	bool operator==(const PID& a, const PID& b);
 
-	bool operator!=(const PID& a, const PID& b) {
-		return !(a == b);
-	}
+	/** */
+	bool operator!=(const PID& a, const PID& b);
 
 	/**
 	 *

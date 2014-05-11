@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 LightningSQL. All rights reserved.
 //
 
+#include <cassert>
 #include "Lock.h"
 
 namespace lsql {

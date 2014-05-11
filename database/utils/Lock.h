@@ -10,7 +10,6 @@
 
 #include <pthread.h>
 #include <algorithm>
-#include <cassert>
 
 namespace lsql {
 
