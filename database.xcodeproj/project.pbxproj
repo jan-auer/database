@@ -103,6 +103,7 @@
 		01A30255191AA03E007A1957 /* MutexTest.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MutexTest.cpp; sourceTree = "<group>"; };
 		01BDE7A019212530009F69E7 /* Serialize-impl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Serialize-impl.h"; sourceTree = "<group>"; };
 		01BDE7A119212659009F69E7 /* SerializeTest.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SerializeTest.cpp; sourceTree = "<group>"; };
+		01BDE7A219213634009F69E7 /* SchemaSerializeTest.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SchemaSerializeTest.cpp; sourceTree = "<group>"; };
 		01D2818118FC5DB400F60DA7 /* sort */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = sort; sourceTree = BUILT_PRODUCTS_DIR; };
 		01D2818218FC5E0300F60DA7 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = sort/main.cpp; sourceTree = "<group>"; tabWidth = 4; usesTabs = 1; };
 		01D2818418FC6EF400F60DA7 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
@@ -334,6 +335,7 @@
 				4A412E7019054BED00E2969B /* IdTest.cpp */,
 				4A8859AE191665FE001A42AB /* ConcurrentListTest.cpp */,
 				01BDE7A119212659009F69E7 /* SerializeTest.cpp */,
+				01BDE7A219213634009F69E7 /* SchemaSerializeTest.cpp */,
 			);
 			name = unit_test;
 			path = test;
