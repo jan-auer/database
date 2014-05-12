@@ -22,18 +22,6 @@ namespace lsql {
 	 */
 	class SPSegment {
 
-		struct Slot {
-			TID id;
-			size_t offset;
-			size_t length;
-		};
-
-		struct Header {
-			uint16_t count;
-			size_t dataStart;
-			Slot first;
-		};
-
 		BufferManager& bufferManager;
 		Relation& relation;
 
@@ -47,7 +35,7 @@ namespace lsql {
 		/**
 		 *
 		 */
-		Record lookup(TID id) const;
+		Record lookup(TID id);
 
 		/**
 		 *
@@ -57,7 +45,7 @@ namespace lsql {
 		/**
 		 *
 		 */
-		bool update(TID id, const Record& record);
+		bool update(TID id, const Record& record, bool allowRedirect = true);
 
 		/**
 		 *
@@ -69,32 +57,7 @@ namespace lsql {
 		/**
 		 *
 		 */
-		Header* getHeader(const BufferFrame& frame) const;
-
-		/**
-		 *
-		 */
-		Slot* getSlot(Header* header, uint16_t index) const;
-
-		/**
-		 *
-		 */
-		Slot* findSlot(const BufferFrame& frame, const TID& id) const;
-
-		/**
-		 *
-		 */
-		char* resolveData(const BufferFrame& frame, const Slot& slot) const;
-
-		/**
-		 *
-		 */
-		size_t computeFreeSpace(const BufferFrame& frame) const;
-
-		/**
-		 *
-		 */
-		BufferFrame& findFreeFrame(size_t requestedSize, uint32_t startPage = 0) const;
+		BufferFrame& findFreeFrame(size_t requestedSize, uint32_t startPage = 0);
 
 	};
 
