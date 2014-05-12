@@ -21,5 +21,20 @@ namespace test {
 		EXPECT_EQ(2, id.page());
 	}
 
+	TEST(TupleIdTest, StoresSegmentId) {
+		TID id(1, 2, 3);
+		EXPECT_EQ(1, id.segment());
+	}
+
+	TEST(TupleIdTest, StoresPageId) {
+		TID id(1, 2, 3);
+		EXPECT_EQ(2, id.page());
+	}
+
+	TEST(TupleIdTest, StoresTupleId) {
+		TID id(1, 2, 3);
+		EXPECT_EQ(3, id.tuple());
+	}
+
 }
 }
