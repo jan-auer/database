@@ -16,8 +16,6 @@
 		01D2818318FC5E0300F60DA7 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 01D2818218FC5E0300F60DA7 /* main.cpp */; };
 		4A192C4718F8227D005941E4 /* generator.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4A192C4618F8227D005941E4 /* generator.1 */; };
 		4A192C4F18F82310005941E4 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A192C4C18F822EF005941E4 /* main.cpp */; };
-		4A230BB819200B3400770D4F /* Parser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A230BB619200B3400770D4F /* Parser.cpp */; };
-		4A230BB919200B3400770D4F /* Parser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A230BB619200B3400770D4F /* Parser.cpp */; };
 		4A44DA9618F82B58001AF70E /* gtest-all.cc in Sources */ = {isa = PBXBuildFile; fileRef = 4A44DA9318F82B58001AF70E /* gtest-all.cc */; };
 		4A44DA9718F82B58001AF70E /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A44DA9518F82B58001AF70E /* main.cpp */; };
 		4A5E081D18F56D630062E0A3 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A5E081C18F56D630062E0A3 /* main.cpp */; };
@@ -526,7 +524,6 @@
 				4A6C4FA0191FECBA003B8AB9 /* SPSegment.cpp in Sources */,
 				4A6C4F85191FA764003B8AB9 /* IDs.cpp in Sources */,
 				4A5E081D18F56D630062E0A3 /* main.cpp in Sources */,
-				4A230BB819200B3400770D4F /* Parser.cpp in Sources */,
 				01A3025C191EBF17007A1957 /* SchemaManager.cpp in Sources */,
 				01A30263191EC097007A1957 /* Lock.cpp in Sources */,
 				01A30262191EC014007A1957 /* BufferManager.cpp in Sources */,
@@ -543,7 +540,6 @@
 				4A6C4F95191FEC50003B8AB9 /* Schema.cpp in Sources */,
 				4A6C4F86191FA764003B8AB9 /* IDs.cpp in Sources */,
 				4A44DA9618F82B58001AF70E /* gtest-all.cc in Sources */,
-				4A230BB919200B3400770D4F /* Parser.cpp in Sources */,
 				4A44DA9718F82B58001AF70E /* main.cpp in Sources */,
 				01A30265191EC272007A1957 /* SchemaManager.cpp in Sources */,
 				01A30268191EC28D007A1957 /* Lock.cpp in Sources */,
