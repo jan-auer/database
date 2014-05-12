@@ -102,7 +102,7 @@ namespace lsql {
 		 * modification within this memory segment should result in a
 		 * call to @c BufferFrame::setDirty().
 		 */
-		void* getData();
+		void* getData() const;
 
 		/**
 		 * Returns whether this frame is dirty or not.

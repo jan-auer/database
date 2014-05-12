@@ -48,7 +48,7 @@ namespace lsql {
 		return id;
 	}
 
-	void* BufferFrame::getData() {
+	void* BufferFrame::getData() const {
 		return data;
 	}
 
