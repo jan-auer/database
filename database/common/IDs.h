@@ -46,6 +46,9 @@ namespace lsql {
 	 */
 	struct TID : public PID {
 
+		/** Creates a new TID from the given 64 bit number. */
+		TID(uint64_t id);
+
 		/** Creates a new TID. */
 		TID(uint16_t segment, uint32_t page, uint16_t tuple);
 

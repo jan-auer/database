@@ -29,6 +29,8 @@ namespace lsql {
 		return uint32_t(id >> PAGE_POS);
 	}
 
+	TID::TID(uint64_t id) : PID(id) {}
+
 	TID::TID(uint16_t segment, uint32_t page, uint16_t tuple)
 	: PID(segment, page) {
 		id |= uint64_t(tuple) << TUPLE_POS;
