@@ -37,6 +37,12 @@ namespace lsql {
 
 	};
 
+	/** Compares two PIDs for equality. */
+	bool operator==(const PID& a, const PID& b);
+
+	/** Compares two PIDs for inequality. */
+	bool operator!=(const PID& a, const PID& b);
+
 	/**
 	 * A tuple identifier containing the unique segment and page identifiers, as 
 	 * well as the tuple number within the page.
@@ -57,10 +63,10 @@ namespace lsql {
 
 	};
 
-	/** Compares two PIDs for equality. */
-	bool operator==(const PID& a, const PID& b);
+	/** Compares two TIDs for equality. */
+	bool operator==(const TID& a, const TID& b);
 
-	/** Compares two PIDs for inequality. */
-	bool operator!=(const PID& a, const PID& b);
+	/** Compares two TIDs for inequality. */
+	bool operator!=(const TID& a, const TID& b);
 
 }

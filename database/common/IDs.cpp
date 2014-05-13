@@ -29,6 +29,14 @@ namespace lsql {
 		return uint32_t(id >> PAGE_POS);
 	}
 
+	bool operator==(const PID& a, const PID& b) {
+		return (a.id >> PAGE_POS) == (b.id >> PAGE_POS);
+	}
+
+	bool operator!=(const PID& a, const PID& b) {
+		return !(a == b);
+	}
+
 	TID::TID(uint64_t id) : PID(id) {}
 
 	TID::TID(uint16_t segment, uint32_t page, uint16_t tuple)
@@ -40,11 +48,11 @@ namespace lsql {
 		return uint16_t(id >> TUPLE_POS);
 	}
 
-	bool operator==(const PID& a, const PID& b) {
+	bool operator==(const TID& a, const TID& b) {
 		return a.id == b.id;
 	}
 
-	bool operator!=(const PID& a, const PID& b) {
+	bool operator!=(const TID& a, const TID& b) {
 		return !(a == b);
 	}
 
