@@ -6,7 +6,7 @@
 
 #include "Types.h"
 #include "common/IDs.h"
-#include "utils/Serialize-impl.h"
+#include "utils/Serialize.h"
 
 namespace lsql {
 
