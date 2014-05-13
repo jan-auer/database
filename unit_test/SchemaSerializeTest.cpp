@@ -7,7 +7,7 @@
 //
 
 #include "gtest/gtest.h"
-#include "Serialize-impl.h"
+#include "utils/Serialize.h"
 
 #include "schema/Schema.h"
 

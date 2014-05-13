@@ -32,7 +32,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 #include "gtest/gtest.h"
-#include "Serialize-impl.h"
+#include "utils/Serialize.h"
 
 #include <sstream>
 #include <chrono>

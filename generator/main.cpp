@@ -7,7 +7,7 @@ const int GENERATOR_BUFFER_SIZE = 1000;
 
 int main(int argc, char* argv[]) {
 	if (argc < 3) {
-		cerr << "usage: " << argv[0] << " <file name> <number of elements>" << endl;
+		std::cerr << "usage: " << argv[0] << " <file name> <number of elements>" << std::endl;
 		return 1;
 	}
 	

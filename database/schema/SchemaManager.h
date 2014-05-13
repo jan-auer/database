@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "Schema.h"
 
 namespace lsql {
 
@@ -15,6 +16,10 @@ namespace lsql {
 	 *
 	 */
 	class SchemaManager {
+
+		/**
+		 *
+		 */
 
 	};
 

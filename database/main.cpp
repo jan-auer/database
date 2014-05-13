@@ -8,8 +8,8 @@
 
 #include <iostream>
 
-#include "File.h"
-#include "Sorting.h"
+#include "utils/File.h"
+#include "sorting/Sorting.h"
 
 using namespace lsql;
 

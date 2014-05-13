@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 LightningSQL. All rights reserved.
 //
 
-#include "File.h"
+#include "utils/File.h"
 #include "Generator.h"
 
 namespace lsql {
@@ -46,7 +46,7 @@ namespace lsql {
 		RandomLong rand(seed);
 		
 		if (n <= 0) {
-			cerr << "Invalid number of elements: " << n << endl;
+			std::cerr << "Invalid number of elements: " << n << std::endl;
 			return false;
 		}
 		
@@ -54,7 +54,7 @@ namespace lsql {
 		if (!f.allocate(n))
 			return false;
 		
-		vector<uint64_t> data;
+		std::vector<uint64_t> data;
 		data.reserve(bufferSize);
 		
 		for (off_t i = 0; i < n; i++) {
