@@ -10,6 +10,7 @@
 
 #include "Schema.h"
 #include "BufferManager.h"
+#include "BufferFrame.h"
 
 namespace lsql {
 
@@ -20,9 +21,9 @@ namespace lsql {
 
 	private:
 		Schema schema;
-		uint64_t segmentCount;
 		BufferManager& bufferManager;
 
+	public:
 		/**
 		 * Creates a new schema manager instance and reads the schema from
 		 * disk, stored in segment 0.
@@ -35,29 +36,20 @@ namespace lsql {
 		 */
 		~SchemaManager();
 
-	public:
 		/**
 		 *
 		 */
-		Schema& getSchema() const;
+		Schema& getSchema();
 
 		/**
-		 *
+		 *  throw exception??
 		 */
-		Relation& findRelation(const std::string& name) const;
+		Relation& lookupRelation(const std::string& name);
 
 		/**
 		 *
 		 */
 		Relation& createRelation(const std::string name, std::vector<Attribute> attributes, std::vector<unsigned> primaryKey);
-
-
-		bool alterRelationAddAttribute(Relation& relation, Attribute attribute);
-		bool alterRelationAlterAttribute(Relation& relation, std::string attributeName, Attribute attribute);
-		bool alterRelationDropAttribute(Relation& relation, std::string attributeName);
-
-		bool alterRelationPrimaryKey(Relation& relation, std::vector<unsigned>);
-
 
 		/**
 		 *

@@ -100,8 +100,11 @@ namespace lsql {
 		std::vector<unsigned> primaryKey;
 
 
-		Relation(const std::string& name) : name(name) {}
-		Relation() : name(std::string()) {}
+		Relation(const std::string& name, uint16_t segment, std::vector<Attribute> attributes, std::vector<unsigned> primaryKey) : name(name), segment(segment), pageCount(0), attributes(attributes), primaryKey(primaryKey) {}
+
+		Relation(const std::string& name) : name(name), segment(-1), pageCount(0) {}
+
+		Relation() : name(std::string()), segment(-1), pageCount(0) {}
 
 	};
 
@@ -167,6 +170,8 @@ namespace lsql {
 		std::vector<Relation> relations;
 
 		std::string toString() const;
+
+		uint16_t segmentCount = 0;
 
 	};
 
