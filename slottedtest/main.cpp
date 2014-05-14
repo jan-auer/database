@@ -108,8 +108,7 @@ int main(int argc, char** argv) {
 
 	// Set up everything.
 	BufferManager bm(100);
-	Segment segment(1, 0);
-	SPSegment sp(bm, segment);
+	SPSegment sp(bm, 1, 0);
 	Random64 rnd;
 
 	// Insert some records.

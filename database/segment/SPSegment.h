@@ -11,7 +11,6 @@
 #include <vector>
 
 #include "common/IDs.h"
-#include "buffer/BufferManager.h"
 #include "Segment.h"
 #include "Record.h"
 
@@ -23,10 +22,7 @@ namespace lsql {
 	 * SPSegment handles CRUD for records in slotted pages. All operations within
 	 * a page are delegated to @c SlottedPage.
 	 */
-	class SPSegment {
-
-		BufferManager& bufferManager;
-		Segment& segment;
+	class SPSegment : protected Segment {
 
 	public:
 
@@ -34,9 +30,10 @@ namespace lsql {
 		 * Creates a wrapper for segments containing slotted pages.
 		 *
 		 * @param bufferManager The buffer manager instance.
-		 * @param segment       The internal segment.
+		 * @param id            The segment identifier.
+		 * @param pageCount     The number of pages in this segment.
 		 */
-		SPSegment(BufferManager& bufferManager, Segment& segment);
+		SPSegment(BufferManager& bufferManager, uint16_t id, uint32_t pageCount = 0);
 
 		/**
 		 * Searches an existing record within the segment.
