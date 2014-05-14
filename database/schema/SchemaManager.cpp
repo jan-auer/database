@@ -7,3 +7,18 @@
 //
 
 #include "SchemaManager.h"
+
+
+namespace lsql {
+
+	SchemaManager::SchemaManager(BufferManager& bufferManager) :
+	bufferManager(bufferManager) {}
+
+
+	SchemaManager::~SchemaManager() {
+
+
+	}
+
+	
+}

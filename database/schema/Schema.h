@@ -10,6 +10,7 @@
 
 namespace lsql {
 
+#pragma mark Attribute
 	/**
 	 *
 	 */
@@ -85,6 +86,7 @@ namespace lsql {
 	}
 
 
+#pragma mark - Relation
 	/**
 	 *
 	 */
@@ -152,6 +154,10 @@ namespace lsql {
 			}
 		};
 	}
+
+
+#pragma mark - Schema
+
 
 	/**
 	 *
