@@ -29,7 +29,7 @@ namespace lsql {
 	}
 
 	TID SPSegment::insert(const Record& record) {
-		BufferFrame& frame = findFreeFrame(record.getLen());
+		BufferFrame& frame = findFreeFrame(record.getSize());
 
 		SlottedPage sp(this, frame);
 		TID id = sp.createSlot();

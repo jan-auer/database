@@ -55,12 +55,12 @@ namespace lsql {
 
 		// Check if we need to compress data
 		int32_t freeSpace = header->dataStart - sizeof(Header) - header->count * sizeof(Slot);
-		if (int32_t(record.getLen()) > freeSpace)
+		if (int32_t(record.getSize()) > freeSpace)
 			compressData();
 
 		// Initialize the slot entry
 		slot.type = SLOT_USED;
-		slot.size = record.getLen();
+		slot.size = record.getSize();
 		slot.offset = header->dataStart - slot.size;
 
 		// Update header information
@@ -89,11 +89,11 @@ namespace lsql {
 			}
 
 		// Downsize the data slot
-		} else if (int32_t(record.getLen()) <= slot.size) {
+		} else if (int32_t(record.getSize()) <= slot.size) {
 			replaceRecord(slot, record);
 
 		// The current data slot might not fit, so reinsert with the same id
-		} else if (int32_t(record.getLen()) <= getFreeSpace()) {
+		} else if (int32_t(record.getSize()) <= getFreeSpace()) {
 			insert(id, record);
 
 		// There is no space in this page, so redirect to a new page
@@ -173,9 +173,9 @@ namespace lsql {
 	}
 
 	void SlottedPage::replaceRecord(Slot& slot, const Record& record) {
-		header->usedSpace += int32_t(record.getLen()) - slot.size;
-		std::memcpy(getData(slot), record.getData(), record.getLen());
-		slot.size = record.getLen();
+		header->usedSpace += int32_t(record.getSize()) - slot.size;
+		std::memcpy(getData(slot), record.getData(), record.getSize());
+		slot.size = record.getSize();
 	}
 
 }

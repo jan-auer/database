@@ -163,7 +163,7 @@ int main(int argc, char** argv) {
 
 		// Lookup.
 		Record rec = sp.lookup(tid);
-		assert(rec.getLen() == len);
+		assert(rec.getSize() == len);
 		assert(memcmp(rec.getData(), value.c_str(), len) == 0);
 
 		// Do delete.
@@ -194,7 +194,7 @@ int main(int argc, char** argv) {
 		const string& value = testData[p.second];
 		unsigned len = value.size();
 		Record rec = sp.lookup(tid);
-		assert(rec.getLen() == len);
+		assert(rec.getSize() == len);
 		assert(memcmp(rec.getData(), value.c_str(), len) == 0);
 	}
 

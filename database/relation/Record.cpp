@@ -14,15 +14,16 @@
 
 namespace lsql {
 
-	Record::Record(Record&& t) : len(t.len), data(t.data) {
-		t.data = nullptr;
-		t.len = 0;
+	Record::Record(Record&& other)
+	: size(other.size), data(other.data) {
+		other.data = nullptr;
+		other.size = 0;
 	}
 
-	Record::Record(uint16_t len, const char* ptr) : len(len) {
-		data = static_cast<char*>(malloc(len));
+	Record::Record(uint32_t size, const char* ptr) : size(size) {
+		data = static_cast<char*>(malloc(size));
 		if (data)
-			std::memcpy(data, ptr, len);
+			std::memcpy(data, ptr, size);
 	}
 
 	Record::~Record() {
@@ -33,8 +34,8 @@ namespace lsql {
 		return data;
 	}
 
-	uint16_t Record::getLen() const {
-		return len;
+	uint32_t Record::getSize() const {
+		return size;
 	}
 
 }
