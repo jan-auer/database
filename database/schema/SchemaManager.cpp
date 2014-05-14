@@ -43,12 +43,7 @@ namespace lsql {
 	}
 
 
-	Schema& SchemaManager::getSchema() {
-		return schema;
-	}
-
-
-	Relation& SchemaManager::lookupRelation(const std::string& name) {
+	Relation& SchemaManager::lookup(const std::string& name) {
 
 		std::vector<Relation> rels = schema.relations;
 
@@ -62,18 +57,19 @@ namespace lsql {
 
 		// relation not found, create new one.
 		// ToDo: Throw Exception
-		return createRelation(name, std::vector<Attribute>(), std::vector<unsigned>());
+		return create(name, std::vector<Attribute>(), std::vector<unsigned>());
 	}
 
-	Relation& SchemaManager::createRelation(const std::string name, std::vector<Attribute> attributes, std::vector<unsigned int> primaryKey) {
+	Relation& SchemaManager::create(const std::string& name, const std::vector<Attribute>& attributes, const std::vector<unsigned>& primaryKey) {
+		uint16_t segmentId = schema.segmentCount++;
 
-		schema.relations.emplace_back(name, schema.segmentCount++, attributes, primaryKey);
+		schema.relations.emplace_back(name, segmentId, attributes, primaryKey);
 
 		Relation& rel = schema.relations.back();
 		return rel;
 	}
 
-	bool SchemaManager::dropRelation(const std::string name) {
+	bool SchemaManager::drop(const std::string& name) {
 
 		typename std::vector<Relation>::iterator it = schema.relations.begin();
 

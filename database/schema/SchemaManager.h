@@ -24,6 +24,7 @@ namespace lsql {
 		BufferManager& bufferManager;
 
 	public:
+
 		/**
 		 * Creates a new schema manager instance and reads the schema from
 		 * disk, stored in segment 0.
@@ -37,24 +38,24 @@ namespace lsql {
 		~SchemaManager();
 
 		/**
-		 *
-		 */
-		Schema& getSchema();
-
-		/**
 		 *  throw exception??
 		 */
-		Relation& lookupRelation(const std::string& name);
+		Relation& lookup(const std::string& name);
 
 		/**
 		 *
 		 */
-		Relation& createRelation(const std::string name, std::vector<Attribute> attributes, std::vector<unsigned> primaryKey);
+		Relation& create(const std::string& name, const std::vector<Attribute>& attributes, const std::vector<unsigned>& primaryKey);
 
 		/**
 		 *
 		 */
-		bool dropRelation(const std::string name);
+		bool drop(const std::string& name);
+
+		/**
+		 *
+		 */
+		PID addPage(Relation& relation);
 
 	};
 
