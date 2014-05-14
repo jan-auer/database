@@ -108,10 +108,8 @@ int main(int argc, char** argv) {
 
 	// Set up everything.
 	BufferManager bm(100);
-	Relation rel("foo");
-	rel.segment = 1;
-	rel.pageCount = 0;
-	SPSegment sp(bm, rel);
+	Segment segment(1, 0);
+	SPSegment sp(bm, segment);
 	Random64 rnd;
 
 	// Insert some records.

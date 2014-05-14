@@ -12,7 +12,7 @@
 
 #include "common/IDs.h"
 #include "buffer/BufferManager.h"
-#include "schema/Schema.h"
+#include "Segment.h"
 #include "Record.h"
 
 namespace lsql {
@@ -23,14 +23,14 @@ namespace lsql {
 	class SPSegment {
 
 		BufferManager& bufferManager;
-		Relation& relation;
+		Segment& segment;
 
 	public:
 
 		/**
 		 *
 		 */
-		SPSegment(BufferManager& bufferManager, Relation& relation);
+		SPSegment(BufferManager& bufferManager, Segment& segment);
 
 		/**
 		 *

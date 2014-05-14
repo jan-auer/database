@@ -15,8 +15,8 @@
 
 namespace lsql {
 
-	SPSegment::SPSegment(BufferManager& bufferManager, Relation& relation)
-	: bufferManager(bufferManager), relation(relation) {}
+	SPSegment::SPSegment(BufferManager& bufferManager, Segment& segment)
+	: bufferManager(bufferManager), segment(segment) {}
 
 	Record SPSegment::lookup(TID id) {
 		BufferFrame& frame = bufferManager.fixPage(id, false);
@@ -61,8 +61,8 @@ namespace lsql {
 
 	BufferFrame& SPSegment::findFreeFrame(int32_t requestedSize, uint32_t startPage) {
 		// Try to find a frame with enough space
-		for (uint32_t page = startPage; page < relation.pageCount; ++page) {
-			BufferFrame& frame = bufferManager.fixPage(PID(relation.segment, page), true);
+		for (uint32_t page = startPage; page < segment.getPageCount(); ++page) {
+			BufferFrame& frame = bufferManager.fixPage(PID(segment.getID(), page), true);
 
 			if (SlottedPage(this, frame).getFreeSpace() >= requestedSize)
 				return frame;
@@ -70,11 +70,9 @@ namespace lsql {
 			bufferManager.unfixPage(frame, false);
 		}
 
-		// No frame found, create a new one.
-		uint32_t pageId = relation.pageCount++;
-		PID id(relation.segment, pageId);
+		// No free page found, create and initialize a new one.
+		PID id = segment.addPage();
 		BufferFrame& frame = bufferManager.fixPage(id, true);
-
 		SlottedPage(this, frame).reset();
 		return frame;
 	}
