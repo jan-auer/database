@@ -15,7 +15,7 @@ namespace lsql {
 	/**
 	 * Represents a record in the database containing data.
 	 *
-	 * Unlike in the database, this record is immutable. To change the value of 
+	 * Unlike in the database, this record is immutable. To change the value of
 	 * a record in the database, create a new record and call @c SPSegment::update
 	 * with the corresponding TID. See @c SPSegment for mor information.
 	 */

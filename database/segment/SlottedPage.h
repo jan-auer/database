@@ -6,8 +6,7 @@
 //  Copyright (c) 2014 LightningSQL. All rights reserved.
 //
 
-#ifndef __database__SlottedPage__
-#define __database__SlottedPage__
+#pragma once
 
 #include <cstdint>
 #include <string>
@@ -59,7 +58,7 @@ namespace lsql {
 		SlottedPage(SPSegment* segment, BufferFrame& frame);
 
 		/**
-		 * Resets this page to an empty state. 
+		 * Resets this page to an empty state.
 		 *
 		 * All counters are set to zero and all slots are removed. Due to performance
 		 * reasons, this method might however leave data on the disk.
@@ -74,7 +73,7 @@ namespace lsql {
 		Record lookup(TID id) const;
 
 		/**
-		 * Creates a new slot within this page. 
+		 * Creates a new slot within this page.
 		 *
 		 * Internally, this method will try to reuse previously freed slots as good
 		 * as possible. If there are no free slots to recycle, a new slot is appended
@@ -88,27 +87,27 @@ namespace lsql {
 		 * Inserts a new record into this page.
 		 *
 		 * The insertion is first tried by prepending the data to the current
-		 * dataStart. If there is not enough space to prepend the data, will first 
+		 * dataStart. If there is not enough space to prepend the data, will first
 		 * be reorganized which moves all existing data to the very back of the page.
 		 *
 		 * If the slot specified by @c id is already used, it's entry is overwritten.
-		 * 
+		 *
 		 * @param id     The tuple identifier of the new record.
 		 * @param record A record containing data to insert.
 		 */
 		void insert(TID id, const Record& record);
 
 		/**
-		 * Updates the specified record with new data. 
+		 * Updates the specified record with new data.
 		 *
-		 * This method tries to update the specified record inplace first. If this 
-		 * is not possible but there is enough cumulated free space in this page, 
+		 * This method tries to update the specified record inplace first. If this
+		 * is not possible but there is enough cumulated free space in this page,
 		 * all data (excluding the old record) is compressed to the end of the page.
 		 *
-		 * Otherwise, the new record data must be redirected to a new page and the 
+		 * Otherwise, the new record data must be redirected to a new page and the
 		 * old record data is replaced with the redirected tuple identifier. If the
 		 * record already has been redirected, this method fails with return value
-		 * @c false. In this case, this redirected instance is removed and a new 
+		 * @c false. In this case, this redirected instance is removed and a new
 		 * one is created in another page.
 		 *
 		 * @param id            The tuple identifier of the record to update.
@@ -143,7 +142,7 @@ namespace lsql {
 
 		/**
 		 * Returns a typed pointer to the data of a slot.
-		 * 
+		 *
 		 * @param DataType The type of data in the slot. Defaults to @c char.
 		 * @param slot     The slot to get data for.
 		 *
@@ -160,7 +159,7 @@ namespace lsql {
 		/**
 		 * Updates the specified slot with the new record data inplace.
 		 *
-		 * This only works, if the new data is less or equal than the current data. 
+		 * This only works, if the new data is less or equal than the current data.
 		 * Furthermore, slot and header counters are updated.
 		 *
 		 * @param slot   The slot to replace.
@@ -171,5 +170,3 @@ namespace lsql {
 	};
 
 }
-
-#endif /* defined(__database__SlottedPage__) */

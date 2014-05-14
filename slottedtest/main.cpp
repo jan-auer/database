@@ -6,7 +6,7 @@
 
 #include "common/IDs.h"
 #include "buffer/BufferManager.h"
-#include "relation/SPSegment.h"
+#include "segment/SPSegment.h"
 
 using namespace std;
 using namespace lsql;

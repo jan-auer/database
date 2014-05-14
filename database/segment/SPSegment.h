@@ -18,7 +18,7 @@
 namespace lsql {
 
 	/**
-	 * 
+	 *
 	 */
 	class SPSegment {
 
