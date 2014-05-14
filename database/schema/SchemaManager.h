@@ -31,7 +31,6 @@ namespace lsql {
 		 */
 		SchemaManager(BufferManager& bufferManager);
 
-
 		/**
 		 * Destroys the schema manager and writes the schema to disk.
 		 */
@@ -51,11 +50,6 @@ namespace lsql {
 		 *
 		 */
 		bool drop(const std::string& name);
-
-		/**
-		 *
-		 */
-		PID addPage(Relation& relation);
 
 	};
 

@@ -20,12 +20,12 @@ namespace lsql {
 	 */
 	class Segment {
 
+	public:
+
 		BufferManager& bufferManager;
 
 		uint16_t id;
 		uint32_t pageCount;
-
-	public:
 
 		/**
 		 * Creates a new segment.

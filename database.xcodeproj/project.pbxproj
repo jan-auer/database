@@ -124,6 +124,8 @@
 		01251734191A5C4C00852C78 /* Mutex.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Mutex.cpp; sourceTree = "<group>"; };
 		01251735191A5C4C00852C78 /* Mutex.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Mutex.h; sourceTree = "<group>"; };
 		01251736191A63B300852C78 /* Logger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Logger.h; sourceTree = "<group>"; };
+		017111EE1923BEA500A7B764 /* Attribute.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Attribute.h; sourceTree = "<group>"; };
+		017111EF1923C98F00A7B764 /* Relation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Relation.h; sourceTree = "<group>"; };
 		01BDE7A019212530009F69E7 /* Serialize.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Serialize.h; sourceTree = "<group>"; };
 		01BDE7A419221674009F69E7 /* BufferFrameTest.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BufferFrameTest.cpp; sourceTree = "<group>"; };
 		01BDE7A519221674009F69E7 /* BufferManagerTest.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BufferManagerTest.cpp; sourceTree = "<group>"; };
@@ -377,6 +379,8 @@
 				4A75D790191E4B9000471EEB /* SchemaManager.h */,
 				4A6C4F91191FEC50003B8AB9 /* Schema.cpp */,
 				4A6C4F92191FEC50003B8AB9 /* Schema.h */,
+				017111EE1923BEA500A7B764 /* Attribute.h */,
+				017111EF1923C98F00A7B764 /* Relation.h */,
 				4A6C4F93191FEC50003B8AB9 /* Types.h */,
 			);
 			path = schema;

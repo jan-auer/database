@@ -108,6 +108,9 @@ int main(int argc, char** argv) {
 
 	// Set up everything.
 	BufferManager bm(100);
+
+	//ToDo: Create Schema Manager
+	//SchemaManager lookup
 	SPSegment sp(bm, 1, 0);
 	Random64 rnd;
 
