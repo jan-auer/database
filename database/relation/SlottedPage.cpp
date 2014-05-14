@@ -28,7 +28,8 @@ namespace lsql {
 	}
 
 	Record SlottedPage::lookup(TID id) const {
-		Slot& slot = getSlot(id);
+		Slot& slot = slots[id.tuple()];
+		assert(id.tuple() < header->count);
 		assert(slot.type != SLOT_EMPTY);
 
 		if (slot.type == SLOT_REDIRECT) {
@@ -48,9 +49,11 @@ namespace lsql {
 		return TID(pid.segment(), pid.page(), id);
 	}
 
-	bool SlottedPage::insert(TID id, const Record& record) {
+	void SlottedPage::insert(TID id, const Record& record) {
+		assert(id.tuple() < header->count);
+
 		// Reset the slot for compression
-		Slot& slot = getSlot(id);
+		Slot& slot = slots[id.tuple()];
 		slot.type = SLOT_EMPTY;
 
 		// Check if we need to compress data
@@ -69,11 +72,11 @@ namespace lsql {
 
 		// Copy data to the page
 		std::memcpy(getData(slot), record.getData(), slot.size);
-		return true;
 	}
 
 	bool SlottedPage::update(TID id, const Record& record, bool allowRedirect) {
-		Slot& slot = getSlot(id);
+		Slot& slot = slots[id.tuple()];
+		assert(id.tuple() < header->count);
 		assert(slot.type != SLOT_EMPTY);
 
 		// Delegate update to the redirected page.
@@ -89,11 +92,11 @@ namespace lsql {
 			}
 
 		// Downsize the data slot
-		} else if (int32_t(record.getSize()) <= slot.size) {
+		} else if (record.getSize() <= slot.size) {
 			replaceRecord(slot, record);
 
 		// The current data slot might not fit, so reinsert with the same id
-		} else if (int32_t(record.getSize()) <= getFreeSpace()) {
+		} else if (record.getSize() <= getFreeSpace()) {
 			insert(id, record);
 
 		// There is no space in this page, so redirect to a new page
@@ -111,14 +114,15 @@ namespace lsql {
 		return true;
 	}
 
-	bool SlottedPage::remove(TID id) {
-		Slot& slot = getSlot(id);
+	void SlottedPage::remove(TID id) {
+		Slot& slot = slots[id.tuple()];
+		assert(id.tuple() < header->count);
 		assert(slot.type != SLOT_EMPTY);
 
 		// Also remove the redirected tuple.
 		if (slot.type == SLOT_REDIRECT) {
 			TID* redirectTID = getData<TID>(slot);
-			return segment->remove(*redirectTID);
+			segment->remove(*redirectTID);
 		}
 
 		// Reset this slot
@@ -134,8 +138,6 @@ namespace lsql {
 		for (; i >= 0; --i)
 			if (slots[i].type != SLOT_EMPTY)
 				header->dataStart = std::min(header->dataStart, slots[i].offset);
-
-		return true;
 	}
 
 	int32_t SlottedPage::getFreeSpace() const {
@@ -143,12 +145,9 @@ namespace lsql {
 		return int32_t(BufferFrame::SIZE) - header->usedSpace - headerSize;
 	}
 
-	SlottedPage::Slot& SlottedPage::getSlot(TID id) const {
-		return slots[id.tuple()];
-	}
-
 	template<typename DataType>
 	DataType* SlottedPage::getData(Slot& slot) const {
+		assert(slot.type != SLOT_EMPTY);
 		return reinterpret_cast<DataType*>(data + slot.offset);
 	}
 
@@ -173,7 +172,10 @@ namespace lsql {
 	}
 
 	void SlottedPage::replaceRecord(Slot& slot, const Record& record) {
-		header->usedSpace += int32_t(record.getSize()) - slot.size;
+		assert(slot.type != SLOT_EMPTY);
+		assert(int32_t(record.getSize()) <= slot.size);
+
+		header->usedSpace += record.getSize() - slot.size;
 		std::memcpy(getData(slot), record.getData(), record.getSize());
 		slot.size = record.getSize();
 	}

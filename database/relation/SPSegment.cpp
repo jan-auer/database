@@ -53,10 +53,10 @@ namespace lsql {
 		BufferFrame& frame = bufferManager.fixPage(id, true);
 
 		SlottedPage sp(this, frame);
-		bool success = sp.remove(id);
+		sp.remove(id);
 
 		bufferManager.unfixPage(frame, true);
-		return success;
+		return true;
 	}
 
 	BufferFrame& SPSegment::findFreeFrame(int32_t requestedSize, uint32_t startPage) {
