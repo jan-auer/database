@@ -57,7 +57,7 @@ namespace lsql {
 		/**
 		 *
 		 */
-		BufferFrame& findFreeFrame(size_t requestedSize, uint32_t startPage = 0);
+		BufferFrame& findFreeFrame(int32_t requestedSize, uint32_t startPage = 0);
 
 	};
 

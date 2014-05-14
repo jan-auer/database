@@ -22,14 +22,20 @@ namespace lsql {
 
 		struct Header {
 			uint16_t count;
-			size_t dataStart;
+			int32_t dataStart;
+			int32_t usedSpace;
+		};
+
+		enum SlotType {
+			SLOT_EMPTY = 0,
+			SLOT_USED,
+			SLOT_REDIRECT
 		};
 
 		struct Slot {
-			TID id;
-			bool redirect;
-			size_t offset;
-			size_t length;
+			SlotType type;
+			int32_t offset;
+			int32_t size;
 		};
 
 		SPSegment* segment;
@@ -59,7 +65,12 @@ namespace lsql {
 		/**
 		 *
 		 */
-		TID insert(const Record& record);
+		TID createSlot();
+
+		/**
+		 *
+		 */
+		bool insert(TID id, const Record& record);
 
 		/**
 		 *
@@ -74,24 +85,30 @@ namespace lsql {
 		/**
 		 *
 		 */
-		size_t getFreeSpace() const;
+		int32_t getFreeSpace() const;
 
 	private:
 
 		/**
 		 *
 		 */
-		Slot* findSlot(TID id) const;
+		Slot& getSlot(TID id) const;
 
 		/**
 		 *
 		 */
-		void replaceRecord(Slot* slot, const Record& record);
+		template<typename DataType = char>
+		DataType* getData(Slot& slot) const;
 
 		/**
 		 *
 		 */
-		void moveData(size_t start, size_t length, ssize_t offset);
+		void compressData();
+
+		/**
+		 *
+		 */
+		void replaceRecord(Slot& slot, const Record& record);
 
 	};
 

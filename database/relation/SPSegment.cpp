@@ -32,17 +32,18 @@ namespace lsql {
 		BufferFrame& frame = findFreeFrame(record.getLen());
 
 		SlottedPage sp(this, frame);
-		TID tid = sp.insert(record);
+		TID id = sp.createSlot();
+		sp.insert(id, record);
 
 		bufferManager.unfixPage(frame, true);
-		return tid;
+		return id;
 	}
 
 	bool SPSegment::update(TID id, const Record& record, bool allowRedirect) {
 		BufferFrame& frame = bufferManager.fixPage(id, true);
 
 		SlottedPage sp(this, frame);
-		bool success = sp.update(id, record);
+		bool success = sp.update(id, record, allowRedirect);
 
 		bufferManager.unfixPage(frame, true);
 		return success;
@@ -58,7 +59,7 @@ namespace lsql {
 		return success;
 	}
 
-	BufferFrame& SPSegment::findFreeFrame(size_t requestedSize, uint32_t startPage) {
+	BufferFrame& SPSegment::findFreeFrame(int32_t requestedSize, uint32_t startPage) {
 		// Try to find a frame with enough space
 		for (uint32_t page = startPage; page < relation.pageCount; ++page) {
 			BufferFrame& frame = bufferManager.fixPage(PID(relation.segment, page), true);
@@ -70,9 +71,9 @@ namespace lsql {
 		}
 
 		// No frame found, create a new one.
-		PID id(relation.segment, relation.pageCount);
+		uint32_t pageId = relation.pageCount++;
+		PID id(relation.segment, pageId);
 		BufferFrame& frame = bufferManager.fixPage(id, true);
-		relation.pageCount++;
 
 		SlottedPage(this, frame).reset();
 		return frame;

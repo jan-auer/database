@@ -7,6 +7,8 @@
 //
 
 #include <cassert>
+#include <algorithm>
+#include <vector>
 
 #include "SlottedPage.h"
 
@@ -21,62 +23,87 @@ namespace lsql {
 
 	void SlottedPage::reset() {
 		header->count = 0;
-		header->dataStart = BufferFrame::SIZE;
+		header->dataStart = int32_t(BufferFrame::SIZE);
+		header->usedSpace = 0;
 	}
 
 	Record SlottedPage::lookup(TID id) const {
-		Slot* slot = findSlot(id);
-		assert(slot != nullptr);
+		Slot& slot = getSlot(id);
+		assert(slot.type != SLOT_EMPTY);
 
-		if (slot->redirect) {
-			TID* redirectTID = reinterpret_cast<TID*>(data + slot->offset);
+		if (slot.type == SLOT_REDIRECT) {
+			TID* redirectTID = getData<TID>(slot);
 			return segment->lookup(*redirectTID);
 		} else {
-			return Record(slot->length, data + slot->offset);
+			return Record(slot.size, getData(slot));
 		}
 	}
 
-	TID SlottedPage::insert(const Record& record) {
-		// Find a free TID
-		uint16_t tid = (header->count == 0) ? 0 : slots[header->count - 1].id.tuple() + 1;
+	TID SlottedPage::createSlot() {
+		for (uint16_t i = 0; i < header->count; ++i)
+			if (slots[i].type == SLOT_EMPTY)
+				return TID(pid.segment(), pid.page(), i);
 
-		// Create a slot entry
-		Slot* slot = &slots[header->count];
-		slot->id = TID(pid.segment(), pid.page(), tid);
-		slot->length = record.getLen();
-		slot->offset = header->dataStart - slot->length;
-		slot->redirect = false;
+		uint16_t id = header->count++;
+		return TID(pid.segment(), pid.page(), id);
+	}
 
-		// Copy data and update dataStart
-		++header->count;
-		header->dataStart = slot->offset;
-		std::memcpy(data + slot->offset, record.getData(), record.getLen());
+	bool SlottedPage::insert(TID id, const Record& record) {
+		// Reset the slot for compression
+		Slot& slot = getSlot(id);
+		slot.type = SLOT_EMPTY;
 
-		return slot->id;
+		// Check if we need to compress data
+		int32_t freeSpace = header->dataStart - sizeof(Header) - header->count * sizeof(Slot);
+		if (int32_t(record.getLen()) > freeSpace)
+			compressData();
+
+		// Initialize the slot entry
+		slot.type = SLOT_USED;
+		slot.size = record.getLen();
+		slot.offset = header->dataStart - slot.size;
+
+		// Update header information
+		header->dataStart = slot.offset;
+		header->usedSpace += slot.size;
+
+		// Copy data to the page
+		std::memcpy(getData(slot), record.getData(), slot.size);
+		return true;
 	}
 
 	bool SlottedPage::update(TID id, const Record& record, bool allowRedirect) {
-		Slot* slot = findSlot(id);
-		assert(slot != nullptr);
+		Slot& slot = getSlot(id);
+		assert(slot.type != SLOT_EMPTY);
 
-		if (slot->redirect) {
-			TID* redirectTID = reinterpret_cast<TID*>(data + slot->offset);
+		// Delegate update to the redirected page.
+		if (slot.type == SLOT_REDIRECT) {
+			TID* redirectTID = getData<TID>(slot);
 			bool updated = segment->update(*redirectTID, record, false);
 
 			if (!updated) {
+				// There was no space in the redirected page, so move the redirection
+				// to a new page and remove the old record.
 				segment->remove(*redirectTID);
 				*redirectTID = segment->insert(record);
 			}
 
-		} else if (record.getLen() - slot->length <= getFreeSpace()) {
+		// Downsize the data slot
+		} else if (int32_t(record.getLen()) <= slot.size) {
 			replaceRecord(slot, record);
 
+		// The current data slot might not fit, so reinsert with the same id
+		} else if (int32_t(record.getLen()) <= getFreeSpace()) {
+			insert(id, record);
+
+		// There is no space in this page, so redirect to a new page
 		} else if (allowRedirect) {
-			slot->redirect = true;
-			TID redirectTID = insert(record);
+			slot.type = SLOT_REDIRECT;
+			TID redirectTID = segment->insert(record);
 			Record redirectRecord(sizeof(TID), reinterpret_cast<char*>(&redirectTID));
 			replaceRecord(slot, redirectRecord);
 
+		// There is no space but we must not redirect, so fail
 		} else {
 			return false;
 		}
@@ -85,58 +112,70 @@ namespace lsql {
 	}
 
 	bool SlottedPage::remove(TID id) {
-		// Find the desired slot within the page.
-		Slot* slot = findSlot(id);
-		assert(slot != nullptr);
+		Slot& slot = getSlot(id);
+		assert(slot.type != SLOT_EMPTY);
 
-		if (slot->redirect) {
-			TID* redirectTID = reinterpret_cast<TID*>(data + slot->offset);
+		// Also remove the redirected tuple.
+		if (slot.type == SLOT_REDIRECT) {
+			TID* redirectTID = getData<TID>(slot);
 			return segment->remove(*redirectTID);
 		}
 
-		// Remove the data gap
-		size_t removedSize = slot->length;
-		moveData(header->dataStart, slot->offset - header->dataStart, removedSize);
+		// Reset this slot
+		slot.type = SLOT_EMPTY;
+		header->usedSpace -= slot.size;
 
-		// Remove the slot
-		Slot* next = slot + sizeof(Slot);
-		Slot* last = &slots[header->count - 1];
-		if (next <= last)
-			std::memmove(slot, next, last - next);
+		// Remove all trailing empty slots
+		int16_t i = header->count - 1;
+		for (; i >= 0 && slots[i].type == SLOT_EMPTY; --i)
+			header->count--;
 
-		header->count--;
+		// Update dataStart according to the remaining slots
+		for (; i >= 0; --i)
+			if (slots[i].type != SLOT_EMPTY)
+				header->dataStart = std::min(header->dataStart, slots[i].offset);
+
 		return true;
 	}
 
-	size_t SlottedPage::getFreeSpace() const {
-		return header->dataStart - sizeof(Header) - header->count * sizeof(Slot);
+	int32_t SlottedPage::getFreeSpace() const {
+		int32_t headerSize = sizeof(Header) + (header->count + 1) * sizeof(Slot);
+		return int32_t(BufferFrame::SIZE) - header->usedSpace - headerSize;
 	}
 
-	SlottedPage::Slot* SlottedPage::findSlot(TID id) const {
-		Slot* slot = &slots[header->count - 1];
-		while (slot >= slots && slot->id != id)
-			slot -= sizeof(Slot);
-
-		return (slot >= slots) ? slot : nullptr;
+	SlottedPage::Slot& SlottedPage::getSlot(TID id) const {
+		return slots[id.tuple()];
 	}
 
-	void SlottedPage::replaceRecord(Slot* slot, const Record& record) {
-		// Move subsequent data
-		ssize_t distance = slot->length - record.getLen();
-		moveData(slot->offset, slot->offset - header->dataStart, distance);
-
-		// Update the slot and data
-		slot->length = record.getLen();
-		std::memcpy(data + slot->offset, record.getData(), record.getLen());
+	template<typename DataType>
+	DataType* SlottedPage::getData(Slot& slot) const {
+		return reinterpret_cast<DataType*>(data + slot.offset);
 	}
 
-	void SlottedPage::moveData(size_t start, size_t length, ssize_t offset) {
-		char* dataStart = data + header->dataStart;
-		std::memmove(dataStart + offset, dataStart, length);
-		header->dataStart += offset;
+	void SlottedPage::compressData() {
+		std::vector<Slot*> orderedSlots;
+		for (int16_t i = header->count - 1; i > 0; --i)
+			if (slots[i].type != SLOT_EMPTY)
+				orderedSlots.push_back(&slots[i]);
 
-		for (Slot* slot = &slots[header->count - 1]; slot->offset <= start; slot -= sizeof(Slot))
-			slot->offset += offset;
+		// Order the slots after decreasing offsets
+		std::sort(orderedSlots.begin(), orderedSlots.end(), [] (Slot* a, Slot* b) {
+			return a->offset > b->offset;
+		});
+
+		// Move all data to the back of the page.
+		header->dataStart = int32_t(BufferFrame::SIZE);
+		for (Slot* slot : orderedSlots) {
+			header->dataStart -= slot->size;
+			std::memmove(data + header->dataStart, data + slot->offset, slot->size);
+			slot->offset = header->dataStart;
+		}
+	}
+
+	void SlottedPage::replaceRecord(Slot& slot, const Record& record) {
+		header->usedSpace += int32_t(record.getLen()) - slot.size;
+		std::memcpy(getData(slot), record.getData(), record.getLen());
+		slot.size = record.getLen();
 	}
 
 }
