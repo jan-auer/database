@@ -8,7 +8,17 @@
 
 #pragma once
 
+#include <cstdint>
+#include <string>
+
+#include "utils/Serialize.h"
+#include "Types.h"
+
 namespace lsql {
+
+	/**
+	 *
+	 */
 	struct Attribute {
 
 		std::string name;
@@ -16,23 +26,12 @@ namespace lsql {
 		uint32_t len;
 		bool notNull;
 
+		/**
+		 *
+		 */
 		Attribute() : len(~0), notNull(true) {}
 
 	};
-
-	static bool operator== (Attribute& a1, Attribute& a2) {
-		if (a1.name == a2.name &&
-				a1.type == a2.type &&
-				a1.len == a2.len &&
-				a1.notNull == a2.notNull
-				)
-			return true;
-		return false;
-	}
-
-	static bool operator!= (Attribute& a1, Attribute& a2) {
-		return !(a1 == a2);
-	}
 
 	/**
 	 * Here comes the extension for the serializer:
@@ -41,6 +40,7 @@ namespace lsql {
 
 		template <>
 		struct get_size_helper<Attribute> {
+
 			static size_t value(const Attribute& obj) {
 				size_t size = get_size(obj.name);
 				size += get_size(obj.type);
@@ -48,6 +48,7 @@ namespace lsql {
 				size += get_size(obj.notNull);
 				return size;
 			}
+
 		};
 
 		template <>
@@ -66,17 +67,20 @@ namespace lsql {
 		struct deserialize_helper<Attribute> {
 
 			static Attribute apply(StreamType::const_iterator& begin,
-														 StreamType::const_iterator end)
-			{
+														 StreamType::const_iterator end,
+														 void* context = nullptr) {
 				Attribute attr = Attribute();
 
 				attr.name			= deserialize_helper<std::string>::apply(begin,end);
 				attr.type			= deserialize_helper<Types::Tag>::apply(begin,end);
 				attr.len			= deserialize_helper<uint32_t>::apply(begin,end);
 				attr.notNull	= deserialize_helper<bool>::apply(begin,end);
+
 				return attr;
 			}
+
 		};
+
 	}
 
 }

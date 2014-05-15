@@ -376,13 +376,13 @@
 			isa = PBXGroup;
 			children = (
 				01A30256191EBD21007A1957 /* parser */,
-				4A75D78F191E4B9000471EEB /* SchemaManager.cpp */,
-				4A75D790191E4B9000471EEB /* SchemaManager.h */,
-				4A6C4F91191FEC50003B8AB9 /* Schema.cpp */,
-				4A6C4F92191FEC50003B8AB9 /* Schema.h */,
+				4A6C4F93191FEC50003B8AB9 /* Types.h */,
 				017111EE1923BEA500A7B764 /* Attribute.h */,
 				017111EF1923C98F00A7B764 /* Relation.h */,
-				4A6C4F93191FEC50003B8AB9 /* Types.h */,
+				4A6C4F91191FEC50003B8AB9 /* Schema.cpp */,
+				4A6C4F92191FEC50003B8AB9 /* Schema.h */,
+				4A75D78F191E4B9000471EEB /* SchemaManager.cpp */,
+				4A75D790191E4B9000471EEB /* SchemaManager.h */,
 			);
 			path = schema;
 			sourceTree = "<group>";
