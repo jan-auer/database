@@ -178,6 +178,7 @@
 		4A8859AB1916581A001A42AB /* ConcurrentList-impl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ConcurrentList-impl.h"; sourceTree = "<group>"; };
 		4A8859AC1916581A001A42AB /* ConcurrentList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConcurrentList.h; sourceTree = "<group>"; };
 		4A9D8F1218F5742400E700F6 /* unit_test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = unit_test; sourceTree = BUILT_PRODUCTS_DIR; };
+		4ACB3F1C1925343400EBD596 /* Serialize-impl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Serialize-impl.h"; sourceTree = "<group>"; };
 		4AD58302192148DB005570F5 /* slottedtest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = slottedtest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4AD58304192148DB005570F5 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		4AD58306192148DB005570F5 /* slottedtest.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = slottedtest.1; sourceTree = "<group>"; };
@@ -427,6 +428,7 @@
 		4AE60B9D18F836A500717C22 /* utils */ = {
 			isa = PBXGroup;
 			children = (
+				4ACB3F1C1925343400EBD596 /* Serialize-impl.h */,
 				01BDE7A019212530009F69E7 /* Serialize.h */,
 				4A0C3FB918FF1F2F0070FD98 /* File-impl.h */,
 				4A0C3FBA18FF1F2F0070FD98 /* File.h */,
