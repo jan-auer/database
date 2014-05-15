@@ -151,7 +151,7 @@ namespace lsql {
 
 			static T apply(StreamType::const_iterator& begin,
 										 StreamType::const_iterator end,
-										 C* context) {
+										 C* context = nullptr) {
 				assert(begin+sizeof(T)<=end);
 				T val;
 				uint8_t* ptr = reinterpret_cast<uint8_t*>(&val);
@@ -167,13 +167,14 @@ namespace lsql {
 
 			static std::vector<T> apply(StreamType::const_iterator& begin,
 																	StreamType::const_iterator end,
-																	C* context) {
+																	C* context = nullptr) {
 				// retrieve the number of elements
 				size_t size = deserialize_helper<size_t, C>::apply(begin,end,context);
 
-				std::vector<T> vect(size);
+				std::vector<T> vect;
+				vect.reserve(size);
 				for(size_t i=0; i<size; ++i) {
-					vect[i] = std::move(deserialize_helper<T,C>::apply(begin,end,context));
+					vect.push_back(std::move(deserialize_helper<T,C>::apply(begin,end,context)));
 				}
 
 				return vect;
@@ -185,7 +186,7 @@ namespace lsql {
 
 			static std::string apply(StreamType::const_iterator& begin,
 															 StreamType::const_iterator end,
-															 void* context) {
+															 void* context = nullptr) {
 				// retrieve the number of elements
 				size_t size = deserialize_helper<size_t, void>::apply(begin,end,nullptr);
 
@@ -215,7 +216,7 @@ namespace lsql {
 			constexpr size_t idx = std::tuple_size<tuple_type>::value-pos-1;
 			typedef typename std::tuple_element<idx,tuple_type>::type T;
 
-			std::get<idx>(obj) = std::move(deserialize_helper<T>::apply(begin, end, context));
+			std::get<idx>(obj) = std::move(deserialize_helper<T, C>::apply(begin, end, context));
 
 			// recur
 			deserialize_tuple(obj, begin, end, int_<pos-1>(), context);
@@ -226,7 +227,7 @@ namespace lsql {
 
 			static std::tuple<T...> apply(StreamType::const_iterator& begin,
 																		StreamType::const_iterator end,
-																		C* context) {
+																		C* context = nullptr) {
 				//return std::make_tuple(deserialize(begin,begin+sizeof(T),T())...);
 				std::tuple<T...> ret;
 				deserialize_tuple(ret, begin, end, int_<sizeof...(T)-1>(), context);
@@ -265,7 +266,7 @@ namespace lsql {
 	template <class T, class C>
 	inline T deserialize(const StreamType& res, C* context) {
 		StreamType::const_iterator it = res.begin();
-		return deserialize<T>(it, res.end());
+		return deserialize<T, C>(it, res.end(), context);
 	}
 
 }

@@ -110,7 +110,7 @@ namespace lsql {
 		 * \code
 		 *    static T apply(StreamType::const_iterator& begin, 
 		 *                   StreamType::const_iterator end,
-		 *                   Context* context);
+		 *                   Context* context = nullptr);
 		 * \endcode
 		 *
 		 * The default implementation directly maps the stream data into the memory
