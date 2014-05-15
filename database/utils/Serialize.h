@@ -64,7 +64,7 @@ namespace lsql {
 	/**
 	 * Contains interfaces and implementation for the serialization.
 	 */
-	namespace detail {
+	namespace serialization {
 
 		/**
 		 * A struct needed during serialization and deserialization to calculate the

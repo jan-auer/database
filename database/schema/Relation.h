@@ -44,7 +44,7 @@ namespace lsql {
 	/**
 	 * Here comes the extension for the serializer:
 	 */
-	namespace detail {
+	namespace serialization {
 
 		/**
 		 *

@@ -25,7 +25,7 @@ namespace lsql {
 	/**
 	 * Here comes the extension for the serializer:
 	 */
-	namespace detail {
+	namespace serialization {
 
 		template <>
 		struct get_size_helper<Schema> {

@@ -6,12 +6,11 @@
 //  Copyright (c) 2014 LightningSQL. All rights reserved.
 //
 
-#include "SchemaManager.h"
+#include <cstdio>
+#include <sstream>
+
 #include "Serialize.h"
-
-#include <sstream>      //std::stringstream
-#include <stdio.h>			//memcpy
-
+#include "SchemaManager.h"
 
 namespace lsql {
 

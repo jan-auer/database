@@ -16,7 +16,7 @@ namespace lsql {
 	template <class T>
 	size_t get_size(const T& obj);
 
-	namespace detail {
+	namespace serialization {
 
 #pragma mark Size Helpers
 
@@ -97,7 +97,7 @@ namespace lsql {
 		struct serialize_helper<std::tuple<T...>> {
 
 			static void apply(const std::tuple<T...>& obj, StreamType::iterator& res) {
-				detail::serialize_tuple(obj, res, detail::int_<sizeof...(T)-1>());
+				serialize_tuple(obj, res, int_<sizeof...(T)-1>());
 			}
 
 		};
@@ -242,7 +242,7 @@ namespace lsql {
 
 	template <class T>
 	inline size_t get_size(const T& obj) {
-		return detail::get_size_helper<T>::value(obj);
+		return serialization::get_size_helper<T>::value(obj);
 	}
 
 	template <class T>
@@ -252,7 +252,7 @@ namespace lsql {
 		res.resize(res.size() + size);
 
 		StreamType::iterator it = res.begin()+offset;
-		detail::serializer(obj,it);
+		serialization::serializer(obj,it);
 		assert(res.begin() + offset + size == it);
 	}
 
@@ -260,7 +260,7 @@ namespace lsql {
 	inline T deserialize(StreamType::const_iterator& begin,
 											 const StreamType::const_iterator& end,
 											 C* context) {
-		return detail::deserialize_helper<T, C>::apply(begin, end, context);
+		return serialization::deserialize_helper<T, C>::apply(begin, end, context);
 	}
 
 	template <class T, class C>
