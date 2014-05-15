@@ -48,13 +48,18 @@ namespace lsql {
 	/**
 	 * Serializes a data object from the provided stream.
 	 *
+	 * In order to provide additional information to the deserialization function,
+	 * an optional (mutable) context may be passed to the deserializer. By default,
+	 * the context is of type @c void, but it may be adapted to any needs.
+	 *
 	 * In order to be deserializable, @c detail::size_helper<T> and
 	 * @c detail::deserialize_helper<T> have to be implemented.
 	 *
-	 * @param res The resource stream which contains serialized data.
+	 * @param res     The resource stream which contains serialized data.
+	 * @param context An optional context to provide during deserialization.
 	 */
-	template <class T>
-	inline T deserialize(const StreamType& res);
+	template <class T, class Context = void>
+	inline T deserialize(const StreamType& res, Context* context = nullptr);
 
 	/**
 	 * Contains interfaces and implementation for the serialization.
@@ -103,7 +108,9 @@ namespace lsql {
 		 * The @c deserialize_helper struct contains one static method which reads 
 		 * an object from a stream:
 		 * \code
-		 *    static T apply(StreamType::const_iterator& begin, StreamType::const_iterator end);
+		 *    static T apply(StreamType::const_iterator& begin, 
+		 *                   StreamType::const_iterator end,
+		 *                   Context* context);
 		 * \endcode
 		 *
 		 * The default implementation directly maps the stream data into the memory
@@ -111,8 +118,12 @@ namespace lsql {
 		 * without pointers or references. In case there is special deserialization
 		 * desired, this method should be overloaded by implementing @c deserialize_helper
 		 * for the concrete type.
+		 *
+		 * If additional information is needed during deserialization, the @c Context
+		 * type may be changed to any kind of (mutable) struct or class which 
+		 * reflects in the @c apply method interface.
 		 */
-		template <class T>
+		template <class T, class Context = void>
 		struct deserialize_helper;
 
 	}

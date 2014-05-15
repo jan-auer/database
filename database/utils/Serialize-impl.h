@@ -146,10 +146,12 @@ namespace lsql {
 
 #pragma mark Deserialize Helpers
 
-		template <class T>
+		template <class T, class C>
 		struct deserialize_helper {
 
-			static T apply(StreamType::const_iterator& begin, StreamType::const_iterator end) {
+			static T apply(StreamType::const_iterator& begin,
+										 StreamType::const_iterator end,
+										 C* context) {
 				assert(begin+sizeof(T)<=end);
 				T val;
 				uint8_t* ptr = reinterpret_cast<uint8_t*>(&val);
@@ -160,16 +162,18 @@ namespace lsql {
 
 		};
 
-		template <class T>
-		struct deserialize_helper<std::vector<T>> {
+		template <class T, class C>
+		struct deserialize_helper<std::vector<T>, C> {
 
-			static std::vector<T> apply(StreamType::const_iterator& begin, StreamType::const_iterator end) {
+			static std::vector<T> apply(StreamType::const_iterator& begin,
+																	StreamType::const_iterator end,
+																	C* context) {
 				// retrieve the number of elements
-				size_t size = deserialize_helper<size_t>::apply(begin,end);
+				size_t size = deserialize_helper<size_t, C>::apply(begin,end,context);
 
 				std::vector<T> vect(size);
 				for(size_t i=0; i<size; ++i) {
-					vect[i] = std::move(deserialize_helper<T>::apply(begin,end));
+					vect[i] = std::move(deserialize_helper<T,C>::apply(begin,end,context));
 				}
 
 				return vect;
@@ -177,48 +181,55 @@ namespace lsql {
 		};
 
 		template <>
-		struct deserialize_helper<std::string> {
+		struct deserialize_helper<std::string, void> {
 
-			static std::string apply(StreamType::const_iterator& begin, StreamType::const_iterator end) {
+			static std::string apply(StreamType::const_iterator& begin,
+															 StreamType::const_iterator end,
+															 void* context) {
 				// retrieve the number of elements
-				size_t size = deserialize_helper<size_t>::apply(begin,end);
+				size_t size = deserialize_helper<size_t, void>::apply(begin,end,nullptr);
 
 				if (size == 0u) return std::string();
 
 				std::string str(size,'\0');
 				for(size_t i=0; i<size; ++i) {
-					str.at(i) = deserialize_helper<uint8_t>::apply(begin,end);
+					str.at(i) = deserialize_helper<uint8_t, void>::apply(begin,end,context);
 				}
 				return str;
 			}
 		};
 
-		template <class tuple_type>
-		inline void deserialize_tuple(tuple_type& obj, StreamType::const_iterator& begin, StreamType::const_iterator end, int_<0>) {
+		template <class tuple_type, class C>
+		inline void deserialize_tuple(tuple_type& obj, StreamType::const_iterator& begin,
+																	StreamType::const_iterator end, int_<0>, C* context) {
 			constexpr size_t idx = std::tuple_size<tuple_type>::value-1;
 			typedef typename std::tuple_element<idx,tuple_type>::type T;
 
-			std::get<idx>(obj) = std::move(deserialize_helper<T>::apply(begin, end));
+			std::get<idx>(obj) = std::move(deserialize_helper<T>::apply(begin, end, context));
 		}
 
-		template <class tuple_type, size_t pos>
-		inline void deserialize_tuple(tuple_type& obj, StreamType::const_iterator& begin, StreamType::const_iterator end, int_<pos>) {
+		template <class tuple_type, size_t pos, class C>
+		inline void deserialize_tuple(tuple_type& obj, StreamType::const_iterator& begin,
+																	StreamType::const_iterator end, int_<pos>,
+																	C* context) {
 			constexpr size_t idx = std::tuple_size<tuple_type>::value-pos-1;
 			typedef typename std::tuple_element<idx,tuple_type>::type T;
 
-			std::get<idx>(obj) = std::move(deserialize_helper<T>::apply(begin, end));
+			std::get<idx>(obj) = std::move(deserialize_helper<T>::apply(begin, end, context));
 
 			// recur
-			deserialize_tuple(obj, begin, end, int_<pos-1>());
+			deserialize_tuple(obj, begin, end, int_<pos-1>(), context);
 		}
 
-		template <class... T>
-		struct deserialize_helper<std::tuple<T...>> {
+		template <class... T, class C>
+		struct deserialize_helper<std::tuple<T...>, C> {
 
-			static std::tuple<T...> apply(StreamType::const_iterator& begin, StreamType::const_iterator end) {
+			static std::tuple<T...> apply(StreamType::const_iterator& begin,
+																		StreamType::const_iterator end,
+																		C* context) {
 				//return std::make_tuple(deserialize(begin,begin+sizeof(T),T())...);
 				std::tuple<T...> ret;
-				deserialize_tuple(ret, begin, end, int_<sizeof...(T)-1>());
+				deserialize_tuple(ret, begin, end, int_<sizeof...(T)-1>(), context);
 				return ret;
 			}
 
@@ -244,13 +255,15 @@ namespace lsql {
 		assert(res.begin() + offset + size == it);
 	}
 
-	template <class T>
-	inline T deserialize(StreamType::const_iterator& begin, const StreamType::const_iterator& end) {
-		return detail::deserialize_helper<T>::apply(begin, end);
+	template <class T, class C = void>
+	inline T deserialize(StreamType::const_iterator& begin,
+											 const StreamType::const_iterator& end,
+											 C* context) {
+		return detail::deserialize_helper<T, C>::apply(begin, end, context);
 	}
 
-	template <class T>
-	inline T deserialize(const StreamType& res) {
+	template <class T, class C>
+	inline T deserialize(const StreamType& res, C* context) {
 		StreamType::const_iterator it = res.begin();
 		return deserialize<T>(it, res.end());
 	}
