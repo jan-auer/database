@@ -19,7 +19,6 @@ namespace lsql {
 	 */
 	class SchemaManager {
 
-	private:
 		Schema schema;
 		BufferManager& bufferManager;
 
@@ -37,14 +36,16 @@ namespace lsql {
 		~SchemaManager();
 
 		/**
-		 *  throw exception??
+		 *
 		 */
 		Relation& lookup(const std::string& name);
 
 		/**
 		 *
 		 */
-		Relation& create(const std::string& name, const std::vector<Attribute>& attributes, const std::vector<unsigned>& primaryKey);
+		Relation& create(const std::string& name,
+										 const std::vector<Attribute>& attributes,
+										 const std::vector<unsigned>& primaryKey);
 
 		/**
 		 *

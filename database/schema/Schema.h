@@ -23,13 +23,17 @@ namespace lsql {
 	 */
 	struct Schema {
 
+		uint16_t segmentCount = 0;
 		std::vector<Relation> relations;
 
 		/** Creates a new Schema */
 		Schema() {}
 
 		/** Serialization constructor for schemata */
-		Schema(std::vector<Relation>&& r) { std::swap(relations, r); }
+		Schema(uint16_t segmentCount, std::vector<Relation>&& r)
+		: segmentCount(segmentCount) {
+			std::swap(relations, r);
+		}
 
 	};
 
@@ -49,6 +53,7 @@ namespace lsql {
 		struct serialize_helper<Schema> {
 
 			static void apply(const Schema& obj, StreamType::iterator& res) {
+				serializer(obj.segmentCount, res);
 				serializer(obj.relations, res);
 			}
 
@@ -60,9 +65,8 @@ namespace lsql {
 			static Schema apply(StreamType::const_iterator& begin,
 													StreamType::const_iterator end,
 													BufferContext* context = nullptr) {
-				return Schema(std::move(
-					deserialize_helper<std::vector<Relation>, BufferContext>::apply(begin, end, context)
-				));
+				return Schema(deserialize_helper<uint16_t>::apply(begin, end),
+					std::move(deserialize_helper<std::vector<Relation>, BufferContext>::apply(begin, end, context)));
 			}
 
 		};

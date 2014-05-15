@@ -28,35 +28,24 @@ namespace lsql {
 
 	}
 
-
 	SchemaManager::~SchemaManager() {
-
 		BufferFrame& frame = bufferManager.fixPage(0, true);
 
 		std::vector<uint8_t> serializedVector;
 		serialize(schema, serializedVector);
 
-		std::memcpy(frame.getData(), serializedVector.data(), serializedVector.size() * sizeof(char));
-
+		std::memcpy(frame.getData(), serializedVector.data(), serializedVector.size());
 		bufferManager.unfixPage(frame, true);
-
 	}
 
-
 	Relation& SchemaManager::lookup(const std::string& name) {
-
-		std::vector<Relation> rels = schema.relations;
-
-		typename std::vector<Relation>::iterator it = rels.begin();
-		for( ; it != rels.end(); ++it) {
-
-			if (it->name == name)
-				return *it;
-
+		for (auto& relation : schema.relations) {
+			if (relation.name == name)
+				return relation;
 		}
 
-		// relation not found, create new one.
-		// ToDo: Throw Exception
+		// ToDo: Throw Exception?
+		// Relation not found, create a new one
 		return create(name, std::vector<Attribute>(), std::vector<unsigned>());
 	}
 
@@ -70,17 +59,14 @@ namespace lsql {
 	}
 
 	bool SchemaManager::drop(const std::string& name) {
-
-		typename std::vector<Relation>::iterator it = schema.relations.begin();
-
-		for( ; it != schema.relations.end(); ++it) {
+		for (auto it = schema.relations.begin(); it != schema.relations.end(); ++it) {
 			if (it->name != name)
 				continue;
 
 			schema.relations.erase(it);
 			return true;
 		}
-		
+
 		return false;
 	}
 
