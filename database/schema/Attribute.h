@@ -22,7 +22,7 @@ namespace lsql {
 	struct Attribute {
 
 		std::string name;
-		Types::Tag type;
+		Type type;
 		uint32_t len;
 		bool notNull;
 
@@ -30,7 +30,7 @@ namespace lsql {
 		Attribute() : len(~0), notNull(true) {}
 
 		/** Serialization constructor for attributes. */
-		Attribute(std::string&& name, Types::Tag&& type, uint32_t len, bool notNull)
+		Attribute(std::string&& name, Type&& type, uint32_t len, bool notNull)
 		: len(len), notNull(notNull) {
 			std::swap(this->name, name);
 			std::swap(this->type, type);
@@ -73,7 +73,7 @@ namespace lsql {
 														 void* context = nullptr) {
 				return Attribute(
 					std::move(deserialize_helper<std::string>::apply(begin,end)),
-					std::move(deserialize_helper<Types::Tag>::apply(begin,end)),
+					std::move(deserialize_helper<Type>::apply(begin,end)),
 					deserialize_helper<uint32_t>::apply(begin,end),
 					deserialize_helper<bool>::apply(begin,end));
 			}
