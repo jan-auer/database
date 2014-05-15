@@ -1,3 +1,11 @@
+//
+//  Schema.h
+//  database
+//
+//  Created by Felix Jankowski on 14.05.14.
+//  Copyright (c) 2014 LightningSQL. All rights reserved.
+//
+
 #pragma once
 
 #include <cstdint>
@@ -11,20 +19,20 @@
 namespace lsql {
 
 	/**
-	 *
+	 * Represents a database schema.
 	 */
 	struct Schema {
 
-		uint16_t segmentCount = 0;
 		std::vector<Relation> relations;
 
-		std::string toString() const;
+		/** Creates a new Schema */
+		Schema() {}
+
+		/** Serialization constructor for schemata */
+		Schema(std::vector<Relation>&& r) { std::swap(relations, r); }
 
 	};
 
-	/**
-	 * Here comes the extension for the serializer:
-	 */
 	namespace serialization {
 
 		template <>
@@ -52,9 +60,9 @@ namespace lsql {
 			static Schema apply(StreamType::const_iterator& begin,
 													StreamType::const_iterator end,
 													BufferContext* context = nullptr) {
-				Schema schema;
-				schema.relations = deserialize_helper<std::vector<Relation>, BufferContext>::apply(begin, end, context);
-				return schema;
+				return Schema(std::move(
+					deserialize_helper<std::vector<Relation>, BufferContext>::apply(begin, end, context)
+				));
 			}
 
 		};

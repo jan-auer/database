@@ -20,7 +20,7 @@
 namespace lsql {
 
 	/**
-	 *
+	 * Represents database relations (TABLE).
 	 */
 	struct Relation : public SPSegment {
 
@@ -28,26 +28,36 @@ namespace lsql {
 		std::vector<unsigned> primaryKey;
 		std::vector<Attribute> attributes;
 
+		/** Creates a new relation */
 		Relation(BufferManager& bufferManager, uint16_t segmentId, uint32_t pageCount = 0)
 		: SPSegment(bufferManager, segmentId, pageCount) {}
 
+		/** Serialization constructor for relations. */
+		Relation(BufferManager& bufferManager, uint16_t segmentId, uint32_t pageCount,
+						 std::string&& name, std::vector<unsigned>&& primaryKey,
+						 std::vector<Attribute>&& attributes)
+		: Relation(bufferManager, segmentId, pageCount) {
+			std::swap(this->name, name);
+			std::swap(this->primaryKey, primaryKey);
+			std::swap(this->attributes, attributes);
+		}
+
+		/** Returns the segment id of the relation. */
 		const uint16_t segmentId() const {
 			return Segment::id;
 		}
 
+		/** Returns the number of pages, this relations uses. */
 		const uint32_t pageCount() const {
 			return Segment::pageCount;
 		}
 
 	};
 
-	/**
-	 * Here comes the extension for the serializer:
-	 */
 	namespace serialization {
 
 		/**
-		 *
+		 * A serialization context to inject a buffer manager during deserialization.
 		 */
 		struct BufferContext {
 			BufferManager& bufferManager;
@@ -87,15 +97,12 @@ namespace lsql {
 			static Relation apply(StreamType::const_iterator& begin,
 														StreamType::const_iterator end,
 														BufferContext* context = nullptr) {
-				auto segment    = deserialize_helper<uint16_t>::apply(begin,end);
-				auto pageCount  = deserialize_helper<uint32_t>::apply(begin,end);
-
-				Relation rel(context->bufferManager, segment, pageCount);
-				rel.name       = deserialize_helper<std::string>::apply(begin,end);
-				rel.primaryKey = deserialize_helper<std::vector<unsigned>>::apply(begin,end);
-				rel.attributes = deserialize_helper<std::vector<Attribute>>::apply(begin,end);
-
-				return rel;
+				return Relation(context->bufferManager,
+					deserialize_helper<uint16_t>::apply(begin,end),
+					deserialize_helper<uint32_t>::apply(begin,end),
+					std::move(deserialize_helper<std::string>::apply(begin,end)),
+					std::move(deserialize_helper<std::vector<unsigned>>::apply(begin,end)),
+					std::move(deserialize_helper<std::vector<Attribute>>::apply(begin,end)));
 			}
 
 		};

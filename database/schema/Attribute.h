@@ -17,7 +17,7 @@
 namespace lsql {
 
 	/**
-	 *
+	 * Represents database attributes.
 	 */
 	struct Attribute {
 
@@ -26,16 +26,18 @@ namespace lsql {
 		uint32_t len;
 		bool notNull;
 
-		/**
-		 *
-		 */
+		/** Creates a new attribute */
 		Attribute() : len(~0), notNull(true) {}
+
+		/** Serialization constructor for attributes. */
+		Attribute(std::string&& name, Types::Tag&& type, uint32_t len, bool notNull)
+		: len(len), notNull(notNull) {
+			std::swap(this->name, name);
+			std::swap(this->type, type);
+		};
 
 	};
 
-	/**
-	 * Here comes the extension for the serializer:
-	 */
 	namespace serialization {
 
 		template <>
@@ -69,14 +71,11 @@ namespace lsql {
 			static Attribute apply(StreamType::const_iterator& begin,
 														 StreamType::const_iterator end,
 														 void* context = nullptr) {
-				Attribute attr = Attribute();
-
-				attr.name			= deserialize_helper<std::string>::apply(begin,end);
-				attr.type			= deserialize_helper<Types::Tag>::apply(begin,end);
-				attr.len			= deserialize_helper<uint32_t>::apply(begin,end);
-				attr.notNull	= deserialize_helper<bool>::apply(begin,end);
-
-				return attr;
+				return Attribute(
+					std::move(deserialize_helper<std::string>::apply(begin,end)),
+					std::move(deserialize_helper<Types::Tag>::apply(begin,end)),
+					deserialize_helper<uint32_t>::apply(begin,end),
+					deserialize_helper<bool>::apply(begin,end));
 			}
 
 		};
