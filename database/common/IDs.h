@@ -69,4 +69,6 @@ namespace lsql {
 	/** Compares two TIDs for inequality. */
 	bool operator!=(const TID& a, const TID& b);
 
+	const TID NULL_TID(0,0,0);
+	const PID NULL_PID(0,0);
 }
