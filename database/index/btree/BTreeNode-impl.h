@@ -7,6 +7,7 @@
 //
 
 #pragma once
+
 #include <iostream>
 
 #include "common/IDs.h"
@@ -22,6 +23,7 @@ namespace lsql {
 			Inner, Leaf
 		};
 
+		/*** These are the different headers for each node ***/
 		struct Header {
 			NodeType type;
 			uint64_t LSN = 0;
@@ -39,10 +41,12 @@ namespace lsql {
 			PID next;
 		};
 
-
 		PID pid;
-		char* data;
+		uint32_t n; //Maximum number of Key/TID pairs in this node
+
 		Header* header;
+		Key* keys;
+		TID* tids;
 
 	public:
 
@@ -50,34 +54,70 @@ namespace lsql {
 		 * Creates a new node in the B+-Tree.
 		 *
 		 * @param frame   The corresponding buffer frame containing page data.
+		 * @param type		Whether this node is an inner or a leaf
 		 */
-		BTreeNode::BTreeNode(BufferFrame& frame, NodeType type)
+		BTreeNode(BufferFrame& frame, NodeType type)
 		: pid(frame.getId()) {
 
-
-			int32_t headerSize = sizeof(Header) + (header->count + 1) * sizeof(Slot);
-			return int32_t(BufferFrame::SIZE) - header->usedSpace - headerSize;
-
-			header = static_cast<Header*>(frame.getData());
+			int32_t headerSize = 0;
+			char* data = static_cast<char*>(frame.getData());
 
 			if (type == Inner) {
-				header = static_cast<InnerHeader*>(header);
-				data = reinterpret_cast<char*>(data + sizeof(InnerHeader));
+				header = static_cast<InnerHeader*>(data);
+				//Inner node has n pointers and n+1 TIDs
+				headerSize = sizeof(InnerHeader) + sizeof(TID);
+
+				keys = reinterpret_cast<Key*>(data + sizeof(InnerHeader));
 			} else if (type == Leaf) {
-				header = static_cast<LeafHeader*>(header);
-				data = reinterpret_cast<char*>(data + sizeof(LeafHeader));
+				header = static_cast<LeafHeader*>(data);
+				headerSize = sizeof(LeafHeader);
+
+				keys = reinterpret_cast<Key*>(data + sizeof(LeafHeader));
 			}
-			
+
+			n = ((BufferFrame::SIZE) - headerSize) / (sizeof(TID) + sizeof(Key));
+			tids = reinterpret_cast<TID*>(data + headerSize);
+
 		}
 
 
+		/**
+		 * Finds a TID
+		 *
+		 * @return PID of the next leaf if inner node, otherwise TID of key. NULL_TID if not found
+		 */
 		TID lookup(Key& key) const;
 
-		bool insert(const Key& key, const TID& tid);
 
+		/**
+		 * Inserts a key/TID pair into the leaf
+		 *
+		 * @param key		A reference to the key that should be inserted
+		 * @param tid		A reference to the key's tid if leaf node or of
+		 *							the next node's PID if inner node
+		 * @return			true on success, false in case of error
+		 */
+		bool insert(const Key& key, const TID& tid) {
+			return false;
+		}
+
+
+		/**
+		 * Removes a key from the Leaf.
+		 *
+		 * @param key		A reference to the key that should be removed
+		 * @return			true if successful, false if key has not been found
+		 */
 		bool remove(Key& key);
 
-		std::pair<TID, TID> splitNode();
+
+		/**
+		 * Splits the current node into two seperate ones
+		 * Used for Concurrent Access (2), slide 40, chapter 3
+		 *
+		 * @return		A PID of the new (2nd) leaf, created by the split
+		 */
+		PID splitNode();
 
 	};
 
