@@ -10,6 +10,7 @@
 
 #include <iostream>
 #include <vector>
+#include <cassert>
 
 #include "buffer/BufferManager.h"
 #include "BTreeNode-impl.h"
@@ -27,6 +28,7 @@ namespace lsql {
 
 	private:
 		uint64_t size;
+		PID root;
 
 	public:
 
@@ -38,12 +40,9 @@ namespace lsql {
 		 * @param pageCount     The number of pages in this segment.
 		 */
 		BTree(BufferManager& bufferManager, uint16_t segmentId, uint32_t pageCount = 0)
-		: size(0), Segment(bufferManager, segmentId, pageCount) {
+		: size(0), root(NULL_PID), Segment(bufferManager, segmentId, pageCount) {
 			//Create root node
-			PID id = addPage();
-			BufferFrame& frame = fixPage(id, true);
-			BTreeNode<Key, Comperator>(frame, BTreeNode<Key, Comperator>::NodeType::Inner).reset();
-			unfixPage(frame, true);
+			root = createNode(BTreeNode<Key, Comperator>::NodeType::Inner);
 		}
 
 
@@ -73,8 +72,20 @@ namespace lsql {
 		 *
 		 * @param	key		A const reference
 		 */
-		TID lookup(const Key& key) const {
-			return NULL_TID;
+		TID lookup(const Key& key) { //const {
+			PID leafPID = findLeaf(key);
+			if (leafPID == NULL_PID)
+				return NULL_TID;
+
+			BufferFrame& frame = fixPage(leafPID, false);
+
+			BTreeNode<Key, Comperator> leaf = BTreeNode<Key, Comperator>(frame);
+			assert(leaf.getType() == (BTreeNode<Key, Comperator>::NodeType::Leaf));
+			TID tid = leaf.lookup(key);
+
+			unfixPage(frame, false);
+
+			return tid;
 		}
 
 
@@ -99,6 +110,31 @@ namespace lsql {
 		//TODO:
 		void visualize();
 
+
+
+	private:
+		PID createNode(typename BTreeNode<Key, Comperator>::NodeType type) {
+			PID id = addPage();
+			BufferFrame& frame = fixPage(id, true);
+			BTreeNode<Key, Comperator>(frame, type).reset();
+			unfixPage(frame, true);
+			return id;
+		}
+
+
+		/**
+		 * This function recursively travels thourgh a B+-Tree and tries to find
+		 * the leaf where a key should be stored. 
+		 * Note: Can split full nodes for concurrent access
+		 *
+		 * @param Key		A reference to the key that should be found
+		 * @param splitFullNodes		A bool value. If true, every traversed node that
+		 *												does not have at least one empty slot is split
+		 * @return			PID of the leave that should contain the key
+		 */
+		PID findLeaf(const Key& key, bool splitFullNodes = false) {
+			return NULL_PID;
+		}
 	};
 
 }
