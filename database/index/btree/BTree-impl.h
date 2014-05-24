@@ -38,7 +38,13 @@ namespace lsql {
 		 * @param pageCount     The number of pages in this segment.
 		 */
 		BTree(BufferManager& bufferManager, uint16_t segmentId, uint32_t pageCount = 0)
-		: size(0), Segment(bufferManager, segmentId, pageCount) {}
+		: size(0), Segment(bufferManager, segmentId, pageCount) {
+			//Create root node
+			PID id = addPage();
+			BufferFrame& frame = fixPage(id, true);
+			BTreeNode<Key, Comperator>(frame, BTreeNode<Key, Comperator>::NodeType::Inner).reset();
+			unfixPage(frame, true);
+		}
 
 
 		/**

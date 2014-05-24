@@ -19,10 +19,12 @@ namespace lsql {
 	template<class Key, class Comperator>
 	class BTreeNode {
 
+	public:
 		enum NodeType {
 			Inner, Leaf
 		};
 
+	private:
 		/*** These are the different headers for each node ***/
 		struct Header {
 			NodeType type;
@@ -37,7 +39,6 @@ namespace lsql {
 		struct LeafHeader : Header {
 			const NodeType type = Leaf;
 			uint64_t LSN = 0;
-			uint32_t count;
 			PID next;
 		};
 
@@ -63,13 +64,14 @@ namespace lsql {
 			char* data = static_cast<char*>(frame.getData());
 
 			if (type == Inner) {
-				header = static_cast<InnerHeader*>(data);
+				header->type = Inner;
+				header = reinterpret_cast<InnerHeader*>(data);
 				//Inner node has n pointers and n+1 TIDs
 				headerSize = sizeof(InnerHeader) + sizeof(TID);
-
 				keys = reinterpret_cast<Key*>(data + sizeof(InnerHeader));
 			} else if (type == Leaf) {
-				header = static_cast<LeafHeader*>(data);
+				header->type = Leaf;
+				header = reinterpret_cast<LeafHeader*>(data);
 				headerSize = sizeof(LeafHeader);
 
 				keys = reinterpret_cast<Key*>(data + sizeof(LeafHeader));
@@ -103,12 +105,15 @@ namespace lsql {
 
 
 		/**
-		 * Removes a key from the Leaf.
+		 * Removes a key from the leaf. Logic simplified by accepting
+		 * underfull pages.
 		 *
 		 * @param key		A reference to the key that should be removed
 		 * @return			true if successful, false if key has not been found
 		 */
-		bool remove(Key& key);
+		bool remove(Key& key) {
+			return false;
+		}
 
 
 		/**
@@ -117,8 +122,17 @@ namespace lsql {
 		 *
 		 * @return		A PID of the new (2nd) leaf, created by the split
 		 */
-		PID splitNode();
+		PID splitNode() {
+			return NULL_PID;
+		}
 
+
+		void reset() {
+			header->count = 0;
+			if (header->type == Leaf) {
+				(static_cast<LeafHeader*>(header))->next = NULL_PID;
+			}
+		}
 	};
 
 }
