@@ -28,8 +28,7 @@
 		01E7CAA0192A3E2D0055E19D /* Mutex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 01251734191A5C4C00852C78 /* Mutex.cpp */; };
 		01E7CAA2192A3E2D0055E19D /* Segment.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A645CAC1923B345006286AD /* Segment.cpp */; };
 		01E7CAA9192A3E400055E19D /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 01E7CA92192A33E70055E19D /* main.cpp */; };
-		01E7CAAD192A400C0055E19D /* BTree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 01E7CAAB192A400C0055E19D /* BTree.cpp */; };
-		01E7CAAE192A400C0055E19D /* BTree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 01E7CAAB192A400C0055E19D /* BTree.cpp */; };
+		01E7CAAD192A400C0055E19D /* BTree-impl.h in Sources */ = {isa = PBXBuildFile; fileRef = 01E7CAAB192A400C0055E19D /* BTree-impl.h */; };
 		01E7CAB1192A46710055E19D /* BTreeNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 01E7CAAF192A46710055E19D /* BTreeNode.cpp */; };
 		01E7CAB2192A46710055E19D /* BTreeNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 01E7CAAF192A46710055E19D /* BTreeNode.cpp */; };
 		4A192C4718F8227D005941E4 /* generator.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4A192C4618F8227D005941E4 /* generator.1 */; };
@@ -166,7 +165,7 @@
 		01E7CA8F192A33860055E19D /* slottedtest.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = slottedtest.1; sourceTree = "<group>"; };
 		01E7CA92192A33E70055E19D /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = test/btreetest/main.cpp; sourceTree = "<group>"; };
 		01E7CAA8192A3E2D0055E19D /* slottedtest copy */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "slottedtest copy"; sourceTree = BUILT_PRODUCTS_DIR; };
-		01E7CAAB192A400C0055E19D /* BTree.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BTree.cpp; sourceTree = "<group>"; };
+		01E7CAAB192A400C0055E19D /* BTree-impl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "BTree-impl.h"; sourceTree = "<group>"; };
 		01E7CAAC192A400C0055E19D /* BTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BTree.h; sourceTree = "<group>"; };
 		01E7CAAF192A46710055E19D /* BTreeNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BTreeNode.cpp; sourceTree = "<group>"; };
 		01E7CAB0192A46710055E19D /* BTreeNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BTreeNode.h; sourceTree = "<group>"; };
@@ -369,7 +368,7 @@
 		01E7CAAA192A3FFD0055E19D /* btree */ = {
 			isa = PBXGroup;
 			children = (
-				01E7CAAB192A400C0055E19D /* BTree.cpp */,
+				01E7CAAB192A400C0055E19D /* BTree-impl.h */,
 				01E7CAAC192A400C0055E19D /* BTree.h */,
 				01E7CAAF192A46710055E19D /* BTreeNode.cpp */,
 				01E7CAB0192A46710055E19D /* BTreeNode.h */,
@@ -682,12 +681,11 @@
 				01E7CA9C192A3E2D0055E19D /* Record.cpp in Sources */,
 				01E7CA9D192A3E2D0055E19D /* BufferFrame.cpp in Sources */,
 				01E7CA9E192A3E2D0055E19D /* SlottedPage.cpp in Sources */,
-				01E7CAB2192A46710055E19D /* BTreeNode.cpp in Sources */,
 				01E7CA9F192A3E2D0055E19D /* Lock.cpp in Sources */,
-				01E7CAAE192A400C0055E19D /* BTree.cpp in Sources */,
 				01E7CAA0192A3E2D0055E19D /* Mutex.cpp in Sources */,
 				01E7CAA2192A3E2D0055E19D /* Segment.cpp in Sources */,
 				01E7CAA9192A3E400055E19D /* main.cpp in Sources */,
+				01E7CAB2192A46710055E19D /* BTreeNode.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -707,7 +705,7 @@
 				4A6C4F85191FA764003B8AB9 /* IDs.cpp in Sources */,
 				4A645CB81923B345006286AD /* SlottedPage.cpp in Sources */,
 				4A645CB21923B345006286AD /* Record.cpp in Sources */,
-				01E7CAAD192A400C0055E19D /* BTree.cpp in Sources */,
+				01E7CAAD192A400C0055E19D /* BTree-impl.h in Sources */,
 				4A5E081D18F56D630062E0A3 /* main.cpp in Sources */,
 				01E7CAB1192A46710055E19D /* BTreeNode.cpp in Sources */,
 				01A30263191EC097007A1957 /* Lock.cpp in Sources */,

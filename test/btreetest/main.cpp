@@ -86,9 +86,9 @@ void test(uint64_t n) {
 
    // Check if they can be retrieved
    for (uint64_t i=0; i<n; ++i) {
-      TID tid;
-      assert(bTree.lookup(getKey<T>(i),tid));
-      assert(tid==i*i);
+		 TID tid = bTree.lookup(getKey<T>(i));
+      assert(tid != NULL_TID);
+      assert(tid == i*i);
    }
 
    // Delete some values
@@ -98,11 +98,11 @@ void test(uint64_t n) {
 
    // Check if the right ones have been deleted
    for (uint64_t i=0; i<n; ++i) {
-      TID tid;
       if ((i%7)==0) {
-         assert(!bTree.lookup(getKey<T>(i),tid));
+         assert(bTree.lookup(getKey<T>(i)) == NULL_TID);
       } else {
-         assert(bTree.lookup(getKey<T>(i),tid));
+				TID tid = bTree.lookup(getKey<T>(i));
+         assert(bTree.lookup(getKey<T>(i)) != NULL_TID);
          assert(tid==i*i);
       }
    }
@@ -110,7 +110,7 @@ void test(uint64_t n) {
    // Delete everything
    for (uint64_t i=0; i<n; ++i)
       bTree.erase(getKey<T>(i));
-   assert(bTree.size()==0);
+   assert(bTree.getSize()==0);
 }
 
 int main(int argc, char* argv[]) {

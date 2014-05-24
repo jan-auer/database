@@ -7,6 +7,7 @@
 //
 
 #pragma once
+#include "BTree.h"
 
 #include <iostream>
 #include "buffer/BufferManager.h"
@@ -38,13 +39,27 @@ namespace lsql {
 		 */
 		BTree(BufferManager& bufferManager, uint16_t segmentId, uint32_t pageCount = 0);
 
+
+		/**
+		 *
+		 */
 		bool insert(const Key& key, const TID& tid);
 
+
+		/**
+		 *
+		 */
 		bool erase(const Key& key);
 
-		TID lookup(Key& key) const;
+		/**
+		 *
+		 */
+		TID lookup(const Key& key) const ;
 
-		std::vector<TID> lookupRange(Key& key) const;
+		/**
+		 *
+		 */
+		std::vector<TID> lookupRange(const Key& key) const;
 
 
 		/**
