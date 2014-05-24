@@ -38,7 +38,7 @@ namespace lsql {
 		 * @param pageCount     The number of pages in this segment.
 		 */
 		BTree(BufferManager& bufferManager, uint16_t segmentId, uint32_t pageCount = 0)
-		: Segment(bufferManager, segmentId, pageCount) {}
+		: size(0), Segment(bufferManager, segmentId, pageCount) {}
 
 
 		/**
@@ -57,7 +57,9 @@ namespace lsql {
 		 *
 		 * @param key		A const reference of the key to be removed from the index
 		 */
-		bool erase(const Key& key);
+		bool erase(const Key& key) {
+			return false;
+		}
 
 
 		/**
@@ -65,13 +67,17 @@ namespace lsql {
 		 *
 		 * @param	key		A const reference
 		 */
-		TID lookup(const Key& key) const ;
+		TID lookup(const Key& key) const {
+			return NULL_TID;
+		}
 
 
 		/**
 		 * @return	FIXME: an iterator that allows to iterate over the result set
 		 */
-		std::vector<TID> lookupRange(const Key& key) const;
+		std::vector<TID> lookupRange(const Key& key) const {
+			return std::vector<TID>();
+		}
 
 
 		/**
@@ -79,7 +85,9 @@ namespace lsql {
 		 *
 		 * @return A uint64_t of the number of Keys in the index
 		 */
-		uint64_t getSize();
+		uint64_t getSize() {
+			return size;
+		}
 
 
 		//TODO:
