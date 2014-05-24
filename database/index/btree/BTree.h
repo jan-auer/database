@@ -70,3 +70,6 @@ namespace lsql {
 	};
 
 }
+
+#include "BTree-impl.h"
+

@@ -14,6 +14,8 @@
 
 namespace lsql {
 
+
+	template<class Key, class Comperator>
 	class BTreeNode {
 
 		enum NodeType {
@@ -51,6 +53,18 @@ namespace lsql {
 		 */
 		BTreeNode(BufferFrame& frame, NodeType type);
 
+
+		TID lookup(Key& key) const;
+
+		bool insert(const Key& key, const TID& tid);
+
+		bool remove(Key& key);
+
+		std::pair<TID, TID> splitNode();
+
 	};
 
 }
+
+
+#include "BTreeNode-impl.h"
