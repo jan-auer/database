@@ -7,12 +7,12 @@
 //
 
 #pragma once
-#include "BTree.h"
 
 #include <iostream>
-#include "buffer/BufferManager.h"
-#include "BTreeNode.h"
 #include <vector>
+
+#include "buffer/BufferManager.h"
+#include "BTreeNode-impl.h"
 
 namespace lsql {
 
@@ -41,49 +41,50 @@ namespace lsql {
 		: Segment(bufferManager, segmentId, pageCount) {}
 
 
-		template<class Key, class Comperator>
-		bool BTree::insert(const Key& key, const TID& tid) {
-			BufferFrame& frame = findFreeFrame(record.getSize());
-
-			BTreeNode bn(this, frame);
-			TID id = bn.createSlot();
-			bn.insert(id, record);
-
-			unfixPage(frame, true);
-			return id;
+		/**
+		 * Inserts a new Key/TID-Pair into the BTree Index
+		 *
+		 * @param key		A const reference of the key to be inserted into the tree
+		 * @param tid		A reference of the key's TID
+		 */
+		bool insert(const Key& key, const TID& tid) {
+			return false;
 		}
 
 
 		/**
+		 * Removes a key from the Index
 		 *
-		 */
-		bool insert(const Key& key, const TID& tid);
-
-
-		/**
-		 *
+		 * @param key		A const reference of the key to be removed from the index
 		 */
 		bool erase(const Key& key);
 
+
 		/**
+		 * Finds a key and returns the key's TID. Retunrs a NULL_TID if not found
 		 *
+		 * @param	key		A const reference
 		 */
 		TID lookup(const Key& key) const ;
 
+
 		/**
-		 *
+		 * @return	FIXME: an iterator that allows to iterate over the result set
 		 */
 		std::vector<TID> lookupRange(const Key& key) const;
 
 
 		/**
 		 * Getter for the size
+		 *
+		 * @return A uint64_t of the number of Keys in the index
 		 */
 		uint64_t getSize();
+
+
+		//TODO:
+		void visualize();
 
 	};
 
 }
-
-#include "BTree-impl.h"
-
