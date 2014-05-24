@@ -53,9 +53,54 @@ namespace lsql {
 		 * @param tid		A reference of the key's TID
 		 */
 		bool insert(const Key& key, const TID& tid) {
-			return false;
+			std::pair<BufferFrame&, PID> findResult = findLeaf(key);
+			PID leafPID = findResult.second;
+			assert(leafPID != NULL_PID);
+
+			BufferFrame& frame = fixPage(leafPID, true);
+
+			BTreeNode<Key, Comperator> leaf = BTreeNode<Key, Comperator>(frame);
+			assert(leaf.getType() == (BTreeNode<Key, Comperator>::NodeType::Leaf));
+
+			if (leaf.getFree() < 1) {
+				leaf.splitNode();
+				//ToDo: Decide where to insert
+				//ToDo: Insert new leaf into parent
+			}
+			unfixPage(findResult.first, true);
+
+			bool success = leaf.insert(key, tid);
+			unfixPage(leaf.getFrame(), true);
+
+			return success;
 		}
 
+
+		/**
+		 * Finds a key and returns the key's TID. Returns a NULL_TID if not found
+		 *
+		 * @param	key		A const reference
+		 */
+		TID lookup(const Key& key) { //const {
+			std::pair<BufferFrame&, PID> findResult = findLeaf(key);
+			PID leafPID = findResult.second;
+			if (leafPID == NULL_PID) {
+				unfixPage(findResult.first, false);
+				return NULL_TID;
+			}
+
+			BufferFrame& frame = fixPage(leafPID, false);
+			unfixPage(findResult.first, false);
+
+			BTreeNode<Key, Comperator> leaf = BTreeNode<Key, Comperator>(frame);
+			assert(leaf.getType() == (BTreeNode<Key, Comperator>::NodeType::Leaf));
+			TID tid = leaf.lookup(key);
+
+			unfixPage(leaf.getFrame(), false);
+
+			return tid;
+		}
+		
 
 		/**
 		 * Removes a key from the Index
@@ -65,29 +110,6 @@ namespace lsql {
 		bool erase(const Key& key) {
 			return false;
 		}
-
-
-		/**
-		 * Finds a key and returns the key's TID. Retunrs a NULL_TID if not found
-		 *
-		 * @param	key		A const reference
-		 */
-		TID lookup(const Key& key) { //const {
-			PID leafPID = findLeaf(key);
-			if (leafPID == NULL_PID)
-				return NULL_TID;
-
-			BufferFrame& frame = fixPage(leafPID, false);
-
-			BTreeNode<Key, Comperator> leaf = BTreeNode<Key, Comperator>(frame);
-			assert(leaf.getType() == (BTreeNode<Key, Comperator>::NodeType::Leaf));
-			TID tid = leaf.lookup(key);
-
-			unfixPage(frame, false);
-
-			return tid;
-		}
-
 
 		/**
 		 * @return	FIXME: an iterator that allows to iterate over the result set
@@ -132,8 +154,20 @@ namespace lsql {
 		 *												does not have at least one empty slot is split
 		 * @return			PID of the leave that should contain the key
 		 */
-		PID findLeaf(const Key& key, bool splitFullNodes = false) {
-			return NULL_PID;
+		std::pair<BufferFrame&, PID> findLeaf(const Key& key, bool splitFullNodes = false) {
+			BufferFrame& frame = fixPage(NULL_TID, false);
+
+
+			/*
+			 if (leaf.getFree < 1) {
+			 //ToDo: Lock parent frame first
+			 leaf.split();
+			 //ToDo: Decide where to insert
+			 }
+			 */
+
+			std::pair<BufferFrame&, PID> pair = {frame, NULL_TID};
+			return pair;
 		}
 	};
 
