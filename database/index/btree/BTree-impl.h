@@ -66,8 +66,10 @@ namespace lsql {
 				leaf.splitNode();
 				//ToDo: Decide where to insert
 				//ToDo: Insert new leaf into parent
+				unfixPage(findResult.first, true);
+			} else {
+				unfixPage(findResult.first, false);
 			}
-			unfixPage(findResult.first, true);
 
 			bool success = leaf.insert(key, tid);
 			unfixPage(leaf.getFrame(), true);
@@ -108,7 +110,9 @@ namespace lsql {
 		 * @param key		A const reference of the key to be removed from the index
 		 */
 		bool erase(const Key& key) {
-			return false;
+			BTreeNode<Key, Comperator>(root).reset();
+			size = 0;
+			pageCount = 1;
 		}
 
 		/**
