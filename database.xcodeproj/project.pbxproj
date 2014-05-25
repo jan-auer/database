@@ -161,7 +161,7 @@
 		01E7CA8E192A33860055E19D /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		01E7CA8F192A33860055E19D /* slottedtest.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = slottedtest.1; sourceTree = "<group>"; };
 		01E7CA92192A33E70055E19D /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = test/btreetest/main.cpp; sourceTree = "<group>"; };
-		01E7CAA8192A3E2D0055E19D /* slottedtest copy */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "slottedtest copy"; sourceTree = BUILT_PRODUCTS_DIR; };
+		01E7CAA8192A3E2D0055E19D /* btreetest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = btreetest; sourceTree = BUILT_PRODUCTS_DIR; };
 		01E7CAAC192A400C0055E19D /* BTree-impl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "BTree-impl.h"; sourceTree = "<group>"; };
 		01E7CAB0192A46710055E19D /* BTreeNode-impl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "BTreeNode-impl.h"; sourceTree = "<group>"; };
 		4A0C3FB918FF1F2F0070FD98 /* File-impl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "File-impl.h"; sourceTree = "<group>"; };
@@ -413,7 +413,7 @@
 				01D2818118FC5DB400F60DA7 /* sort */,
 				4AD7E6C61916B547000EEEF3 /* buffertest */,
 				4AD58302192148DB005570F5 /* slottedtest */,
-				01E7CAA8192A3E2D0055E19D /* slottedtest copy */,
+				01E7CAA8192A3E2D0055E19D /* btreetest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -535,7 +535,7 @@
 			);
 			name = btreetest;
 			productName = slottedtest;
-			productReference = 01E7CAA8192A3E2D0055E19D /* slottedtest copy */;
+			productReference = 01E7CAA8192A3E2D0055E19D /* btreetest */;
 			productType = "com.apple.product-type.tool";
 		};
 		4A192C4118F8227D005941E4 /* generator */ = {
@@ -789,7 +789,7 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				PRODUCT_NAME = "slottedtest copy";
+				PRODUCT_NAME = btreetest;
 			};
 			name = Debug;
 		};
@@ -797,7 +797,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				PRODUCT_NAME = "slottedtest copy";
+				PRODUCT_NAME = btreetest;
 			};
 			name = Release;
 		};
