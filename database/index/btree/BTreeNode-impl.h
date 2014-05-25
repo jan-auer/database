@@ -103,7 +103,7 @@ namespace lsql {
 		 * @param key		A reference to the key that should be removed
 		 * @return			true if successful, false if key has not been found
 		 */
-		bool remove(Key& key) {
+		bool remove(const Key& key) {
 			return false;
 		}
 

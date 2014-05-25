@@ -116,17 +116,33 @@ namespace lsql {
 		 * Removes a key from the Index
 		 *
 		 * @param key		A const reference of the key to be removed from the index
+		 * @return			true on success or false if key is not in index
 		 */
 		bool erase(const Key& key) {
+			std::pair<BufferFrame&, PID> findResult = findLeaf(key);
+			PID leafPID = findResult.second;
+			if (leafPID == NULL_PID) {
+				unfixPage(findResult.first, false);
+				return false;
+			}
+
+			BufferFrame& frame = fixPage(leafPID, true);
+			unfixPage(findResult.first, false);
+
+			BTreeNode<Key, Comperator> leaf = BTreeNode<Key, Comperator>(frame);
+			assert(leaf.getType() == (BTreeNode<Key, Comperator>::NodeType::Leaf));
+
+			bool success = leaf.remove(key);
+			unfixPage(leaf.getFrame(), success);
+			return success;
 		}
 
-		bool reset(const Key& key) {
+		void reset(const Key& key) {
 			BufferFrame& frame = fixPage(root, true);
 			(BTreeNode<Key, Comperator>(frame)).reset();
 			unfixPage(frame, true);
 			size = 0;
 			pageCount = 1;
-			return true;
 		}
 
 		/**
