@@ -25,16 +25,15 @@ namespace lsql {
 		};
 
 	private:
-		/*** These are the different headers for each node ***/
 		struct Header {
 			NodeType type;
 			uint64_t LSN = 0;
 			uint32_t count;
-			PID next;  //only for leaves
+			PID next;  //only for leafs
 		};
 
 		PID pid;
-		uint32_t n; //Maximum number of Key/TID pairs in this node
+		uint32_t n; //Maximum number of Key/TID pairs in this node. Set in constructor
 		BufferFrame& bf;
 
 		Header* header;
@@ -57,9 +56,8 @@ namespace lsql {
 			char* data = static_cast<char*>(frame.getData());
 			header = reinterpret_cast<Header*>(data);
 
-			if (type != None) {
+			if (type != None)
 				reset(type);
-			}
 
 			//Inner node has n pointers and n+1 TIDs
 			if (header->type == Inner)
@@ -93,7 +91,7 @@ namespace lsql {
 		 *							the next node's PID if inner node
 		 * @return			true on success, false in case of error
 		 */
-		bool insert(const Key& key, const TID& tid) {
+		bool insert(const Key& key, const PID& tid) {  //PID vs TID ??
 			return false;
 		}
 
@@ -110,6 +108,12 @@ namespace lsql {
 		}
 
 
+		Key firstKey() {
+			return *keys;
+		}
+
+		Key lastKey();
+
 		/**
 		 * Splits the current node into two seperate ones
 		 * Used for Concurrent Access (2), slide 40, chapter 3
@@ -118,6 +122,23 @@ namespace lsql {
 		 */
 		PID splitNode() {
 			return NULL_PID;
+		}
+
+		/**
+		 * Resets the node and deletes all data
+		 *
+		 * @param type	OPTIONAL: The type of the node to be set in the header.
+		 */
+		void reset() {
+			header->count = 0;
+			header->next = NULL_PID;
+		}
+
+
+		void reset(NodeType type) {
+			reset();
+			if (type != None)
+				header->type = type;
 		}
 
 
@@ -138,20 +159,6 @@ namespace lsql {
 			return bf;
 		}
 
-		/**
-		 * Resets the node and deletes all data
-		 */
-		void reset() {
-			header->count = 0;
-			header->next = NULL_PID;
-		}
-
-
-		void reset(NodeType type) {
-			reset();
-			header->type = type;
-		}
-		
 	};
 
 }

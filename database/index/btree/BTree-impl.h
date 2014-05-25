@@ -54,25 +54,33 @@ namespace lsql {
 		 */
 		bool insert(const Key& key, const TID& tid) {
 			std::pair<BufferFrame&, PID> findResult = findLeaf(key);
+			BufferFrame& parentFrame = findResult.first;
 			PID leafPID = findResult.second;
 			assert(leafPID != NULL_PID);
 
 			BufferFrame& frame = fixPage(leafPID, true);
-
 			BTreeNode<Key, Comperator> leaf = BTreeNode<Key, Comperator>(frame);
 			assert(leaf.getType() == (BTreeNode<Key, Comperator>::NodeType::Leaf));
 
+
+			//Split node into leaf and newLeaf. Insert newLeaf into parent
 			if (leaf.getFree() < 1) {
-				leaf.splitNode();
-				//ToDo: Decide where to insert
-				//ToDo: Insert new leaf into parent
-				unfixPage(findResult.first, true);
+				BTreeNode<Key, Comperator> parentNode = BTreeNode<Key, Comperator>(findResult.first);
+
+				const PID newLeafId = leaf.splitNode();
+				BufferFrame& newLeafFrame = fixPage(newLeafId, false);
+				BTreeNode<Key, Comperator> newLeafNode = BTreeNode<Key, Comperator>(newLeafFrame);
+
+				parentNode.insert(newLeafNode.firstKey(), newLeafId);
+				unfixPage(parentFrame, true);		//unfix parent dirty
+				unfixPage(newLeafFrame, false);	//unfix newLeaf without changes
 			} else {
-				unfixPage(findResult.first, false);
+				unfixPage(parentFrame, false);		//unfix parent without changes
 			}
 
+
 			bool success = leaf.insert(key, tid);
-			unfixPage(leaf.getFrame(), true);
+			unfixPage(leaf.getFrame(), true);  //unfix leaf after writing to it
 
 			return success;
 		}
@@ -110,9 +118,15 @@ namespace lsql {
 		 * @param key		A const reference of the key to be removed from the index
 		 */
 		bool erase(const Key& key) {
-			BTreeNode<Key, Comperator>(root).reset();
+		}
+
+		bool reset(const Key& key) {
+			BufferFrame& frame = fixPage(root, true);
+			(BTreeNode<Key, Comperator>(frame)).reset();
+			unfixPage(frame, true);
 			size = 0;
 			pageCount = 1;
+			return true;
 		}
 
 		/**
