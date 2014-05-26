@@ -37,6 +37,8 @@
 #include <sstream>
 #include <chrono>
 
+using namespace lsql;
+
 TEST(get_size, Ints) {
 	uint16_t v1 = 2u;
 	EXPECT_EQ(get_size(v1), sizeof(decltype(v1)));
@@ -107,16 +109,13 @@ TEST(Serialize, MultipleInvocations) {
 		3, 4}));
 }
 
-TEST(Deerialize, MultipleInvocations) {
+TEST(Deserialize, MultipleInvocations) {
 
 	std::vector<uint8_t> res{0x2, 0, 0, 0, 0, 0, 0, 0, 1, 2, 0x2, 0, 0, 0, 0, 0, 0, 0, 3, 4};
 
-	auto it = res.cbegin();
-	auto v1 = deserialize<std::vector<char>>(it, res.cend());
-	auto v2 = deserialize<std::vector<char>>(it, res.end());
+	auto v1 = deserialize<std::vector<char>>(res);
 
 	EXPECT_EQ(v1, std::vector<char>({1,2}));
-	EXPECT_EQ(v2, std::vector<char>({3,4}));
 
 }
 
