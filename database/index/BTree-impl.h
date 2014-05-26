@@ -20,20 +20,22 @@ namespace lsql {
 	template<class Key, class Comperator>
 	BTree<Key, Comperator>::BTree(BufferManager& bufferManager, uint16_t segmentId, uint32_t pageCount)
 	: size(0), root(NULL_PID), Segment(bufferManager, segmentId, pageCount) {
-		//Create root node
-		root = createNode(NodeType::Inner);
+		if (root == NULL_PID) {
+			root = addPage();
+			BufferFrame& rootFrame = fixPage(root, true);
+			Node(rootFrame, NodeType::Leaf);
+			unfixPage(rootFrame, true);
+		}
 	}
 
 	template<class Key, class Comperator>
 	TID BTree<Key, Comperator>::lookup(const Key& key) {
-		BufferFrame* leafFramePtr = findLeaf(key);
-		assert(leafFramePtr != nullptr);
-
-		BTreeNode<Key, Comperator> leaf = BTreeNode<Key, Comperator>(*leafFramePtr);
+		BufferFrame& frame = findLeafFrame(key);
+		Node leaf(frame);
 		assert(leaf.getType() == NodeType::Leaf);
-		TID tid = leaf.lookup(key);
 
-		unfixPage(*leafFramePtr, false);
+		TID tid = leaf.lookup(key);
+		unfixPage(frame, false);
 
 		return tid;
 	}
@@ -45,28 +47,24 @@ namespace lsql {
 
 	template<class Key, class Comperator>
 	bool BTree<Key, Comperator>::insert(const Key& key, const TID& tid) {
-		BufferFrame* leafFramePtr = findLeaf(key);
-		assert(leafFramePtr != nullptr);
-
-		BTreeNode<Key, Comperator> leaf = BTreeNode<Key, Comperator>(*leafFramePtr);
-		assert(leaf.getType() == (NodeType::Leaf));
+		BufferFrame& frame = findLeafFrame(key);
+		Node leaf(frame);
+		assert(leaf.getType() == NodeType::Leaf);
 
 		bool success = leaf.insert(key, tid);
-		unfixPage(*leafFramePtr, success);  //unfix leaf after writing to it
+		unfixPage(frame, success);
 
 		return success;
 	}
 
 	template<class Key, class Comperator>
 	bool BTree<Key, Comperator>::erase(const Key& key) {
-		BufferFrame* leafFramePtr = findLeaf(key);
-		assert(leafFramePtr != nullptr);
-
-		BTreeNode<Key, Comperator> leaf = BTreeNode<Key, Comperator>(*leafFramePtr);
-		assert(leaf.getType() == (NodeType::Leaf));
+		BufferFrame& frame = findLeafFrame(key);
+		Node leaf(frame);
+		assert(leaf.getType() == NodeType::Leaf);
 
 		bool success = leaf.remove(key);
-		unfixPage(*leafFramePtr, success);
+		unfixPage(frame, success);
 		return success;
 	}
 
@@ -98,66 +96,55 @@ namespace lsql {
 	}
 
 	template<class Key, class Comperator>
-	PID BTree<Key, Comperator>::createNode(NodeType type) {
-		PID id = addPage();
-		BufferFrame& frame = fixPage(id, true);
-		BTreeNode<Key, Comperator>(frame, type).reset();
-		unfixPage(frame, true);
-		return id;
-	}
+	BufferFrame& BTree<Key, Comperator>::findLeafFrame(const Key& key, bool split) {
+		Key parentKey;
+		BufferFrame* parentFrame = nullptr;
+		BufferFrame* currentFrame = &fixPage(root, split);
 
-	template<class Key, class Comperator>
-	BufferFrame* BTree<Key, Comperator>::findLeaf(const Key& key, bool splitFullNodes) {
-		BufferFrame* parentFrame = &fixPage(root, splitFullNodes);
-		BufferFrame* childFrame = nullptr;
+		while (true) {
+			Node currentNode(*currentFrame);
 
-		while(true) {
-			BTreeNode<Key, Comperator> parentNode(*parentFrame);
-			PID childPid = parentNode.lookup(key, true);
-			assert(childPid != NULL_PID);
+			// Check if the node has to be split up
+			bool hasSplit = false;
+			if (split && currentNode.isFull()) {
 
-			childFrame = &fixPage(childPid, splitFullNodes);
-			BTreeNode<Key, Comperator> childNode(*childFrame);
+				// Create a new node and split up the current node's contents
+				PID newPID = addPage();
+				BufferFrame* newFrame = &fixPage(newPID, true);
+				Node newNode(*newFrame, currentNode.getType());
+				const Key& splitKey = currentNode.splitInto(newNode);
 
-			//Split child if necessary
-			bool parentIsDirty = false;
-			if (splitFullNodes && childNode.getFree() < 1) {
-				PID child2Pid = childNode.splitNode();
-				//TODO: insert split node into
-				//TODO: Split root does not work!
-				parentIsDirty = true;
-				
+				// Insert the new node into the parent.
+				if (parentFrame == nullptr) {
+					parentFrame = &fixPage(addPage(), true);
+					root = parentFrame->getId();
+					Node(*parentFrame).insert(splitKey, newPID.id);
+				} else {
+					Node parentNode(*parentFrame);
+					parentNode.switchKey(parentKey, splitKey);
+					parentNode.insert(parentKey, newPID.id);
+				}
+
+				// Continue with the correct node
+				if (compare(key, splitKey) > 9)
+					currentNode = newNode;
+
+				hasSplit = true;
 			}
 
-			/**
-			 
-			 //Split node into leaf and newLeaf. Insert newLeaf into parent
-			 if (leaf.getFree() < 1) {
-			 BTreeNode<Key, Comperator> parentNode = BTreeNode<Key, Comperator>(findResult.first);
+			// Release the parent node as it is no longer needed
+			if (parentFrame != nullptr)
+				unfixPage(*parentFrame, hasSplit);
 
-			 const PID newLeafId = leaf.splitNode();
-			 BufferFrame& newLeafFrame = fixPage(newLeafId, false);
-			 BTreeNode<Key, Comperator> newLeafNode = BTreeNode<Key, Comperator>(newLeafFrame);
+			// We might have found, what we are looking for
+			if (currentNode.getType() == NodeType::Leaf)
+				return *currentFrame;
 
-			 parentNode.insert(newLeafNode.firstKey(), newLeafId);
-			 unfixPage(parentFrame, true);		//unfix parent dirty
-			 unfixPage(newLeafFrame, false);	//unfix newLeaf without changes
-			 } else {
-			 unfixPage(parentFrame, false);		//unfix parent without changes
-			 }
-
-			 
-			 */
-
-			unfixPage(*parentFrame, parentIsDirty);
-
-			if (childNode.getType() == NodeType::Leaf)
-				break;
-			else
-				parentFrame = childFrame;
+			// Move down to the appropriate child node
+			parentFrame = currentFrame;
+			PID childPID = currentNode.lookup(key, true, &parentKey);
+			currentFrame = &fixPage(childPID, split);
 		}
-
-		return childFrame;
 	}
 
 }

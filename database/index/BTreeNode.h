@@ -25,8 +25,10 @@ namespace lsql {
 	/**
 	 *
 	 */
-	template<class Key, class Comperator>
-	class BTreeNode {
+	template<typename Key, typename Comperator>
+	class BTreeNode : private Comperator {
+
+		using Comperator::compare;
 
 		/**
 		 *
@@ -42,7 +44,7 @@ namespace lsql {
 
 		Header* header;
 		Key* keys;
-		TID* tids;
+		TID* values;
 
 	public:
 
@@ -56,22 +58,27 @@ namespace lsql {
 		BTreeNode(BufferFrame& frame, NodeType type = None);
 
 		/**
-		 * Finds a TID
+		 * Searches for an entry with the corresponding TID.
 		 *
-		 * @return PID of the next leaf if inner node, otherwise TID of key.
-		 *				 NULL_TID is returned if not found
+		 * For better use of cache locality and branch prediction, this method uses
+		 * a linear search instead of a binary search.
+		 *
+		 * @param key        The key to search for.
+		 * @param allowRight Whether there is a right outer value or not.
+		 *
+		 * @return Returns an ID with the specified type.
 		 */
-		TID lookup(const Key& key, bool return_left = false) const;
+		TID lookup(const Key& key, bool allowRight = false, Key* found = nullptr) const;
 
 		/**
 		 * Inserts a key/TID pair into the leaf
 		 *
-		 * @param key		A reference to the key that should be inserted
-		 * @param tid		A reference to the key's tid if leaf node or of
-		 *							the next node's PID if inner node
+		 * @param key   A reference to the key that should be inserted
+		 * @param value A reference to the value which is either a PID for inner
+		 *              nodes or a TID for leaf nodes.
 		 * @return			true on success, false in case of error
 		 */
-		bool insert(const Key& key, const PID& tid);
+		bool insert(const Key& key, const TID& value);
 
 		/**
 		 * Removes a key from the leaf. Logic simplified by accepting
@@ -83,44 +90,60 @@ namespace lsql {
 		bool remove(const Key& key);
 
 		/**
-		 * Splits the current node into two seperate ones
-		 * Used for Concurrent Access (2), slide 40, chapter 3
 		 *
-		 * @return		A PID of the new (2nd) leaf, created by the split
 		 */
-		PID splitNode();
+		const Key& splitInto(BTreeNode<Key, Comperator>& other);
 
+		/**
+		 *
+		 */
+		void switchKey(const Key& oldKey, const Key& newKey);
 
+		/**
+		 * Returns whether a node is an inner or a leaf node
+		 */
+		NodeType getType() const;
+
+		/**
+		 *
+		 */
+		bool isFull() const;
+		
 		/**
 		 * Prints the content
 		 *
 		 * @param ostream		A reference to the stream to which the output should
 		 *									be printed
-		 * @return					An array of child PIDs. 
+		 * @return					An array of child PIDs.
 		 */
 		std::vector<PID> visualize(std::ostream& dataOut);
 
-		/**
-		 * Resets the node and deletes all data
-		 *
-		 * @param type	OPTIONAL: The type of the node to be set in the header.
-		 */
-		void reset();
+	private:
 
 		/**
 		 *
 		 */
-		void reset(NodeType type);
+		void initialize(char* data);
 
 		/**
-		 * Returns whether a node is an inner or a leaf node
+		 * Resets the node and deletes all data.
+		 *
+		 * If the optional node type parameter is specified, the node type will
+		 * also be converted.
+		 *
+		 * @param type OPTIONAL: The type of the node to be set in the header.
 		 */
-		NodeType getType();
-		
+		void reset(NodeType type = NodeType::None);
+
 		/**
 		 *
 		 */
-		size_t getFree();
+		size_t findPos(const Key& key) const;
+
+		/**
+		 *
+		 */
+		void moveEntries(size_t offset, ssize_t distance);
 		
 	};
 	

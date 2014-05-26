@@ -24,7 +24,11 @@ namespace lsql {
 	 * @param Comperator A class providing the < comperator for each data type
 	 */
 	template<class Key, class Comperator>
-	class BTree : protected Segment {
+	class BTree : protected Segment, private Comperator {
+
+		using Comperator::compare;
+
+		typedef BTreeNode<Key, Comperator> Node;
 
 		uint64_t size;
 		PID root;
@@ -85,22 +89,17 @@ namespace lsql {
 		void visualizeRecurse(PID pid, std::ostream& dataOut);
 
 		/**
-		 *
-		 */
-		PID createNode(NodeType type);
-
-		/**
 		 * This function recursively travels thourgh a B+-Tree and tries to find
 		 * the leaf where a key should be stored.
 		 * Note: Can split full nodes for concurrent access
 		 *
-		 * @param Key		A reference to the key that should be found
-		 * @param splitFullNodes		A bool value. If true, every traversed node that
-		 *												does not have at least one empty slot is split
-		 * @return			A pointer to a fixed BufferFrame of the leave
-		 *							containing the key
+		 * @param Key   A reference to the key that should be found
+		 * @param split A bool value. If true, every traversed node that
+		 *              does not have at least one empty slot is split
+		 * @return      A pointer to a fixed BufferFrame of the leave
+		 *              containing the key
 		 */
-		BufferFrame* findLeaf(const Key& key, bool splitFullNodes = false);
+		BufferFrame& findLeafFrame(const Key& key, bool split = false);
 
 	};
 

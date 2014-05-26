@@ -8,92 +8,105 @@
 
 #pragma once
 
+#include <cassert>
+#include <cstring>
 #include "BTreeNode.h"
 
 namespace lsql {
 
-	template<class Key, class Comperator>
+	template<typename Key, typename Comperator>
 	BTreeNode<Key, Comperator>::BTreeNode(BufferFrame& frame, NodeType type)
 	: pid(frame.getId()) {
-
-		int32_t headerSize = 0;
 		char* data = static_cast<char*>(frame.getData());
 		header = reinterpret_cast<Header*>(data);
 
 		if (type != None)
 			reset(type);
 
-		//Inner node has n pointers and n+1 TIDs
-		if (header->type == Inner)
-			headerSize = sizeof(Header) + sizeof(TID);
-		else if (header->type == Leaf)
-			headerSize = sizeof(Header);
-
-		n = ((BufferFrame::SIZE) - headerSize) / (sizeof(TID) + sizeof(Key));
-
-		keys = reinterpret_cast<Key*>(data + sizeof(Header));
-		tids = reinterpret_cast<TID*>(data + headerSize);
+		initialize(data);
 	}
 
-	template<class Key, class Comperator>
-	TID BTreeNode<Key, Comperator>::lookup(const Key& key, bool return_left) const {
-		int i;
-		Comperator comp;
+	template<typename Key, typename Comperator>
+	TID BTreeNode<Key, Comperator>::lookup(const Key& key, bool allowRight, Key* found) const {
+		size_t i = findPos(key);
 
-		for (i = 0; i < header->count; ++i) {
-			if (comp(keys[i], key))
-				break;
-		}
-
-		if (i == header->count && !return_left)
+		if (i == header->count && !allowRight)
 			return NULL_TID;
 
-		return tids[i];
+		if (found != nullptr)
+			*found = keys[i];
+
+		return values[i];
 	}
 
-	template<class Key, class Comperator>
-	bool BTreeNode<Key, Comperator>::insert(const Key& key, const PID& tid) {  //PID vs TID ??
+	template<typename Key, typename Comperator>
+	bool BTreeNode<Key, Comperator>::insert(const Key& key, const TID& value) {
+		assert(header->count <= n);
 		if(header->count == n)
 			return false;
 
-		assert(header->count < n);
-
-		size_t position = (header->count)++;
-
-		*(keys + position) = key;
-		*(tids + position) = tid;
+		size_t pos = findPos(key);
+		moveEntries(pos, 1);
+		keys[pos] = key;
+		values[pos] = value;
 
 		return true;
 	}
 
-	template<class Key, class Comperator>
+	template<typename Key, typename Comperator>
 	bool BTreeNode<Key, Comperator>::remove(const Key& key) {
-		int i;
-		Comperator comp;
+		size_t i = findPos(key);
 
-		for (i = 0; i < header->count; ++i) {
-			if (comp(*(keys + i),key))
-				break;
-		}
-
-		if (i == header->count)
+		if (i == header->count || compare(key, keys[i]) != 0)
 			return false;
 
-		assert(i > 0);
-		assert(i < header->count);
-
-		//overwrite element number i with element number i + 1
-		memmove(keys + i, keys + i + 1, (header->count - i - 1) * sizeof(*keys));
-		memmove(tids + i, tids + i + 1, (header->count - i - 1) * sizeof(*tids));
-
-		--(header->count);
-
+		moveEntries(i + 1, -1);
 		return true;
 	}
 
-	template<class Key, class Comperator>
-	PID BTreeNode<Key, Comperator>::splitNode() {
-		return NULL_PID;
+	template<typename Key, typename Comperator>
+	const Key& BTreeNode<Key, Comperator>::splitInto(BTreeNode<Key, Comperator>& other) {
+		assert(header->count == n);
+
+		other.header->next = header->next;
+		header->next = other.pid;
+
+		// Not happy about this...
+		size_t i, c, o;
+		if (header->type == NodeType::Inner) {
+			i = n / 2;
+			c = header->count = n / 2;
+		} else {
+			i = (n - 1) / 2;
+			c = header->count = (n + 1) / 2;
+		}
+		other.header->count = o = n - i - 1;
+
+		// Not happy about this either...
+		std::memcpy(other.keys, keys + n - o, o * sizeof(Key));
+		if (header->type == NodeType::Inner) {
+			std::memcpy(other.values, values + n - o, (o + 1) * sizeof(TID));
+		} else {
+			std::memcpy(other.values, values + n - o, o * sizeof(TID));
+		}
+
+		return keys[header->count - 1];
+	}
+
+	template<typename Key, typename Comperator>
+	void BTreeNode<Key, Comperator>::switchKey(const Key& oldKey, const Key& newKey) {
+		size_t i = findPos(oldKey);
+		keys[i] = newKey;
+	}
+
+	template<typename Key, typename Comperator>
+	NodeType BTreeNode<Key, Comperator>::getType() const {
+		return header->type;
+	}
+
+	template<typename Key, typename Comperator>
+	bool BTreeNode<Key, Comperator>::isFull() const {
+		return header->count >= n;
 	}
 
 	template<class Key, class Comperator>
@@ -103,7 +116,7 @@ namespace lsql {
 
 		//print the node header including node pid
 		dataOut << "node" << pid << " [shape=record, label=\"<count> " << header->count
-						<< " | <isLeaf> " << ((header->type == NodeType::Leaf) ? "true" : "false");
+		<< " | <isLeaf> " << ((header->type == NodeType::Leaf) ? "true" : "false");
 
 		//print the keys, sequentally iterated and numbered
 		for (int i = 0; i < n; ++i) {
@@ -119,7 +132,7 @@ namespace lsql {
 			for (int i = 0; i < n + 1; ++i) {
 				dataOut << " |   <ptr" << i <<">";
 				if(i < header->count + 1 ) {
-					childPids.push_back(tids[i]);
+					childPids.push_back(values[i]);
 					dataOut << " *";
 				}
 			}
@@ -128,13 +141,13 @@ namespace lsql {
 
 			//pointer to child pages
 			for (int i = 0; i < header->count + 1; ++i) {
-				dataOut << "node" << pid << ":ptr" << i << " -> leaf" << tids[i] << ":count;" << std::endl;
+				dataOut << "node" << pid << ":ptr" << i << " -> leaf" << values[i] << ":count;" << std::endl;
 			}
 
 		} else { //Leaf
 
 			for (int i = 0; i < header->count; ++i) {
-				dataOut << " | " << tids[i];
+				dataOut << " | " << values[i];
 			}
 
 			if (header->next != NULL_PID) {
@@ -144,31 +157,48 @@ namespace lsql {
 				dataOut << " | <next> \"];" << std::endl;
 
 		}
-
+		
 		return childPids;
 	}
 
-	template<class Key, class Comperator>
-	void BTreeNode<Key, Comperator>::reset() {
-		header->count = 0;
-		header->next = NULL_PID;
+	template<typename Key, typename Comperator>
+	void BTreeNode<Key, Comperator>::initialize(char* data) {
+		assert(data != nullptr);
+		assert(header->type != NodeType::None);
+
+		size_t size = BufferFrame::SIZE - sizeof(Header);
+		if (header->type == NodeType::Inner)
+			size -= sizeof(TID);
+
+		n = size / (sizeof(Key) + sizeof(TID));
+
+		keys = reinterpret_cast<Key*>(data + sizeof(Header));
+		values = reinterpret_cast<TID*>(data + sizeof(Header) + n * sizeof(Key));
 	}
 
-	template<class Key, class Comperator>
+	template<typename Key, typename Comperator>
 	void BTreeNode<Key, Comperator>::reset(NodeType type) {
-		reset();
+		header->count = 0;
+		header->next = NULL_PID;
+
 		if (type != None)
 			header->type = type;
 	}
 
-	template<class Key, class Comperator>
-	NodeType BTreeNode<Key, Comperator>::getType() {
-		return header->type;
+	template<typename Key, typename Comperator>
+	size_t BTreeNode<Key, Comperator>::findPos(const Key& key) const {
+		for (size_t pos = 0; pos < header->count; pos++)
+			if (compare(key, keys[pos]) <= 0)
+				return pos;
+
+		return header->count;
 	}
 
-	template<class Key, class Comperator>
-	size_t BTreeNode<Key, Comperator>::getFree() {
-		return n - header->count;
+	template<typename Key, typename Comperator>
+	void BTreeNode<Key, Comperator>::moveEntries(size_t offset, ssize_t distance) {
+		std::memmove(keys + offset + distance, keys + distance, header->count - offset * sizeof(Key));
+		std::memmove(values + offset + distance, values + distance, header->count - offset * sizeof(TID));
+		header->count += distance;
 	}
 
 }
