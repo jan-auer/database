@@ -9,6 +9,7 @@
 #pragma once
 
 #include <cstdint>
+#include <iostream>
 
 namespace lsql {
 
@@ -34,6 +35,8 @@ namespace lsql {
 
 		/** Returns the page number. */
 		uint32_t page() const;
+
+		friend std::ostream& operator<<(std::ostream& os, const PID& pid);
 
 	};
 
@@ -63,6 +66,8 @@ namespace lsql {
 
 		/** Allows assigning a PID onto TIDs*/
 		TID operator=(const PID& pid);
+
+		//friend std::ostream& operator<<(std::ostream& os, const TID& tid);
 
 	};
 

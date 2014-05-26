@@ -29,6 +29,12 @@ namespace lsql {
 		return uint32_t(id >> PAGE_POS);
 	}
 
+	std::ostream& operator<<(std::ostream& os, const PID& pid) {
+//		os << "PID";
+		os << pid.id;
+		return os;
+	}
+
 	bool operator==(const PID& a, const PID& b) {
 		return (a.id >> PAGE_POS) == (b.id >> PAGE_POS);
 	}
@@ -52,6 +58,12 @@ namespace lsql {
 		id = pid.id;
 		return *this;
 	}
+
+	/* std::ostream& operator<<(std::ostream& os, const TID& tid) {
+		os << tid.id;
+		//os << "p" << tid.page() << "s" << tid.segment() << "t" << tid.tuple();
+		return os;
+	} */
 
 	bool operator==(const TID& a, const TID& b) {
 		return a.id == b.id;
