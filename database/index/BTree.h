@@ -85,7 +85,7 @@ namespace lsql {
 		/**
 		 *
 		 */
-		PID createNode(typename BTreeNode<Key, Comperator>::NodeType type);
+		PID createNode(NodeType type);
 
 		/**
 		 * This function recursively travels thourgh a B+-Tree and tries to find

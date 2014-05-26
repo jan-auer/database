@@ -21,7 +21,7 @@ namespace lsql {
 	BTree<Key, Comperator>::BTree(BufferManager& bufferManager, uint16_t segmentId, uint32_t pageCount)
 	: size(0), root(NULL_PID), Segment(bufferManager, segmentId, pageCount) {
 		//Create root node
-		root = createNode(BTreeNode<Key, Comperator>::NodeType::Inner);
+		root = createNode(NodeType::Inner);
 	}
 
 	template<class Key, class Comperator>
@@ -30,7 +30,7 @@ namespace lsql {
 		assert(leafFramePtr != nullptr);
 
 		BTreeNode<Key, Comperator> leaf = BTreeNode<Key, Comperator>(*leafFramePtr);
-		assert(leaf.getType() == (BTreeNode<Key, Comperator>::NodeType::Leaf));
+		assert(leaf.getType() == NodeType::Leaf);
 		TID tid = leaf.lookup(key);
 
 		unfixPage(*leafFramePtr, false);
@@ -49,7 +49,7 @@ namespace lsql {
 		assert(leafFramePtr != nullptr);
 
 		BTreeNode<Key, Comperator> leaf = BTreeNode<Key, Comperator>(*leafFramePtr);
-		assert(leaf.getType() == (BTreeNode<Key, Comperator>::NodeType::Leaf));
+		assert(leaf.getType() == (NodeType::Leaf));
 
 		bool success = leaf.insert(key, tid);
 		unfixPage(*leafFramePtr, success);  //unfix leaf after writing to it
@@ -63,7 +63,7 @@ namespace lsql {
 		assert(leafFramePtr != nullptr);
 
 		BTreeNode<Key, Comperator> leaf = BTreeNode<Key, Comperator>(*leafFramePtr);
-		assert(leaf.getType() == (BTreeNode<Key, Comperator>::NodeType::Leaf));
+		assert(leaf.getType() == (NodeType::Leaf));
 
 		bool success = leaf.remove(key);
 		unfixPage(*leafFramePtr, success);
@@ -81,7 +81,7 @@ namespace lsql {
 	}
 
 	template<class Key, class Comperator>
-	PID BTree<Key, Comperator>::createNode(typename BTreeNode<Key, Comperator>::NodeType type) {
+	PID BTree<Key, Comperator>::createNode(NodeType type) {
 		PID id = addPage();
 		BufferFrame& frame = fixPage(id, true);
 		BTreeNode<Key, Comperator>(frame, type).reset();
@@ -134,7 +134,7 @@ namespace lsql {
 
 			unfixPage(*parentFrame, parentIsDirty);
 
-			if (childNode.getType() == BTreeNode<Key, Comperator>::NodeType::Leaf)
+			if (childNode.getType() == NodeType::Leaf)
 				break;
 			else
 				parentFrame = childFrame;

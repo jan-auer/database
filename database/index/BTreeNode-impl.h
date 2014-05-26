@@ -110,7 +110,7 @@ namespace lsql {
 	}
 
 	template<class Key, class Comperator>
-	typename BTreeNode<Key,Comperator>::NodeType BTreeNode<Key, Comperator>::getType() {
+	NodeType BTreeNode<Key, Comperator>::getType() {
 		return header->type;
 	}
 

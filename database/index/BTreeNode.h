@@ -16,20 +16,23 @@ namespace lsql {
 	/**
 	 *
 	 */
+	enum NodeType {
+		None,
+		Inner,
+		Leaf
+	};
+
+	/**
+	 *
+	 */
 	template<class Key, class Comperator>
 	class BTreeNode {
 
-	public:
-
-		enum NodeType {
-			None, Inner, Leaf
-		};
-
-	private:
-
+		/**
+		 *
+		 */
 		struct Header {
 			NodeType type;
-			uint64_t LSN = 0;
 			size_t count;
 			PID next;  //only for leafs
 		};
