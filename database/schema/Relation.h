@@ -42,6 +42,18 @@ namespace lsql {
 			std::swap(this->attributes, attributes);
 		}
 
+		Relation(Relation&& other)
+		: SPSegment(other.bufferManager, other.id, other.pageCount()) {
+			*this = std::move(other);
+		}
+
+		Relation& operator=(Relation&& other) {
+			std::swap(this->name,       other.name);
+			std::swap(this->primaryKey, other.primaryKey);
+			std::swap(this->attributes, other.attributes);
+			return *this;
+		}
+
 		/** Returns the segment id of the relation. */
 		const uint16_t segmentId() const {
 			return Segment::id;

@@ -8,9 +8,9 @@
 
 #pragma once
 
+#include "buffer/BufferFrame.h"
+#include "buffer/BufferManager.h"
 #include "Schema.h"
-#include "BufferManager.h"
-#include "BufferFrame.h"
 
 namespace lsql {
 
