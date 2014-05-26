@@ -82,6 +82,8 @@ namespace lsql {
 
 	private:
 
+		void visualizeRecurse(PID pid, std::ostream& dataOut);
+
 		/**
 		 *
 		 */

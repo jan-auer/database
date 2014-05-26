@@ -97,6 +97,58 @@ namespace lsql {
 	}
 
 	template<class Key, class Comperator>
+	std::vector<PID> BTreeNode<Key, Comperator>::visualize(std::ostream& dataOut) {
+
+		std::vector<PID> childPids;
+
+		//print the node header including node pid
+		dataOut << "node" << pid << " [shape=record, label=\"<count> " << header->count
+						<< " | <isLeaf> " << ((header->type == NodeType::Leaf) ? "true" : "false");
+
+		//print the keys, sequentally iterated and numbered
+		for (int i = 0; i < n; ++i) {
+			dataOut << " | <key" << i << "> ";
+			if(i < header->count)
+				dataOut << &keys[i];
+		}
+
+
+		if (header->type == NodeType::Inner) {
+
+			//Print the pointers to the children and put them into childPids vector
+			for (int i = 0; i < n + 1; ++i) {
+				dataOut << " |   <ptr" << i <<">";
+				if(i < header->count + 1 ) {
+					childPids.push_back(tids[i]);
+					dataOut << " *";
+				}
+			}
+
+			dataOut << "\"];" << std::endl;
+
+			//pointer to child pages
+			for (int i = 0; i < header->count + 1; ++i) {
+				dataOut << "node" << pid << ":ptr" << i << " -> leaf" << tids[i] << ":count;" << std::endl;
+			}
+
+		} else { //Leaf
+
+			for (int i = 0; i < header->count; ++i) {
+				dataOut << " | " << tids[i];
+			}
+
+			if (header->next != NULL_PID) {
+				dataOut << " | <next> *\"];" << std::endl;
+				dataOut << "node" << pid << ":next -> leaf" << header->next << ":count;" << std::endl;
+			} else
+				dataOut << " | <next> \"];" << std::endl;
+
+		}
+
+		return childPids;
+	}
+
+	template<class Key, class Comperator>
 	void BTreeNode<Key, Comperator>::reset() {
 		header->count = 0;
 		header->next = NULL_PID;

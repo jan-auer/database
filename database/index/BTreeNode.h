@@ -90,6 +90,16 @@ namespace lsql {
 		 */
 		PID splitNode();
 
+
+		/**
+		 * Prints the content
+		 *
+		 * @param ostream		A reference to the stream to which the output should
+		 *									be printed
+		 * @return					An array of child PIDs. 
+		 */
+		std::vector<PID> visualize(std::ostream& dataOut);
+
 		/**
 		 * Resets the node and deletes all data
 		 *

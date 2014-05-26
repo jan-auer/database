@@ -76,8 +76,25 @@ namespace lsql {
 	}
 
 	template<class Key, class Comperator>
-	void BTree<Key, Comperator>::visualize() {
+	void BTree<Key, Comperator>::visualizeRecurse(PID pid, std::ostream& dataOut) {
+		BufferFrame& frame = fixPage(pid, false);
+		BTreeNode<Key, Comperator> node(frame);
+		std::vector<PID> childPids = node.visualize(dataOut);
+		unfixPage(frame, false);
 
+		for(std::vector<PID>::iterator it = childPids.begin(); it != childPids.end(); ++it) {
+			visualizeRecurse(*it, dataOut);
+		}
+	}
+
+	template<class Key, class Comperator>
+	void BTree<Key, Comperator>::visualize() {
+		std::ostream& os = std::cout;
+		os << "digraph myBTree {\n node [shape=record]; \n";
+
+		visualizeRecurse(root, std::cout);
+
+		os << " }";
 	}
 
 	template<class Key, class Comperator>
