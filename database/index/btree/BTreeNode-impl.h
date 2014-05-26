@@ -76,10 +76,22 @@ namespace lsql {
 		/**
 		 * Finds a TID
 		 *
-		 * @return PID of the next leaf if inner node, otherwise TID of key. NULL_TID if not found
+		 * @return PID of the next leaf if inner node, otherwise TID of key.
+		 *				 NULL_TID is returned if not found
 		 */
-		TID lookup(const Key& key) const {
-			return NULL_TID;
+		TID lookup(const Key& key, bool return_left = false) const {
+			int i;
+			Comperator comp;
+
+			for (i = 0; i < header->count; ++i) {
+				if (comp(*(keys + i),key))
+					break;
+			}
+
+			if (i == header->count && !return_left)
+				return NULL_TID;
+
+			return *(tids + i);
 		}
 
 
@@ -92,7 +104,17 @@ namespace lsql {
 		 * @return			true on success, false in case of error
 		 */
 		bool insert(const Key& key, const PID& tid) {  //PID vs TID ??
-			return false;
+			if(header->count == n)
+				return false;
+
+			assert(header->count < n);
+
+			uint32_t position = (header->count)++;
+
+			*(keys + position) = key;
+			*(tids + position) = tid;
+
+			return true;
 		}
 
 
@@ -104,7 +126,27 @@ namespace lsql {
 		 * @return			true if successful, false if key has not been found
 		 */
 		bool remove(const Key& key) {
-			return false;
+			int i;
+			Comperator comp;
+
+			for (i = 0; i < header->count; ++i) {
+				if (comp(*(keys + i),key))
+					break;
+			}
+
+			if (i == header->count)
+				return false;
+
+			assert(i > 0);
+			assert(i < header->count);
+
+			//overwrite element number i with element number i + 1
+			memmove(keys + i, keys + i + 1, (header->count - i - 1) * sizeof(*keys));
+			memmove(tids + i, tids + i + 1, (header->count - i - 1) * sizeof(*tids));
+
+			--(header->count);
+
+			return true;
 		}
 
 
@@ -112,7 +154,9 @@ namespace lsql {
 			return *keys;
 		}
 
-		Key lastKey();
+		Key lastKey() {
+			return *(keys + header->count);
+		}
 
 		/**
 		 * Splits the current node into two seperate ones
