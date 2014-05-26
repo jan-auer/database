@@ -17,7 +17,7 @@ using namespace lsql;
 /* Comparator functor for uint64_t*/
 struct MyCustomUInt64Cmp {
    bool operator()(uint64_t a, uint64_t b) const {
-      return a<b;
+      return a<=b;
    }
 };
 
@@ -30,7 +30,7 @@ struct Char {
 template <unsigned len>
 struct MyCustomCharCmp {
    bool operator()(const Char<len>& a, const Char<len>& b) const {
-      return memcmp(a.data, b.data, len) < 0;
+      return memcmp(a.data, b.data, len) <= 0;
    }
 };
 

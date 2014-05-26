@@ -34,7 +34,6 @@ namespace lsql {
 
 		PID pid;
 		size_t n; //Maximum number of Key/TID pairs in this node. Set in constructor
-		BufferFrame& bf;
 
 		Header* header;
 		Key* keys;
@@ -50,7 +49,7 @@ namespace lsql {
 		 *								If specified, node is reset upon instantiation.
 		 */
 		BTreeNode(BufferFrame& frame, NodeType type = None)
-		: pid(frame.getId()), bf(frame) {
+		: pid(frame.getId()) {
 
 			int32_t headerSize = 0;
 			char* data = static_cast<char*>(frame.getData());
@@ -84,14 +83,14 @@ namespace lsql {
 			Comperator comp;
 
 			for (i = 0; i < header->count; ++i) {
-				if (comp(*(keys + i),key))
+				if (comp(keys[i], key))
 					break;
 			}
 
 			if (i == header->count && !return_left)
 				return NULL_TID;
 
-			return *(tids + i);
+			return tids[i];
 		}
 
 
@@ -198,10 +197,6 @@ namespace lsql {
 			return n - header->count;
 		}
 
-
-		BufferFrame& getFrame() {
-			return bf;
-		}
 
 	};
 
