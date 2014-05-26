@@ -48,6 +48,11 @@ namespace lsql {
 		return uint16_t(id >> TUPLE_POS);
 	}
 
+	TID TID::operator=(const PID& pid) {
+		id = pid.id;
+		return *this;
+	}
+
 	bool operator==(const TID& a, const TID& b) {
 		return a.id == b.id;
 	}

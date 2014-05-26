@@ -61,6 +61,9 @@ namespace lsql {
 		/** Returns the tuple number. */
 		uint16_t tuple() const;
 
+		/** Allows assigning a PID onto TIDs*/
+		TID operator=(const PID& pid);
+
 	};
 
 	/** Compares two TIDs for equality. */
