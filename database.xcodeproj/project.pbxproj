@@ -162,8 +162,6 @@
 		01E7CA8F192A33860055E19D /* slottedtest.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = slottedtest.1; sourceTree = "<group>"; };
 		01E7CA92192A33E70055E19D /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = test/btreetest/main.cpp; sourceTree = "<group>"; };
 		01E7CAA8192A3E2D0055E19D /* btreetest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = btreetest; sourceTree = BUILT_PRODUCTS_DIR; };
-		01E7CAAC192A400C0055E19D /* BTree-impl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "BTree-impl.h"; sourceTree = "<group>"; };
-		01E7CAB0192A46710055E19D /* BTreeNode-impl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "BTreeNode-impl.h"; sourceTree = "<group>"; };
 		4A0C3FB918FF1F2F0070FD98 /* File-impl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "File-impl.h"; sourceTree = "<group>"; };
 		4A0C3FBA18FF1F2F0070FD98 /* File.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = File.h; sourceTree = "<group>"; };
 		4A192C4218F8227D005941E4 /* generator */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = generator; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -200,6 +198,10 @@
 		4ACB3F1C1925343400EBD596 /* Serialize-impl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Serialize-impl.h"; sourceTree = "<group>"; };
 		4AD58302192148DB005570F5 /* slottedtest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = slottedtest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4AD7E6C61916B547000EEEF3 /* buffertest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = buffertest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4ADF19511933760B0047D095 /* BTree-impl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "BTree-impl.h"; sourceTree = "<group>"; };
+		4ADF19521933760B0047D095 /* BTreeNode-impl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "BTreeNode-impl.h"; sourceTree = "<group>"; };
+		4ADF19531933762C0047D095 /* BTree.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BTree.h; sourceTree = "<group>"; };
+		4ADF1954193376590047D095 /* BTreeNode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BTreeNode.h; sourceTree = "<group>"; };
 		4AE034EE1901F2DD00C48F5E /* Lock.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Lock.cpp; sourceTree = "<group>"; };
 		4AE034EF1901F2DD00C48F5E /* Lock.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Lock.h; sourceTree = "<group>"; };
 		4AE60BA518F909DB00717C22 /* Generator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Generator.cpp; sourceTree = "<group>"; };
@@ -355,18 +357,12 @@
 		01E7CA93192A3DA70055E19D /* index */ = {
 			isa = PBXGroup;
 			children = (
-				01E7CAAA192A3FFD0055E19D /* btree */,
+				4ADF19511933760B0047D095 /* BTree-impl.h */,
+				4ADF19531933762C0047D095 /* BTree.h */,
+				4ADF19521933760B0047D095 /* BTreeNode-impl.h */,
+				4ADF1954193376590047D095 /* BTreeNode.h */,
 			);
 			path = index;
-			sourceTree = "<group>";
-		};
-		01E7CAAA192A3FFD0055E19D /* btree */ = {
-			isa = PBXGroup;
-			children = (
-				01E7CAAC192A400C0055E19D /* BTree-impl.h */,
-				01E7CAB0192A46710055E19D /* BTreeNode-impl.h */,
-			);
-			path = btree;
 			sourceTree = "<group>";
 		};
 		4A192C4318F8227D005941E4 /* generator */ = {

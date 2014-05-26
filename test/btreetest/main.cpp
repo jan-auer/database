@@ -9,8 +9,7 @@
 
 #include "buffer/BufferManager.h"
 #include "common/IDs.h"
-
-#include "index/btree/BTree-impl.h"
+#include "index/BTree.h"
 
 using namespace lsql;
 
