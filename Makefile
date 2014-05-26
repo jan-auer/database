@@ -1,8 +1,18 @@
-EXECUTABLES=database sort buffertest unit_test
+EXECUTABLES=database sort buffertest slottedtest btreetest unit_test
 
 .PHONY: $(EXECUTABLES)
 
-CPP_FILES = database/schema/Schema.cpp database/relation/Record.cpp database/relation/SPSegment.cpp database/relation/SlottedPage.cpp database/common/IDs.cpp database/schema/SchemaManager.cpp database/buffer/BufferManager.cpp database/buffer/BufferFrame.cpp database/utils/Lock.cpp database/utils/Mutex.cpp unit_test/gtest/gtest-all.cc
+CPP_FILES = database/common/IDs.cpp    \
+		database/utils/Lock.cpp            \
+		database/utils/Mutex.cpp           \
+		database/buffer/BufferManager.cpp  \
+		database/buffer/BufferFrame.cpp    \
+		database/segment/Record.cpp        \
+		database/segment/Segment.cpp       \
+		database/segment/SlottedPage.cpp   \
+		database/segment/SPSegment.cpp     \
+		database/schema/SchemaManager.cpp  \
+		unit_test/gtest/gtest-all.cc
 
 CC=g++
 FLAGS=-std=c++11 -O3

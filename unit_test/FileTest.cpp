@@ -7,5 +7,3 @@
 //
 
 #include "utils/File.h"
-
-#warning Tests not implemented.
