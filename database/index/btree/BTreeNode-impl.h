@@ -28,12 +28,12 @@ namespace lsql {
 		struct Header {
 			NodeType type;
 			uint64_t LSN = 0;
-			uint32_t count;
+			size_t count;
 			PID next;  //only for leafs
 		};
 
 		PID pid;
-		uint32_t n; //Maximum number of Key/TID pairs in this node. Set in constructor
+		size_t n; //Maximum number of Key/TID pairs in this node. Set in constructor
 		BufferFrame& bf;
 
 		Header* header;
@@ -109,7 +109,7 @@ namespace lsql {
 
 			assert(header->count < n);
 
-			uint32_t position = (header->count)++;
+			size_t position = (header->count)++;
 
 			*(keys + position) = key;
 			*(tids + position) = tid;
@@ -194,7 +194,7 @@ namespace lsql {
 		}
 
 
-		uint32_t getFree() {
+		size_t getFree() {
 			return n - header->count;
 		}
 
