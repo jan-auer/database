@@ -18,17 +18,17 @@
 namespace lsql {
 
 	/**
-	 * This is a B+-Tree datastructure for indexing data
+	 * This is a B+-Tree data structure for indexing relations.
 	 *
 	 * @param Keys The datatype of the indexed values
-	 * @param Comperator A class providing the < comperator for each data type
+	 * @param Comparator A class providing the < Comparator for each data type
 	 */
-	template<class Key, class Comperator>
-	class BTree : protected Segment, private Comperator {
+	template<class Key, class Comparator>
+	class BTree : protected Segment, private Comparator {
 
-		using Comperator::compare;
+		using Comparator::compare;
 
-		typedef BTreeNode<Key, Comperator> Node;
+		typedef BTreeNode<Key, Comparator> Node;
 
 		uint64_t size;
 		PID root;

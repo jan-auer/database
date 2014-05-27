@@ -17,8 +17,8 @@
 
 namespace lsql {
 
-	template<class Key, class Comperator>
-	BTree<Key, Comperator>::BTree(BufferManager& bufferManager, uint16_t segmentId, uint32_t pageCount)
+	template<class Key, class Comparator>
+	BTree<Key, Comparator>::BTree(BufferManager& bufferManager, uint16_t segmentId, uint32_t pageCount)
 	: size(0), root(NULL_PID), Segment(bufferManager, segmentId, pageCount) {
 		if (root == NULL_PID) {
 			root = addPage();
@@ -28,8 +28,8 @@ namespace lsql {
 		}
 	}
 
-	template<class Key, class Comperator>
-	TID BTree<Key, Comperator>::lookup(const Key& key) {
+	template<class Key, class Comparator>
+	TID BTree<Key, Comparator>::lookup(const Key& key) {
 		BufferFrame& frame = findLeafFrame(key);
 		Node leaf(frame);
 		assert(leaf.getType() == NodeType::Leaf);
@@ -40,13 +40,13 @@ namespace lsql {
 		return tid;
 	}
 	
-	template<class Key, class Comperator>
-	std::vector<TID> BTree<Key, Comperator>::lookupRange(const Key& key) {
+	template<class Key, class Comparator>
+	std::vector<TID> BTree<Key, Comparator>::lookupRange(const Key& key) {
 		return std::vector<TID>();
 	}
 
-	template<class Key, class Comperator>
-	bool BTree<Key, Comperator>::insert(const Key& key, const TID& tid) {
+	template<class Key, class Comparator>
+	bool BTree<Key, Comparator>::insert(const Key& key, const TID& tid) {
 		BufferFrame& frame = findLeafFrame(key);
 		Node leaf(frame);
 		assert(leaf.getType() == NodeType::Leaf);
@@ -57,8 +57,8 @@ namespace lsql {
 		return success;
 	}
 
-	template<class Key, class Comperator>
-	bool BTree<Key, Comperator>::erase(const Key& key) {
+	template<class Key, class Comparator>
+	bool BTree<Key, Comparator>::erase(const Key& key) {
 		BufferFrame& frame = findLeafFrame(key);
 		Node leaf(frame);
 		assert(leaf.getType() == NodeType::Leaf);
@@ -68,15 +68,15 @@ namespace lsql {
 		return success;
 	}
 
-	template<class Key, class Comperator>
-	uint64_t BTree<Key, Comperator>::getSize() {
+	template<class Key, class Comparator>
+	uint64_t BTree<Key, Comparator>::getSize() {
 		return size;
 	}
 
-	template<class Key, class Comperator>
-	void BTree<Key, Comperator>::visualizeRecurse(PID pid, std::ostream& dataOut) {
+	template<class Key, class Comparator>
+	void BTree<Key, Comparator>::visualizeRecurse(PID pid, std::ostream& dataOut) {
 		BufferFrame& frame = fixPage(pid, false);
-		BTreeNode<Key, Comperator> node(frame);
+		BTreeNode<Key, Comparator> node(frame);
 		std::vector<PID> childPids = node.visualize(dataOut);
 		unfixPage(frame, false);
 
@@ -85,8 +85,8 @@ namespace lsql {
 		}
 	}
 
-	template<class Key, class Comperator>
-	void BTree<Key, Comperator>::visualize() {
+	template<class Key, class Comparator>
+	void BTree<Key, Comparator>::visualize() {
 		std::ostream& os = std::cout;
 		os << "digraph myBTree {\n node [shape=record]; \n";
 
@@ -95,8 +95,8 @@ namespace lsql {
 		os << " }";
 	}
 
-	template<class Key, class Comperator>
-	BufferFrame& BTree<Key, Comperator>::findLeafFrame(const Key& key, bool split) {
+	template<class Key, class Comparator>
+	BufferFrame& BTree<Key, Comparator>::findLeafFrame(const Key& key, bool split) {
 		Key parentKey;
 		BufferFrame* parentFrame = nullptr;
 		BufferFrame* currentFrame = &fixPage(root, split);

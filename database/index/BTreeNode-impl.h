@@ -14,8 +14,8 @@
 
 namespace lsql {
 
-	template<typename Key, typename Comperator>
-	BTreeNode<Key, Comperator>::BTreeNode(BufferFrame& frame, NodeType type)
+	template<typename Key, typename Comparator>
+	BTreeNode<Key, Comparator>::BTreeNode(BufferFrame& frame, NodeType type)
 	: pid(frame.getId()) {
 		char* data = static_cast<char*>(frame.getData());
 		header = reinterpret_cast<Header*>(data);
@@ -26,8 +26,8 @@ namespace lsql {
 		initialize(data);
 	}
 
-	template<typename Key, typename Comperator>
-	TID BTreeNode<Key, Comperator>::lookup(const Key& key, bool allowRight, Key* found) const {
+	template<typename Key, typename Comparator>
+	TID BTreeNode<Key, Comparator>::lookup(const Key& key, bool allowRight, Key* found) const {
 		size_t i = findPos(key);
 
 		if (i == header->count && !allowRight)
@@ -39,8 +39,8 @@ namespace lsql {
 		return values[i];
 	}
 
-	template<typename Key, typename Comperator>
-	bool BTreeNode<Key, Comperator>::insert(const Key& key, const TID& value) {
+	template<typename Key, typename Comparator>
+	bool BTreeNode<Key, Comparator>::insert(const Key& key, const TID& value) {
 		assert(header->count <= n);
 		if(header->count == n)
 			return false;
@@ -53,8 +53,8 @@ namespace lsql {
 		return true;
 	}
 
-	template<typename Key, typename Comperator>
-	bool BTreeNode<Key, Comperator>::remove(const Key& key) {
+	template<typename Key, typename Comparator>
+	bool BTreeNode<Key, Comparator>::remove(const Key& key) {
 		size_t i = findPos(key);
 
 		if (i == header->count || compare(key, keys[i]) != 0)
@@ -64,8 +64,8 @@ namespace lsql {
 		return true;
 	}
 
-	template<typename Key, typename Comperator>
-	const Key& BTreeNode<Key, Comperator>::splitInto(BTreeNode<Key, Comperator>& other) {
+	template<typename Key, typename Comparator>
+	const Key& BTreeNode<Key, Comparator>::splitInto(BTreeNode<Key, Comparator>& other) {
 		assert(header->count == n);
 
 		other.header->next = header->next;
@@ -93,24 +93,24 @@ namespace lsql {
 		return keys[header->count - 1];
 	}
 
-	template<typename Key, typename Comperator>
-	void BTreeNode<Key, Comperator>::switchKey(const Key& oldKey, const Key& newKey) {
+	template<typename Key, typename Comparator>
+	void BTreeNode<Key, Comparator>::switchKey(const Key& oldKey, const Key& newKey) {
 		size_t i = findPos(oldKey);
 		keys[i] = newKey;
 	}
 
-	template<typename Key, typename Comperator>
-	NodeType BTreeNode<Key, Comperator>::getType() const {
+	template<typename Key, typename Comparator>
+	NodeType BTreeNode<Key, Comparator>::getType() const {
 		return header->type;
 	}
 
-	template<typename Key, typename Comperator>
-	bool BTreeNode<Key, Comperator>::isFull() const {
+	template<typename Key, typename Comparator>
+	bool BTreeNode<Key, Comparator>::isFull() const {
 		return header->count >= n;
 	}
 
-	template<class Key, class Comperator>
-	std::vector<PID> BTreeNode<Key, Comperator>::visualize(std::ostream& dataOut) {
+	template<class Key, class Comparator>
+	std::vector<PID> BTreeNode<Key, Comparator>::visualize(std::ostream& dataOut) {
 
 		std::vector<PID> childPids;
 
@@ -161,8 +161,8 @@ namespace lsql {
 		return childPids;
 	}
 
-	template<typename Key, typename Comperator>
-	void BTreeNode<Key, Comperator>::initialize(char* data) {
+	template<typename Key, typename Comparator>
+	void BTreeNode<Key, Comparator>::initialize(char* data) {
 		assert(data != nullptr);
 		assert(header->type != NodeType::None);
 
@@ -176,8 +176,8 @@ namespace lsql {
 		values = reinterpret_cast<TID*>(data + sizeof(Header) + n * sizeof(Key));
 	}
 
-	template<typename Key, typename Comperator>
-	void BTreeNode<Key, Comperator>::reset(NodeType type) {
+	template<typename Key, typename Comparator>
+	void BTreeNode<Key, Comparator>::reset(NodeType type) {
 		header->count = 0;
 		header->next = NULL_PID;
 
@@ -185,8 +185,8 @@ namespace lsql {
 			header->type = type;
 	}
 
-	template<typename Key, typename Comperator>
-	size_t BTreeNode<Key, Comperator>::findPos(const Key& key) const {
+	template<typename Key, typename Comparator>
+	size_t BTreeNode<Key, Comparator>::findPos(const Key& key) const {
 		for (size_t pos = 0; pos < header->count; pos++)
 			if (compare(key, keys[pos]) <= 0)
 				return pos;
@@ -194,8 +194,8 @@ namespace lsql {
 		return header->count;
 	}
 
-	template<typename Key, typename Comperator>
-	void BTreeNode<Key, Comperator>::moveEntries(size_t offset, ssize_t distance) {
+	template<typename Key, typename Comparator>
+	void BTreeNode<Key, Comparator>::moveEntries(size_t offset, ssize_t distance) {
 		std::memmove(keys + offset + distance, keys + distance, header->count - offset * sizeof(Key));
 		std::memmove(values + offset + distance, values + distance, header->count - offset * sizeof(TID));
 		header->count += distance;

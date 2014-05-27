@@ -25,10 +25,10 @@ namespace lsql {
 	/**
 	 *
 	 */
-	template<typename Key, typename Comperator>
-	class BTreeNode : private Comperator {
+	template<typename Key, typename Comparator>
+	class BTreeNode : private Comparator {
 
-		using Comperator::compare;
+		using Comparator::compare;
 
 		/**
 		 *
@@ -92,7 +92,7 @@ namespace lsql {
 		/**
 		 *
 		 */
-		const Key& splitInto(BTreeNode<Key, Comperator>& other);
+		const Key& splitInto(BTreeNode<Key, Comparator>& other);
 
 		/**
 		 *
