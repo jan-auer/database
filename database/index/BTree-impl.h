@@ -41,7 +41,7 @@ namespace lsql {
 	}
 	
 	template<class Key, class Comparator>
-	std::vector<TID> BTree<Key, Comparator>::lookupRange(const Key& key) {
+	std::vector<TID> BTree<Key, Comparator>::lookupRange(const Key& from, const Key& to) {
 		return std::vector<TID>();
 	}
 
