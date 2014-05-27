@@ -14,7 +14,7 @@
 namespace lsql {
 
 	/**
-	 *
+	 * Possible types of BTree nodes: Inner and Leaf.
 	 */
 	enum NodeType {
 		None,
@@ -23,16 +23,14 @@ namespace lsql {
 	};
 
 	/**
-	 *
+	 * Wrapper class for nodes of B+-Trees.
 	 */
 	template<typename Key, typename Comparator>
 	class BTreeNode : private Comparator {
 
 		using Comparator::compare;
 
-		/**
-		 *
-		 */
+		/** Header for BTree nodes. */
 		struct Header {
 			NodeType type;
 			size_t count;
@@ -40,7 +38,7 @@ namespace lsql {
 		};
 
 		PID pid;
-		size_t n; //Maximum number of Key/TID pairs in this node. Set in constructor
+		size_t n;
 
 		Header* header;
 		Key* keys;
@@ -65,6 +63,8 @@ namespace lsql {
 		 *
 		 * @param key        The key to search for.
 		 * @param allowRight Whether there is a right outer value or not.
+		 * @param found      The key of this pointer will be set to the actually 
+		 *                   resolved key.
 		 *
 		 * @return Returns an ID with the specified type.
 		 */
@@ -90,22 +90,38 @@ namespace lsql {
 		bool remove(const Key& key);
 
 		/**
+		 * Splits contents into the specified other node.
+		 * 
+		 * The other node receives the bigger half of the current contents. Additionally,
+		 * the next pointer is set correctly. Behavior is based on the node type:
+		 *  - INNER NODE: The median value will be moved to the parent node, so it
+		 *    is neither in the left nor the right split node. Child pointers are
+		 *    set correctly.
+		 *  - LEAF NODE: There are no child pointers. The median value stays in this
+		 *    node.
 		 *
+		 * This method will fail, if it is not full yet.
+		 *
+		 * @return The key which has to be inserted into the parent.
 		 */
 		const Key& splitInto(BTreeNode<Key, Comparator>& other);
 
 		/**
+		 * Updates the specified key with @c newKey. This is useful, when child nodes
+		 * are split up and the upper bound of one child has changed.
 		 *
+		 * @param oldKey The old key to be updated.
+		 * @param newKey The new key.
 		 */
 		void switchKey(const Key& oldKey, const Key& newKey);
 
 		/**
-		 * Returns whether a node is an inner or a leaf node
+		 * Returns whether a node is an inner or a leaf node.
 		 */
 		NodeType getType() const;
 
 		/**
-		 *
+		 * Determines whether this node has reached it's capacity or not.
 		 */
 		bool isFull() const;
 		
@@ -121,7 +137,9 @@ namespace lsql {
 	private:
 
 		/**
+		 * Initializes this node. This eventually overwrites all node contents.
 		 *
+		 * @param data A pointer to the internal data of this node.
 		 */
 		void initialize(char* data);
 
@@ -136,12 +154,20 @@ namespace lsql {
 		void reset(NodeType type = NodeType::None);
 
 		/**
-		 *
+		 * Resolves the position of the key within this node. If they key is not
+		 * contained, a position is returned, the key should have.
+		 * 
+		 * @param key A reference to the key.
+		 * 
+		 * @return An index between 0 and N.
 		 */
 		size_t findPos(const Key& key) const;
 
 		/**
+		 * Moves all entries within this page to insert new ones or remove old ones.
 		 *
+		 * @param offset   The first element to move.
+		 * @param distance The distance to move the elements.
 		 */
 		void moveEntries(size_t offset, ssize_t distance);
 		
