@@ -42,10 +42,18 @@ namespace lsql {
 	template<typename Key, typename Comparator>
 	bool BTreeNode<Key, Comparator>::insert(const Key& key, const TID& value) {
 		assert(header->count <= n);
+
+		// Prevent overflows
 		if(header->count == n)
 			return false;
 
 		size_t pos = findPos(key);
+
+		// Do not allow duplicates
+		if (compare(keys[pos], key) == 0)
+			return false;
+
+		// Insert the new entry and move everything else to the back
 		moveEntries(pos, 1);
 		keys[pos] = key;
 		values[pos] = value;
