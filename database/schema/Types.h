@@ -22,6 +22,16 @@ namespace lsql {
 		Char
 	};
 
+	/**
+	 * SQL Type Integer
+	 */
+	typedef uint64_t Integer;
+
+	/**
+	 * SQL Type Char
+	 */
+	typedef std::string Char;
+
 	/*
 	typedef int Integer;
 

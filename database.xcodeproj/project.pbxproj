@@ -61,6 +61,8 @@
 		4ADF195D1933EA160047D095 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4ADF19591933E9ED0047D095 /* main.cpp */; };
 		4ADF195E1933EA1E0047D095 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4ADF195B1933E9ED0047D095 /* main.cpp */; };
 		4ADF195F1933EA270047D095 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4ADF19561933E9ED0047D095 /* main.cpp */; };
+		4AF3B624194B8FA2004CC4B7 /* Register.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4AF3B622194B8FA2004CC4B7 /* Register.cpp */; };
+		4AF3B625194B8FA2004CC4B7 /* Register.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4AF3B622194B8FA2004CC4B7 /* Register.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -166,6 +168,7 @@
 		4A230BB719200B3400770D4F /* Parser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Parser.h; path = parser/Parser.h; sourceTree = "<group>"; };
 		4A44DA8C18F826C2001AF70E /* Sorting.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Sorting.cpp; sourceTree = "<group>"; };
 		4A44DA8D18F826C2001AF70E /* Sorting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sorting.h; sourceTree = "<group>"; };
+		4A4CAEE3194B85FA0044A2A1 /* IOperator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IOperator.h; sourceTree = "<group>"; };
 		4A5E081918F56D630062E0A3 /* database */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = database; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A5E081C18F56D630062E0A3 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		4A5E081E18F56D630062E0A3 /* database.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = database.1; sourceTree = "<group>"; };
@@ -208,6 +211,8 @@
 		4AE60BA618F909DB00717C22 /* Generator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Generator.h; sourceTree = "<group>"; };
 		4AE60BA918F9230200717C22 /* Chunk.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Chunk.cpp; sourceTree = "<group>"; };
 		4AE60BAA18F9230200717C22 /* Chunk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Chunk.h; sourceTree = "<group>"; };
+		4AF3B622194B8FA2004CC4B7 /* Register.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Register.cpp; sourceTree = "<group>"; };
+		4AF3B623194B8FA2004CC4B7 /* Register.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Register.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -350,6 +355,16 @@
 			path = sorting;
 			sourceTree = "<group>";
 		};
+		4A4CAEE1194B85980044A2A1 /* operator */ = {
+			isa = PBXGroup;
+			children = (
+				4A4CAEE3194B85FA0044A2A1 /* IOperator.h */,
+				4AF3B622194B8FA2004CC4B7 /* Register.cpp */,
+				4AF3B623194B8FA2004CC4B7 /* Register.h */,
+			);
+			path = operator;
+			sourceTree = "<group>";
+		};
 		4A5E081018F56D630062E0A3 = {
 			isa = PBXGroup;
 			children = (
@@ -388,6 +403,7 @@
 				4A645CA91923B345006286AD /* segment */,
 				4A75D787191E4B2400471EEB /* schema */,
 				01E7CA93192A3DA70055E19D /* index */,
+				4A4CAEE1194B85980044A2A1 /* operator */,
 				4A44DA8B18F826B0001AF70E /* sorting */,
 				4A5E081E18F56D630062E0A3 /* database.1 */,
 				4A5E081C18F56D630062E0A3 /* main.cpp */,
@@ -686,6 +702,7 @@
 				4A645CB21923B345006286AD /* Record.cpp in Sources */,
 				4A5E081D18F56D630062E0A3 /* main.cpp in Sources */,
 				01A30263191EC097007A1957 /* Lock.cpp in Sources */,
+				4AF3B624194B8FA2004CC4B7 /* Register.cpp in Sources */,
 				01A30262191EC014007A1957 /* BufferManager.cpp in Sources */,
 				4A6C4F90191FAA20003B8AB9 /* BufferFrame.cpp in Sources */,
 				4A6C4F8C191FA962003B8AB9 /* Mutex.cpp in Sources */,
@@ -710,6 +727,7 @@
 				4A6C4F8E191FAA17003B8AB9 /* BufferFrame.cpp in Sources */,
 				4A645CB31923B345006286AD /* Record.cpp in Sources */,
 				4A6C4F8F191FAA1A003B8AB9 /* BufferManager.cpp in Sources */,
+				4AF3B625194B8FA2004CC4B7 /* Register.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
