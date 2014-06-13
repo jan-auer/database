@@ -14,7 +14,7 @@ CPP_FILES = database/common/IDs.cpp    \
 		database/schema/SchemaManager.cpp  \
 		unit_test/gtest/gtest-all.cc
 
-CC=g++
+CC=clang++
 FLAGS=-std=c++11 -O3
 INC=-I generator -I database
 CPP=./$@/main.cpp $(CPP_FILES)
