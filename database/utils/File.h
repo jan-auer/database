@@ -9,7 +9,7 @@
 #pragma once
 
 #include <cstdint>
-#include <string>
+#include <cstring>
 #include <vector>
 
 namespace lsql {

@@ -6,9 +6,9 @@
 //  Copyright (c) 2014 LightningSQL. All rights reserved.
 //
 
+#include <cstring>
 #include <cassert>
 #include <algorithm>
-#include <string>
 
 #include "SlottedPage.h"
 #include "SPSegment.h"

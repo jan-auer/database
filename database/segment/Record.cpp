@@ -8,7 +8,7 @@
 
 #include <cassert>
 #include <cstdlib>
-#include <string>
+#include <cstring>
 
 #include "Record.h"
 

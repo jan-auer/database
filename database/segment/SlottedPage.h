@@ -9,7 +9,6 @@
 #pragma once
 
 #include <cstdint>
-#include <string>
 
 #include "buffer/BufferFrame.h"
 #include "SPSegment.h"
