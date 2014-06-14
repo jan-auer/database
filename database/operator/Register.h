@@ -10,6 +10,8 @@
 
 #include <ostream>
 #include <iostream>
+#include <utility>
+
 #include "schema/Types.h"
 
 namespace lsql {
@@ -21,12 +23,32 @@ namespace lsql {
 
 		Type type;
 
-		union {
+		union Value {
 			Char c;
 			Integer i;
+
+			Value() {}
+			Value(Char c) : c(c) {}
+			Value(Integer i) : i(i) {}
+			~Value() {}
 		} data;
 
 	public:
+
+		/**
+		 *
+		 */
+		Register(const Register& r);
+
+		/**
+		 *
+		 */
+		Register(Char c);
+
+		/**
+		 *
+		 */
+		Register(Integer i);
 
 		/**
 		 *
@@ -37,6 +59,11 @@ namespace lsql {
 		 *
 		 */
 		uint64_t hash() const;
+
+		/**
+		 *
+		 */
+		Register& operator=(const Register& r);
 
 		/**
 		 *
@@ -67,6 +94,19 @@ namespace lsql {
 		 *
 		 */
 		friend int compare(const Register& a, const Register& b);
+
+	};
+
+}
+
+namespace std {
+
+	template<>
+	struct hash<lsql::Register> {
+
+		size_t operator()(const lsql::Register& r) const {
+			return r.hash();
+		}
 
 	};
 

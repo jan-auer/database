@@ -13,6 +13,18 @@
 
 namespace lsql {
 
+	Register::Register(const Register& r) {
+		*this = r;
+	}
+
+	Register::Register(Char c) {
+		*this = c;
+	}
+
+	Register::Register(Integer i) {
+		*this = i;
+	}
+
 	Type Register::getType() const {
 		return type;
 	}
@@ -20,15 +32,23 @@ namespace lsql {
 	uint64_t Register::hash() const {
 		switch (type) {
 			case Type::Char:
-				std::hash<Char> hashChar;
-				return hashChar(data.c);
+				return std::hash<Char>()(data.c);
 
 			case Type::Integer:
-				std::hash<Integer> hashInt;
-				return hashInt(data.i);
+				return std::hash<Integer>()(data.i);
 
 			default:
 				return 0;
+		}
+	}
+
+	Register& Register::operator=(const Register& r) {
+		switch (r.type) {
+			case Type::Char:
+				return *this = r.data.c;
+
+			case Type::Integer:
+				return *this = r.data.i;
 		}
 	}
 
