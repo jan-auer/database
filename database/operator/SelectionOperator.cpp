@@ -6,47 +6,49 @@
 //  Copyright (c) 2014 LightningSQL. All rights reserved.
 //
 
+#include <cassert>
 #include "SelectionOperator.h"
 
-#include <cassert>
+namespace lsql {
 
-using namespace lsql;
+	SelectionOperator::SelectionOperator(IOperator& in, uint16_t index, Register& constant)
+	: in(in), index(index), constant(constant) {}
 
-SelectionOperator::SelectionOperator(IOperator& in, uint32_t index, Register& constant) :
-	in(in), index(index), constant(constant) {}
+	void SelectionOperator::open() {
+		assert(!isOpen);
 
-
-void SelectionOperator::open() {
-	isOpen = true;
-	in.open();
-}
-
-
-bool SelectionOperator::next() {
-	assert(isOpen);
-
-	while (in.next()) {
-		std::vector<Register*> input = in.getOutput();
-		
-		if (*(input.at(index)) == constant)
-			return true;
+		in.open();
+		isOpen = true;
 	}
 
-	return false;
-}
+	bool SelectionOperator::next() {
+		assert(isOpen);
 
+		while (in.next()) {
+			Row input = in.getOutput();
+			
+			if (*(input.at(index)) == constant)
+				return true;
+		}
 
-std::vector<Register*> SelectionOperator::getOutput() {
-	return in.getOutput();
-}
+		return false;
+	}
 
+	Row SelectionOperator::getOutput() const {
+		assert(isOpen);
+		return in.getOutput();
+	}
 
-void SelectionOperator::rewind() {
-	in.rewind();
-}
+	void SelectionOperator::rewind() {
+		assert(isOpen);
+		in.rewind();
+	}
 
+	void SelectionOperator::close() {
+		assert(isOpen);
 
-void SelectionOperator::close() {
-	isOpen = false;
-	in.close();
+		in.close();
+		isOpen = false;
+	}
+
 }

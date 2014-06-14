@@ -6,45 +6,47 @@
 //  Copyright (c) 2014 LightningSQL. All rights reserved.
 //
 
+#include <cassert>
 #include "PrintOperator.h"
 
-#include <cassert>
+namespace lsql {
 
-using namespace lsql;
+	PrintOperator::PrintOperator(IOperator& in, std::ostream& os) : in(in), os(os) {}
 
-PrintOperator::PrintOperator(IOperator& in, std::ostream& os) : in(in), os(os) {}
+	void PrintOperator::open() {
+		assert(!isOpen);
 
-
-void PrintOperator::open() {
-	in.open();
-	isOpen = true;
-}
-
-
-bool PrintOperator::next() {
-	assert(isOpen);
-
-	if (!in.next())
-		return false;
-
-	std::vector<Register*> v = in.getOutput();
-
-
-	for(std::vector<Register*>::iterator it = v.begin(); it != v.end(); ++it) {
-		os << *(*it) << " ";
+		in.open();
+		isOpen = true;
 	}
 
-	os << std::endl;
-	return true;
-}
+	bool PrintOperator::next() {
+		assert(isOpen);
+
+		if (!in.next())
+			return false;
+
+		Row v = in.getOutput();
 
 
-void PrintOperator::rewind() {
-	in.rewind();
-}
+		for(Row::iterator it = v.begin(); it != v.end(); ++it) {
+			os << *(*it) << " ";
+		}
 
+		os << std::endl;
+		return true;
+	}
 
-void PrintOperator::close() {
-	isOpen = false;
-	in.close();
+	void PrintOperator::rewind() {
+		assert(isOpen);
+		in.rewind();
+	}
+
+	void PrintOperator::close() {
+		assert(isOpen);
+
+		in.close();
+		isOpen = false;
+	}
+
 }

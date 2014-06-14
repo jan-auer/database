@@ -6,54 +6,48 @@
 //  Copyright (c) 2014 LightningSQL. All rights reserved.
 //
 
+#include <cassert>
 #include "ProjectionOperator.h"
 
-#include <cassert>
+namespace lsql {
 
+	ProjectionOperator::ProjectionOperator(IOperator& in, std::vector<uint16_t>& indices)
+	: in(in), indices(indices) {}
 
-using namespace lsql;
-
-
-ProjectionOperator::ProjectionOperator(IOperator& in, std::vector<uint32_t>& indices) :
-in(in), indices(indices) {}
-
-
-void ProjectionOperator::open() {
-	in.open();
-}
-
-
-bool ProjectionOperator::next() {
-	assert(isOpen);
-
-	if (!in.next())
-		return false;
-
-	return true;
-}
-
-
-std::vector<Register*> ProjectionOperator::getOutput() {
-	assert(isOpen);
-
-	std::vector<Register*> output;
-	std::vector<Register*> input = in.getOutput();
-
-	for (auto &it : indices) {
-		assert(it < input.size());
-		output.push_back(input.at(it));
+	void ProjectionOperator::open() {
+		assert(!isOpen);
+		in.open();
 	}
 
-	return output;
-}
+	bool ProjectionOperator::next() {
+		assert(isOpen);
+		return in.next();
+	}
 
+	Row ProjectionOperator::getOutput() const {
+		assert(isOpen);
 
-void ProjectionOperator::rewind() {
-	in.rewind();
-}
+		Row output;
+		Row input = in.getOutput();
 
+		for (auto index : indices) {
+			assert(index < input.size());
+			output.push_back(input[index]);
+		}
 
-void ProjectionOperator::close() {
-	isOpen = false;
-	in.close();
+		return output;
+	}
+
+	void ProjectionOperator::rewind() {
+		assert(isOpen);
+		in.rewind();
+	}
+
+	void ProjectionOperator::close() {
+		assert(isOpen);
+
+		in.close();
+		isOpen = false;
+	}
+
 }

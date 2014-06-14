@@ -8,7 +8,6 @@
 
 #pragma once
 
-
 #include <vector>
 #include <ostream>
 #include <iostream>
@@ -25,14 +24,13 @@ namespace lsql {
 	 * it should project to
 	 */
 
-	class ProjectionOperator : protected IOperator {
+	class ProjectionOperator : public IOperator {
 
 		IOperator& in;
 		bool isOpen = false;
-		std::vector<uint32_t>& indices;
+		std::vector<uint16_t>& indices;
 
 	public:
-
 
 		/**
 		 * Creates a new Operator:
@@ -40,37 +38,15 @@ namespace lsql {
 		 *
 		 * @param op The next operator, from which the tuples shall be fetched
 		 */
-		ProjectionOperator(IOperator& in, std::vector<uint32_t>& indices);
+		ProjectionOperator(IOperator& in, std::vector<uint16_t>& indices);
 
-		/**
-		 *
-		 */
-		~ProjectionOperator();
+		// IOperator interface implementation.
 
-		/**
-		 *
-		 */
-		virtual void open();
-
-		/**
-		 *
-		 */
-		virtual bool next();
-
-		/**
-		 *
-		 */
-		virtual std::vector<Register*> getOutput();
-
-		/**
-		 *
-		 */
-		virtual void rewind();
-
-		/**
-		 *
-		 */
-		virtual void close();
+		void open();
+		bool next();
+		Row getOutput() const;
+		void rewind();
+		void close();
 		
 	};
 	

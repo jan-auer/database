@@ -8,7 +8,6 @@
 
 #pragma once
 
-
 #include <vector>
 #include <ostream>
 #include <iostream>
@@ -25,7 +24,7 @@ namespace lsql {
 	 * next tuple (if any) in a humanreadable format
 	 */
 
-	class PrintOperator : protected IOperator {
+	class PrintOperator : public IOperator {
 
 		IOperator& in;
 		std::ostream& os;
@@ -33,7 +32,6 @@ namespace lsql {
 		bool isOpen = false;
 		
 	public:
-
 
 		/**
 		 * Creates a new Operator:
@@ -45,35 +43,13 @@ namespace lsql {
 		 */
 		PrintOperator(IOperator& in, std::ostream& os = std::cout);
 
-		/**
-		 *
-		 */
-		~PrintOperator();
+		// IOperator interface implementation.
 
-		/**
-		 *
-		 */
-		virtual void open();
-
-		/**
-		 *
-		 */
-		virtual bool next();
-
-		/**
-		 *
-		 */
-		virtual std::vector<Register*> getOutput() = 0;
-
-		/**
-		 *
-		 */
-		virtual void rewind();
-
-		/**
-		 *
-		 */
-		virtual void close();
+		void open();
+		bool next();
+		Row getOutput() const = 0;
+		void rewind();
+		void close();
 		
 	};
 	

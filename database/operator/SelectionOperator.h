@@ -8,7 +8,6 @@
 
 #pragma once
 
-
 #include <vector>
 #include <ostream>
 #include <iostream>
@@ -23,13 +22,13 @@ namespace lsql {
 	 * The Selection operator is initialized with an input operator,
 	 * a register ID and a constant
 	 */
-
-	class SelectionOperator : protected IOperator {
+	class SelectionOperator : public IOperator {
 
 		IOperator& in;
-		bool isOpen = false;
 		uint32_t index;
 		Register& constant;
+
+		bool isOpen = false;
 
 	public:
 
@@ -40,37 +39,15 @@ namespace lsql {
 		 *
 		 * @param in The next operator, from which the tuples shall be fetched
 		 */
-		SelectionOperator(IOperator& in, uint32_t index, Register& constant);
+		SelectionOperator(IOperator& in, uint16_t index, Register& constant);
 
-		/**
-		 *
-		 */
-		~SelectionOperator();
+		// IOperator interface implementation.
 
-		/**
-		 *
-		 */
-		virtual void open();
-
-		/**
-		 *
-		 */
-		virtual bool next();
-
-		/**
-		 *
-		 */
-		virtual std::vector<Register*> getOutput();
-
-		/**
-		 *
-		 */
-		virtual void rewind();
-
-		/**
-		 *
-		 */
-		virtual void close();
+		void open();
+		bool next();
+		Row getOutput() const;
+		void rewind();
+		void close();
 		
 	};
 	
