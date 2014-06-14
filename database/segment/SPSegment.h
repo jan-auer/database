@@ -27,6 +27,11 @@ namespace lsql {
 	public:
 
 		/**
+		 *
+		 */
+		class Iterator;
+
+		/**
 		 * Creates a wrapper for segments containing slotted pages.
 		 *
 		 * @param bufferManager The buffer manager instance.
@@ -70,6 +75,16 @@ namespace lsql {
 		 */
 		bool remove(TID id);
 
+		/**
+		 * Returns an iterator to the first page in this segment.
+		 */
+		Iterator begin();
+
+		/**
+		 * Returns an iterator to the element following the last page in this segment.
+		 */
+		Iterator end();
+
 	private:
 
 		/**
@@ -83,3 +98,5 @@ namespace lsql {
 	};
 
 }
+
+#include "SPSegmentIterator.h"

@@ -59,6 +59,14 @@ namespace lsql {
 		return true;
 	}
 
+	SPSegment::Iterator SPSegment::begin() {
+		return Iterator(this);
+	}
+
+	SPSegment::Iterator SPSegment::end() {
+		return Iterator(this, pageCount);
+	}
+
 	BufferFrame& SPSegment::findFreeFrame(int32_t requestedSize, uint32_t startPage) {
 		// Try to find a frame with enough space
 		for (uint32_t page = startPage; page < getPageCount(); ++page) {
