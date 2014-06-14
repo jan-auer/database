@@ -16,12 +16,9 @@
 		01BDE7B5192216C0009F69E7 /* gtest-all.cc in Sources */ = {isa = PBXBuildFile; fileRef = 01BDE7A919221674009F69E7 /* gtest-all.cc */; };
 		01D2817D18FC5DB400F60DA7 /* database.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4A5E081E18F56D630062E0A3 /* database.1 */; };
 		01D2818318FC5E0300F60DA7 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 01D2818218FC5E0300F60DA7 /* main.cpp */; };
-		01E035E0194C551700B4103C /* PrintOperator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 01E035DE194C551700B4103C /* PrintOperator.cpp */; };
 		01E035E1194C569C00B4103C /* PrintOperator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 01E035DE194C551700B4103C /* PrintOperator.cpp */; };
-		01E035E4194C5C6D00B4103C /* ProjectionOperator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 01E035E2194C5C6D00B4103C /* ProjectionOperator.cpp */; };
 		01E035E5194C5C6D00B4103C /* ProjectionOperator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 01E035E2194C5C6D00B4103C /* ProjectionOperator.cpp */; };
 		01E035E8194C6BEA00B4103C /* SelectionOperator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 01E035E6194C6BEA00B4103C /* SelectionOperator.cpp */; };
-		01E035E9194C6BEA00B4103C /* SelectionOperator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 01E035E6194C6BEA00B4103C /* SelectionOperator.cpp */; };
 		01E7CA99192A3E2D0055E19D /* SPSegment.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A645CB01923B345006286AD /* SPSegment.cpp */; };
 		01E7CA9A192A3E2D0055E19D /* IDs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A6C4F84191FA764003B8AB9 /* IDs.cpp */; };
 		01E7CA9B192A3E2D0055E19D /* BufferManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A8859A519165491001A42AB /* BufferManager.cpp */; };
@@ -35,6 +32,8 @@
 		4A192C4F18F82310005941E4 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A192C4C18F822EF005941E4 /* main.cpp */; };
 		4A307075194C5265003F17C8 /* SlottedPageIterator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A307073194C5265003F17C8 /* SlottedPageIterator.cpp */; };
 		4A307076194C5265003F17C8 /* SlottedPageIterator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A307073194C5265003F17C8 /* SlottedPageIterator.cpp */; };
+		4A307081194C7583003F17C8 /* HashJoinOperator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A30707F194C7583003F17C8 /* HashJoinOperator.cpp */; };
+		4A307082194C7583003F17C8 /* HashJoinOperator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A30707F194C7583003F17C8 /* HashJoinOperator.cpp */; };
 		4A5E081D18F56D630062E0A3 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A5E081C18F56D630062E0A3 /* main.cpp */; };
 		4A5E081F18F56D630062E0A3 /* database.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4A5E081E18F56D630062E0A3 /* database.1 */; };
 		4A645CB21923B345006286AD /* Record.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A645CAA1923B345006286AD /* Record.cpp */; };
@@ -61,6 +60,11 @@
 		4A6C4F8E191FAA17003B8AB9 /* BufferFrame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A8859A81916549A001A42AB /* BufferFrame.cpp */; };
 		4A6C4F8F191FAA1A003B8AB9 /* BufferManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A8859A519165491001A42AB /* BufferManager.cpp */; };
 		4A6C4F90191FAA20003B8AB9 /* BufferFrame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A8859A81916549A001A42AB /* BufferFrame.cpp */; };
+		4A9085CD194C9105008E33F7 /* SelectionOperator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 01E035E6194C6BEA00B4103C /* SelectionOperator.cpp */; };
+		4A9085D0194C9D75008E33F7 /* TableScanOperator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A9085CE194C9D75008E33F7 /* TableScanOperator.cpp */; };
+		4A9085D1194C9D75008E33F7 /* TableScanOperator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A9085CE194C9D75008E33F7 /* TableScanOperator.cpp */; };
+		4A9085D4194CA4A4008E33F7 /* SPSegmentIterator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A9085D2194CA4A4008E33F7 /* SPSegmentIterator.cpp */; };
+		4A9085D5194CA4A4008E33F7 /* SPSegmentIterator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A9085D2194CA4A4008E33F7 /* SPSegmentIterator.cpp */; };
 		4AD5830B19214936005570F5 /* IDs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A6C4F84191FA764003B8AB9 /* IDs.cpp */; };
 		4AD5830C19214936005570F5 /* BufferManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A8859A519165491001A42AB /* BufferManager.cpp */; };
 		4AD5830D19214936005570F5 /* BufferFrame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A8859A81916549A001A42AB /* BufferFrame.cpp */; };
@@ -182,6 +186,8 @@
 		4A230BB719200B3400770D4F /* Parser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Parser.h; path = parser/Parser.h; sourceTree = "<group>"; };
 		4A307073194C5265003F17C8 /* SlottedPageIterator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SlottedPageIterator.cpp; sourceTree = "<group>"; };
 		4A307074194C5265003F17C8 /* SlottedPageIterator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SlottedPageIterator.h; sourceTree = "<group>"; };
+		4A30707F194C7583003F17C8 /* HashJoinOperator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HashJoinOperator.cpp; sourceTree = "<group>"; };
+		4A307080194C7583003F17C8 /* HashJoinOperator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HashJoinOperator.h; sourceTree = "<group>"; };
 		4A44DA8C18F826C2001AF70E /* Sorting.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Sorting.cpp; sourceTree = "<group>"; };
 		4A44DA8D18F826C2001AF70E /* Sorting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sorting.h; sourceTree = "<group>"; };
 		4A4CAEE3194B85FA0044A2A1 /* IOperator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IOperator.h; sourceTree = "<group>"; };
@@ -208,6 +214,10 @@
 		4A8859A91916549A001A42AB /* BufferFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BufferFrame.h; sourceTree = "<group>"; };
 		4A8859AB1916581A001A42AB /* ConcurrentList-impl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ConcurrentList-impl.h"; sourceTree = "<group>"; };
 		4A8859AC1916581A001A42AB /* ConcurrentList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConcurrentList.h; sourceTree = "<group>"; };
+		4A9085CE194C9D75008E33F7 /* TableScanOperator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TableScanOperator.cpp; sourceTree = "<group>"; };
+		4A9085CF194C9D75008E33F7 /* TableScanOperator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableScanOperator.h; sourceTree = "<group>"; };
+		4A9085D2194CA4A4008E33F7 /* SPSegmentIterator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SPSegmentIterator.cpp; sourceTree = "<group>"; };
+		4A9085D3194CA4A4008E33F7 /* SPSegmentIterator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPSegmentIterator.h; sourceTree = "<group>"; };
 		4A9D8F1218F5742400E700F6 /* unit_test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = unit_test; sourceTree = BUILT_PRODUCTS_DIR; };
 		4ACB3F1C1925343400EBD596 /* Serialize-impl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Serialize-impl.h"; sourceTree = "<group>"; };
 		4AD58302192148DB005570F5 /* slottedtest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = slottedtest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -383,6 +393,10 @@
 				01E035E3194C5C6D00B4103C /* ProjectionOperator.h */,
 				01E035E6194C6BEA00B4103C /* SelectionOperator.cpp */,
 				01E035E7194C6BEA00B4103C /* SelectionOperator.h */,
+				4A30707F194C7583003F17C8 /* HashJoinOperator.cpp */,
+				4A307080194C7583003F17C8 /* HashJoinOperator.h */,
+				4A9085CE194C9D75008E33F7 /* TableScanOperator.cpp */,
+				4A9085CF194C9D75008E33F7 /* TableScanOperator.h */,
 			);
 			path = operator;
 			sourceTree = "<group>";
@@ -446,6 +460,8 @@
 				4A307074194C5265003F17C8 /* SlottedPageIterator.h */,
 				4A645CB01923B345006286AD /* SPSegment.cpp */,
 				4A645CB11923B345006286AD /* SPSegment.h */,
+				4A9085D2194CA4A4008E33F7 /* SPSegmentIterator.cpp */,
+				4A9085D3194CA4A4008E33F7 /* SPSegmentIterator.h */,
 			);
 			path = segment;
 			sourceTree = "<group>";
@@ -727,13 +743,16 @@
 				4A645CB21923B345006286AD /* Record.cpp in Sources */,
 				4A5E081D18F56D630062E0A3 /* main.cpp in Sources */,
 				01A30263191EC097007A1957 /* Lock.cpp in Sources */,
+				4A9085D4194CA4A4008E33F7 /* SPSegmentIterator.cpp in Sources */,
 				4AF3B624194B8FA2004CC4B7 /* Register.cpp in Sources */,
 				01A30262191EC014007A1957 /* BufferManager.cpp in Sources */,
+				4A307081194C7583003F17C8 /* HashJoinOperator.cpp in Sources */,
 				4A6C4F90191FAA20003B8AB9 /* BufferFrame.cpp in Sources */,
 				4A6C4F8C191FA962003B8AB9 /* Mutex.cpp in Sources */,
 				4A645CB51923B345006286AD /* Segment.cpp in Sources */,
 				01A3025C191EBF17007A1957 /* SchemaManager.cpp in Sources */,
 				01E035E8194C6BEA00B4103C /* SelectionOperator.cpp in Sources */,
+				4A9085D0194C9D75008E33F7 /* TableScanOperator.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -749,16 +768,18 @@
 				4A6C4F86191FA764003B8AB9 /* IDs.cpp in Sources */,
 				01A30265191EC272007A1957 /* SchemaManager.cpp in Sources */,
 				01A30268191EC28D007A1957 /* Lock.cpp in Sources */,
-				01E035E9194C6BEA00B4103C /* SelectionOperator.cpp in Sources */,
 				4A6C4F8D191FA979003B8AB9 /* Mutex.cpp in Sources */,
-				01E035E5194C5C6D00B4103C /* ProjectionOperator.cpp in Sources */,
 				4A6C4F8E191FAA17003B8AB9 /* BufferFrame.cpp in Sources */,
+				4A9085D5194CA4A4008E33F7 /* SPSegmentIterator.cpp in Sources */,
 				4A307076194C5265003F17C8 /* SlottedPageIterator.cpp in Sources */,
 				4A645CB31923B345006286AD /* Record.cpp in Sources */,
 				4A6C4F8F191FAA1A003B8AB9 /* BufferManager.cpp in Sources */,
 				4AF3B625194B8FA2004CC4B7 /* Register.cpp in Sources */,
 				01E035E1194C569C00B4103C /* PrintOperator.cpp in Sources */,
-				01E035E9194C6BEA00B4103C /* SelectionOperator.cpp in Sources */,
+				4A9085CD194C9105008E33F7 /* SelectionOperator.cpp in Sources */,
+				4A9085D1194C9D75008E33F7 /* TableScanOperator.cpp in Sources */,
+				4A307082194C7583003F17C8 /* HashJoinOperator.cpp in Sources */,
+				01E035E5194C5C6D00B4103C /* ProjectionOperator.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
