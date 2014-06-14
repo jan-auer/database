@@ -49,7 +49,10 @@ namespace lsql {
 		if (record != nullptr)
 			delete record;
 
-		++slot;
+		do {
+			++slot;
+		} while (slot - page->slots < page->header->count && slot->type == SLOT_REDIRECT);
+
 		return *this;
 	}
 

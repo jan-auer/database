@@ -47,12 +47,12 @@ namespace lsql {
 		/**
 		 *
 		 */
-		inline bool operator==(const Iterator& other) const;
+		bool operator==(const Iterator& other) const;
 
 		/**
 		 *
 		 */
-		inline bool operator!=(const Iterator& other) const;
+		bool operator!=(const Iterator& other) const;
 
 		/**
 		 *
