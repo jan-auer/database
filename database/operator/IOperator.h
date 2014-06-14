@@ -14,6 +14,8 @@
 
 namespace lsql {
 
+	typedef std::vector<Register*> Row;
+
 	/**
 	 *
 	 */
@@ -33,7 +35,7 @@ namespace lsql {
 		/**
 		 *
 		 */
-		virtual std::vector<Register*> getOutput() = 0;
+		virtual Row getOutput() const = 0;
 
 		/**
 		 *
