@@ -16,6 +16,9 @@
 
 namespace lsql {
 
+	/**
+	 * Represents a page within a slotted page segment.
+	 */
 	class SlottedPage {
 
 		/** Structure of the slotted page header. */
@@ -47,6 +50,11 @@ namespace lsql {
 		Slot* slots;
 
 	public:
+
+		/**
+		 * Iterator for records in slotted pages.
+		 */
+		class Iterator;
 
 		/**
 		 * Creates a new slotted page.
@@ -137,6 +145,16 @@ namespace lsql {
 		 */
 		int32_t getFreeSpace() const;
 
+		/**
+		 * Returns an iterator to the first tuple in this page.
+		 */
+		Iterator begin();
+
+		/**
+		 * Returns an iterator to the element following the last tuple in this page.
+		 */
+		Iterator end();
+
 	private:
 
 		/**
@@ -169,3 +187,5 @@ namespace lsql {
 	};
 
 }
+
+#include "SlottedPageIterator.h"

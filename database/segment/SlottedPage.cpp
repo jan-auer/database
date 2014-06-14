@@ -146,6 +146,14 @@ namespace lsql {
 		return int32_t(BufferFrame::SIZE) - header->usedSpace - headerSize;
 	}
 
+	SlottedPage::Iterator SlottedPage::begin() {
+		return Iterator(this);
+	}
+
+	SlottedPage::Iterator SlottedPage::end() {
+		return Iterator(this, header->count);
+	}
+
 	template<typename DataType>
 	DataType* SlottedPage::getData(Slot& slot) const {
 		assert(slot.type != SLOT_EMPTY);
