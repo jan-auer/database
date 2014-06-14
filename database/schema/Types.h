@@ -26,11 +26,14 @@ namespace lsql {
 	 * SQL Type Integer
 	 */
 	typedef uint64_t Integer;
+	constexpr int INTEGER_LEN = sizeof(uint64_t);
+
 
 	/**
 	 * SQL Type Char
 	 */
 	typedef std::string Char;
+	constexpr int CHAR_LEN = 50;
 
 	/*
 	typedef int Integer;
