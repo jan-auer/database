@@ -27,7 +27,7 @@ namespace lsql {
 		/**
 		 *
 		 */
-		Iterator(SlottedPage* page, uint16_t start = 0);
+		explicit Iterator(SlottedPage* page = nullptr, uint16_t start = 0);
 
 		/**
 		 *

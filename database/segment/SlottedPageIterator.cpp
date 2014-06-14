@@ -43,6 +43,9 @@ namespace lsql {
 	}
 
 	SPI& SPI::operator++() {
+		assert(page != nullptr);
+		assert(slot != nullptr);
+
 		if (record != nullptr)
 			delete record;
 
@@ -55,6 +58,8 @@ namespace lsql {
 	}
 
 	Record* SPI::operator->() const {
+		assert(page != nullptr);
+		assert(slot != nullptr);
 		assert(slot - page->slots < page->header->count);
 
 		if (record == nullptr) {
