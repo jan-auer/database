@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include <cassert>
 #include <cstdint>
 
 #include "buffer/BufferFrame.h"
@@ -185,6 +186,12 @@ namespace lsql {
 		void replaceRecord(Slot& slot, const Record& record);
 
 	};
+
+	template<typename DataType>
+	DataType* SlottedPage::getData(Slot& slot) const {
+		assert(slot.type != SLOT_EMPTY);
+		return reinterpret_cast<DataType*>(data + slot.offset);
+	}
 
 }
 

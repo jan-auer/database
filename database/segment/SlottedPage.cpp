@@ -154,12 +154,6 @@ namespace lsql {
 		return Iterator(this, header->count);
 	}
 
-	template<typename DataType>
-	DataType* SlottedPage::getData(Slot& slot) const {
-		assert(slot.type != SLOT_EMPTY);
-		return reinterpret_cast<DataType*>(data + slot.offset);
-	}
-
 	void SlottedPage::compressData() {
 		std::vector<Slot*> orderedSlots;
 		for (int16_t i = header->count - 1; i > 0; --i)
