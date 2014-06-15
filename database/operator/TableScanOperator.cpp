@@ -31,6 +31,9 @@ namespace lsql {
 			}
 
 			if (tuples != page->end()) {
+				for (Register* rp : output)
+					delete rp;
+
 				output = buildRow(*tuples);
 				++tuples;
 				return true;
