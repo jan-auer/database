@@ -9,7 +9,6 @@
 #include <utility>
 #include <cmath>
 
-#include "utils/Logger.h"
 #include "utils/File.h"
 #include "BufferManager.h"
 
