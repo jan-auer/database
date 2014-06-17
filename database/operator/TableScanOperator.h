@@ -47,7 +47,7 @@ namespace lsql {
 	private:
 
 		/**
-		 *
+		 * 
 		 */
 		Row buildRow(const Record& record) const;
 

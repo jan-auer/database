@@ -34,10 +34,13 @@ namespace lsql {
 
 		/**
 		 * Creates a new Operator:
-		 * Selection: Implements predicates of the form 􏰀i ai = ci where
+		 * Selection: Implements predicates of the form ^i ai = ci where
 		 *             ai are attributes and ci are constants.
 		 *
 		 * @param in The next operator, from which the tuples shall be fetched
+		 * @param index The index of the value that shall be compared to
+		 *							the constant
+		 * @param constant The comparison value
 		 */
 		SelectionOperator(IOperator& in, uint16_t index, Register& constant);
 

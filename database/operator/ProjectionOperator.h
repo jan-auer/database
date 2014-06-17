@@ -37,6 +37,7 @@ namespace lsql {
 		 * Projection: Projects to a subset of the input schema.
 		 *
 		 * @param op The next operator, from which the tuples shall be fetched
+		 * @param indices The indices of the values that shall be retained
 		 */
 		ProjectionOperator(IOperator& in, std::vector<uint16_t>& indices);
 

@@ -16,7 +16,9 @@
 namespace lsql {
 
 	/**
-	 *
+	 * The Hash Join operator is initialized with two input operators, and
+	 * two register IDs. One ID is from the left side and one is from the
+	 * right side.
 	 */
 	class HashJoinOperator : public IOperator {
 
@@ -38,7 +40,15 @@ namespace lsql {
 	public:
 
 		/**
+		 * Creates a new operator:
+		 * Hash Join: Compute inner join by storing left input in main memory,
+		 * then find matches for each tuple from the right side. The predicate
+		 * is of the form left.a = right.b.
 		 *
+		 * @param left
+		 * @param right
+		 * @param leftIndex
+		 * @param rightIndex
 		 */
 		HashJoinOperator(IOperator& left, IOperator& right, uint16_t leftIndex, uint16_t rightIndex);
 
